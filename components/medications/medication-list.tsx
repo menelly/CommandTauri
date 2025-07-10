@@ -1,0 +1,105 @@
+/**
+ * MEDICATION LIST COMPONENT
+ * 
+ * Displays a list of medications using the MedicationCard component.
+ * Handles loading states and empty states.
+ */
+
+'use client';
+
+import { Loader2, Pill, Search } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { MedicationCard } from './medication-card';
+import { Medication } from '@/lib/types/medication-types';
+
+interface MedicationListProps {
+  medications: Medication[];
+  onEdit: (medication: Medication) => void;
+  onDelete: (id: string) => void;
+  onUpdateReminders: (id: string, enabled: boolean, times?: string[]) => Promise<void>;
+  onRefillRequestSent: (id: string) => void;
+  onMedsAcquired: (id: string) => void;
+  onResetRefillTimer: (id: string, newRefillDate: string) => void;
+  isLoading?: boolean;
+}
+
+export function MedicationList({
+  medications,
+  onEdit,
+  onDelete,
+  onUpdateReminders,
+  onRefillRequestSent,
+  onMedsAcquired,
+  onResetRefillTimer,
+  isLoading = false,
+}: MedicationListProps) {
+  // ============================================================================
+  // LOADING STATE
+  // ============================================================================
+  
+  if (isLoading) {
+    return (
+      <Card>
+        <CardContent className="flex items-center justify-center py-12">
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <Loader2 className="h-5 w-5 animate-spin" />
+            <span>Loading medications...</span>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // ============================================================================
+  // EMPTY STATE
+  // ============================================================================
+  
+  if (medications.length === 0) {
+    return (
+      <Card>
+        <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+          <div className="rounded-full bg-muted p-3 mb-4">
+            <Pill className="h-6 w-6 text-muted-foreground" />
+          </div>
+          <h3 className="text-lg font-semibold mb-2">No medications found</h3>
+          <p className="text-muted-foreground mb-4 max-w-sm">
+            Get started by adding your first medication. Only a medication name is required!
+          </p>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Search className="h-4 w-4" />
+            <span>Try adjusting your search or filters</span>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // ============================================================================
+  // MEDICATION LIST
+  // ============================================================================
+  
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold">
+          Your Medications ({medications.length})
+        </h2>
+      </div>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {medications.map((medication) => (
+          <MedicationCard
+            key={medication.id}
+            medication={medication}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            onUpdateReminders={onUpdateReminders}
+            onRefillRequestSent={onRefillRequestSent}
+            onMedsAcquired={onMedsAcquired}
+            onResetRefillTimer={onResetRefillTimer}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}

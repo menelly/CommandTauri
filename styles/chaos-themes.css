@@ -1,0 +1,565 @@
+/* === CHAOS COMMAND CENTER THEMES === */
+
+:root {
+  /* === LAVENDER GARDEN: DEFAULT THEME COLORS === */
+  --primary-purple: #a78bfa;        /* main UI blocks — cards, nav, panel containers */
+  --accent-orange: #f472b6;         /* buttons, highlight icons, warning text */
+  --deep-space: #f3f0ff;            /* full page background - soft lavender */
+  --hover-glow: #c084fc;            /* hover/focus outlines + shimmer effect */
+  --border-soft: #c4b5fd;
+  --text-main: #4c1d95;             /* deeper purple text */
+  --text-muted: #7c3aed;
+
+  /* BUTTON FIXINS */
+  --btn-bg: #c084fc;
+  --btn-text: #ffffff;
+  --btn-border: #f472b6;
+  --btn-hover-bg: #a855f7;         /* deeper lavender */
+  --btn-hover-text: #ffffff;
+  --btn-hover-border: #ec4899;     /* coral hover */
+  --btn-disabled-background: #e9d5ff;
+  --btn-disabled-text: #a78bfa;
+  --btn-disabled-border: #d8b4fe;
+
+  /* GROUNDING TECHNIQUES & CRISIS COLORS */
+  --grounding-bg: #f3f0ff;          /* soft lavender background for technique cards */
+  --grounding-border: #a78bfa;      /* lavender border for technique cards */
+  --grounding-text: #374151;        /* dark gray text for readability */
+  --grounding-accent: #c4b5fd;      /* light lavender for highlights */
+  --crisis-bg: #fef2f2;             /* light pink background for crisis cards */
+  --crisis-border: #fca5a5;         /* coral border for crisis cards */
+  --crisis-text: #374151;           /* dark gray text for crisis readability */
+  --crisis-accent: #fca5a5;         /* coral accent for crisis highlights */
+
+  /* Aliased for new theme system */
+  --surface-1: #FFDDD6; /* content block background - very light warm coral */
+  --surface-2: #FEEFEC; /* table rows, inset containers - slightly deeper coral */
+
+  /* === TYPOGRAPHY === */
+  --font-main: 'Atkinson Hyperlegible', sans-serif;
+
+  /* === SPACING === (em-based for accessibility) */
+  --space-xs: 0.25em;
+  --space-sm: 0.5em;
+  --space-md: 1em;
+  --space-lg: 2em;
+
+  /* Tailwind CSS variable mappings for LAVENDER GARDEN */
+  --background: 255 100 96; /* #f3f0ff - lavender background */
+  --foreground: 262 83 58; /* #4c1d95 - deep purple text */
+  --card: 17 98 97; /* #ffebe0 - very light warm coral cards */
+  --card-foreground: 262 83 58;
+  --popover: 18 100 96;
+  --popover-foreground: 262 83 58;
+  --primary: 258 90 78; /* #a78bfa - soft lavender */
+  --primary-foreground: 0 0 100;
+  --secondary: 18 100 88; /* #ffd0c4 - deeper coral */
+  --secondary-foreground: 262 83 58;
+  --muted: 322 20 97;
+  --muted-foreground: 258 86 58; /* #7c3aed - purple muted text */
+  --accent: 330 81 71; /* #f472b6 - coral/pink accent */
+  --accent-foreground: 0 0 100;
+  --destructive: 0 84 69;
+  --destructive-foreground: 0 0 100;
+  --border: 258 90 87; /* #c4b5fd - lavender border */
+  --input: 0 20 98;
+  --ring: 258 90 78;
+}
+
+body {
+  background-color: var(--deep-space);
+  color: var(--text-main);
+  font-family: var(--font-main);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Ensure muted text uses our theme colors - FORCE OVERRIDE */
+.text-muted-foreground {
+  color: var(--text-muted) !important;
+}
+
+/* Default lavender garden muted text */
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-storm):not(.theme-chaos) .text-muted-foreground {
+  color: var(--text-muted) !important;
+}
+
+/* === THEME: Light Mode === */
+body.theme-light {
+  --primary-purple: #ffffff;
+  --accent-orange: #aa4a28;
+  --deep-space: #f0f0f0;
+  --hover-glow: #8888ff;
+  --text-main: #222222;
+  --text-muted: #666666;
+  --surface-1: #fefefe;
+  --surface-2: #f9f9f9;
+  --btn-bg: #007acc;
+  --btn-text: #ffffff;
+  --btn-border: #007acc;
+  --btn-hover-bg: #005fa3;
+  --btn-hover-text: #ffffff;
+  --btn-hover-border: #005fa3;
+
+  /* Tailwind mappings for light mode */
+  --background: 240 10 94; /* #f0f0f0 */
+  --foreground: 0 0 13; /* #222222 */
+  --card: 0 0 100; /* #ffffff */
+  --card-foreground: 0 0 13;
+  --popover: 0 0 100;
+  --popover-foreground: 0 0 13;
+  --primary: 207 89 42; /* #007acc */
+  --primary-foreground: 0 0 100;
+  --secondary: 210 40 96; /* #f9f9f9 */
+  --secondary-foreground: 0 0 13;
+  --muted: 210 40 96;
+  --muted-foreground: 215 16 47;
+  --accent: 210 40 96;
+  --accent-foreground: 0 0 13;
+  --destructive: 0 84 60;
+  --destructive-foreground: 210 40 98;
+  --border: 214 32 91;
+  --input: 214 32 91;
+  --ring: 207 89 42;
+}
+
+/* === THEME: Chaos Mode === */
+body.theme-chaos {
+  --primary-purple: #3e103f;        /* main UI blocks — cards, nav, panel containers */
+  --accent-orange: #f48b50;         /* buttons, highlight icons, warning text */
+  --deep-space: #1a111f;            /* full page background */
+  --hover-glow: #a674ff;            /* hover/focus outlines + shimmer effect */
+  --border-soft: #aa88ff;
+  --text-main: #fcc16e;
+  --text-muted: #a18ac7;
+
+  /* BUTTON FIXINS */
+  --btn-bg: #942fbc;
+  --btn-text: #cfa33b;
+  --btn-border: #fc9004;
+  --btn-hover-bg: #522b84;         /* rich purple */
+  --btn-hover-text: #ffc37a;
+  --btn-hover-border: #b88eff;
+  --btn-disabled-background: #8d714f;
+  --btn-disabled-text: #9b9a9d;
+  --btn-disabled-border: #5c4b78;
+
+  /* Aliased for new theme system */
+  --surface-1: #4a1e4a; /* content block background */
+  --surface-2: #320934; /* table rows, inset containers */
+
+  /* Tailwind CSS variable mappings for CHAOS VORTEX */
+  --background: 285 42 9; /* deep-space #1a111f */
+  --foreground: 39 69 69; /* text-main #fcc16e */
+  --card: 285 42 21; /* surface-1 #4a1e4a */
+  --card-foreground: 39 69 69;
+  --popover: 285 42 21;
+  --popover-foreground: 39 69 69;
+  --primary: 285 73 15; /* primary-purple #3e103f */
+  --primary-foreground: 39 69 69;
+  --secondary: 285 42 16; /* surface-2 #320934 */
+  --secondary-foreground: 39 69 69;
+  --muted: 285 42 16;
+  --muted-foreground: 261 28 65; /* text-muted #a18ac7 */
+  --accent: 285 42 16;
+  --accent-foreground: 39 69 69;
+  --destructive: 0 84 60;
+  --destructive-foreground: 39 69 69;
+  --border: 261 53 73; /* border-soft #aa88ff */
+  --input: 261 53 73;
+  --ring: 285 73 15;
+}
+
+/* === THEME: Colorblind Mode === */
+body.theme-colorblind {
+  --primary-purple: #2b2d42;
+  --accent-orange: #ffa600;
+  --deep-space: #1c1c1c;
+  --hover-glow: #00bfff;
+  --text-main: #ffffff;
+  --surface-1: #2f2f2f;
+  --surface-2: #333333;
+  --btn-bg: #ffa600;
+  --btn-text: #1c1c1c;
+  --btn-border: #ffa600;
+  --btn-hover-bg: #ffcc66;
+  --btn-hover-text: #000000;
+  --btn-hover-border: #ffcc66;
+
+  /* Tailwind mappings for colorblind mode */
+  --background: 0 0 11; /* #1c1c1c */
+  --foreground: 0 0 100; /* #ffffff */
+  --card: 0 0 18; /* #2f2f2f */
+  --card-foreground: 0 0 100;
+  --popover: 0 0 18;
+  --popover-foreground: 0 0 100;
+  --primary: 38 100 50; /* #ffa600 */
+  --primary-foreground: 0 0 11;
+  --secondary: 220 10 20; /* dark gray for colorblind */
+  --secondary-foreground: 0 0 100;
+  --muted: 220 10 20; /* same as secondary for colorblind */
+  --muted-foreground: 0 0 75;
+  --accent: 220 10 20;
+  --accent-foreground: 0 0 100;
+  --destructive: 0 84 60;
+  --destructive-foreground: 0 0 100;
+  --border: 38 100 50;
+  --input: 38 100 50;
+  --ring: 38 100 50;
+}
+
+/* === THEME: Glitter Mode === */
+body.theme-glitter {
+  --primary-purple: #eec3ff;
+  --accent-orange: #ff94d1;
+  --deep-space: #fff0fb;
+  --hover-glow: #b8f2ff;
+  --text-main: #602a63;
+  --surface-1: #f8d6f2;
+  --surface-2: #f0cdec;
+  --btn-bg: #ff94d1;
+  --btn-text: #602a63;
+  --btn-border: #ff94d1;
+  --btn-hover-bg: #ffc2e8;
+  --btn-hover-text: #602a63;
+  --btn-hover-border: #ffc2e8;
+  
+  background: linear-gradient(135deg, #fff0fb, #eec3ff, #b8f2ff, #ffe9fc) !important;
+  background-size: 400% 400%;
+  animation: glitterFlow 12s ease infinite !important;
+
+  /* Tailwind mappings for glitter mode */
+  --background: 315 100 97; /* #fff0fb */
+  --foreground: 298 42 29; /* #602a63 */
+  --card: 315 15 99; /* ultra light pink to match settings */
+  --card-foreground: 298 42 29;
+  --popover: 315 15 99;
+  --popover-foreground: 298 42 29;
+  --primary: 315 100 79; /* #ff94d1 */
+  --primary-foreground: 298 42 29;
+  --secondary: 315 50 95; /* light pink for glitter */
+  --secondary-foreground: 298 42 29;
+  --muted: 315 50 95; /* same as secondary for glitter */
+  --muted-foreground: 298 42 45;
+  --accent: 315 50 95;
+  --accent-foreground: 298 42 29;
+  --destructive: 0 84 60;
+  --destructive-foreground: 315 100 97;
+  --border: 315 100 79;
+  --input: 315 100 79;
+  --ring: 315 100 79;
+}
+
+@keyframes glitterFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* === THEME: Calm Mode === */
+body.theme-calm {
+  --primary-purple: #0c58c2;
+  --accent-orange: #ffd60a;
+  --deep-space: #61a1dd;
+  --hover-glow: #a2c5ff;
+  --text-main: #1f2a44;
+  --surface-1: #c7d9f7;
+  --surface-2: #e4ecfa;
+  --btn-bg: #F9DB6D;
+  --btn-text: #1f2a44;
+  --btn-border: #d4af37;
+  --btn-hover-bg: #ffe580;
+  --btn-hover-text: #1f2a44;
+  --btn-hover-border: #ffe580;
+
+  /* Tailwind mappings */
+  --background: 204 75 80;
+  --foreground: 220 37 20;
+  --card: 210 40 98;
+  --card-foreground: 220 37 20;
+  --popover: 210 40 98;
+  --popover-foreground: 220 37 20;
+  --primary: 213 92 40;
+  --primary-foreground: 218 69 94;
+  --secondary: 210 40 90; /* light blue for calm */
+  --secondary-foreground: 220 37 20;
+  --muted: 210 40 90; /* same as secondary for calm */
+  --muted-foreground: 220 37 35;
+  --accent: 210 40 90;
+  --accent-foreground: 220 37 20;
+  --destructive: 0 84 60;
+  --destructive-foreground: 210 40 98;
+  --border: 213 92 40;
+  --input: 213 92 40;
+  --ring: 213 92 40;
+}
+
+/* === THEME: Accessibility Mode === */
+body.theme-accessibility {
+  --primary-purple: #000000;
+  --accent-orange: #ffff00;
+  --deep-space: #000000;
+  --hover-glow: #ffffff;
+  --text-main: #ffffff;
+  --surface-1: #111111;
+  --surface-2: #1a1a1a;
+  --btn-bg: #ffff00;
+  --btn-text: #000000;
+  --btn-border: #ffff00;
+  --btn-hover-bg: #ffffff;
+  --btn-hover-text: #000000;
+  --btn-hover-border: #ffffff;
+
+  font-size: 1.25rem;
+  line-height: 1.75;
+
+  /* Tailwind mappings */
+  --background: 0 0 0;
+  --foreground: 0 0 100;
+  --card: 0 0 7;
+  --card-foreground: 0 0 100;
+  --popover: 0 0 7;
+  --popover-foreground: 0 0 100;
+  --primary: 60 100 50;
+  --primary-foreground: 0 0 0;
+  --secondary: 0 0 15; /* dark gray for accessibility */
+  --secondary-foreground: 0 0 100;
+  --muted: 0 0 15; /* same as secondary for accessibility */
+  --muted-foreground: 0 0 80;
+  --accent: 0 0 15;
+  --accent-foreground: 0 0 100;
+  --destructive: 0 84 60;
+  --destructive-foreground: 0 0 100;
+  --border: 60 100 50;
+  --input: 60 100 50;
+  --ring: 60 100 50;
+}
+
+/* === THEME: Storm Mode === */
+body.theme-storm {
+  --primary-purple: #0a0f3d;
+  --accent-orange: #c0c0c0;
+  --deep-space: #060b1a;
+  --hover-glow: #32cd32;
+  --text-main: #c0c0c0;
+  --surface-1: #3b0a0a;
+  --surface-2: #4d1515;
+  --btn-bg: #be2b2b;
+  --btn-text: #ffffff;
+  --btn-border: #1e90ff;
+  --btn-hover-bg: #1e90ff;
+  --btn-hover-text: #000000;
+  --btn-hover-border: #32cd32;
+
+  /* Tailwind mappings */
+  --background: 225 63 8;
+  --foreground: 0 0 75;
+  --card: 0 75 15;
+  --card-foreground: 0 0 75;
+  --popover: 0 75 15;
+  --popover-foreground: 0 0 75;
+  --primary: 225 75 15;
+  --primary-foreground: 0 0 100;
+  --secondary: 0 50 20; /* dark red for storm */
+  --secondary-foreground: 0 0 75;
+  --muted: 0 50 20; /* same as secondary for storm */
+  --muted-foreground: 0 0 60;
+  --accent: 0 50 20;
+  --accent-foreground: 0 0 75;
+  --destructive: 0 84 60;
+  --destructive-foreground: 0 0 100;
+  --border: 225 75 15;
+  --input: 225 75 15;
+  --ring: 225 75 15;
+}
+
+/* === FONT OVERRIDES === */
+body.font-poppins,
+body.font-poppins * {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+body.font-system,
+body.font-system * {
+  font-family: system-ui, sans-serif !important;
+}
+
+body.font-lexend,
+body.font-lexend * {
+  font-family: 'Lexend', sans-serif !important;
+}
+
+body.font-atkinson,
+body.font-atkinson * {
+  font-family: 'Atkinson Hyperlegible', sans-serif !important;
+}
+
+/* === COMPONENT STYLING === */
+.theme-button {
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  border: 1px solid var(--btn-border);
+  padding: 0.4em 0.75em;
+  font-weight: 600;
+  border-radius: 0.5em;
+  transition: all 0.2s ease-in-out;
+}
+
+.theme-button:hover:not(:disabled) {
+  background-color: var(--btn-hover-bg);
+  color: var(--btn-hover-text);
+  border-color: var(--btn-hover-border);
+  box-shadow: 0 0 4px var(--hover-glow);
+}
+
+.blorb-shimmer {
+  animation: shimmerPulse 3s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.blorb-shimmer:hover {
+  transform: scale(1.05);
+}
+
+@keyframes shimmerPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 3px var(--hover-glow));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px var(--hover-glow));
+  }
+}
+
+/* === THEME-SPECIFIC MUTED TEXT OVERRIDES === */
+body.theme-light .text-muted-foreground {
+  color: #666666 !important;
+}
+
+body.theme-colorblind .text-muted-foreground {
+  color: #cccccc !important;
+}
+
+body.theme-glitter .text-muted-foreground {
+  color: #b576a8 !important;
+}
+
+body.theme-calm .text-muted-foreground,
+body.theme-calm p.text-muted-foreground,
+body.theme-calm .text-muted-foreground *,
+body.theme-calm [class*="muted"] {
+  color: #03045d !important;
+}
+
+body.theme-accessibility .text-muted-foreground {
+  color: #ffffff !important;
+}
+
+body.theme-storm .text-muted-foreground {
+  color: #999999 !important;
+}
+
+/* === THEME-SPECIFIC MUTED TEXT OVERRIDES === */
+body.theme-light .text-muted-foreground {
+  color: #666666 !important;
+}
+
+body.theme-colorblind .text-muted-foreground {
+  color: #cccccc !important;
+}
+
+body.theme-glitter .text-muted-foreground {
+  color: #b576a8 !important;
+}
+
+body.theme-calm .text-muted-foreground {
+  color: #5a7ba8 !important;
+}
+
+body.theme-accessibility .text-muted-foreground {
+  color: #ffffff !important;
+}
+
+body.theme-storm .text-muted-foreground {
+  color: #999999 !important;
+}
+
+body.theme-chaos .text-muted-foreground {
+  color: #a18ac7 !important;
+}
+
+/* === THEMED SIDEBAR BUTTONS === */
+
+/* === LAVENDER GARDEN THEME BUTTONS === */
+.sidebar-btn-1 { background-color: #A2F6DB !important; color: #2d3748 !important; } /* Mint */
+.sidebar-btn-2 { background-color: #F68D8D !important; color: #ffffff !important; } /* Coral */
+.sidebar-btn-3 { background-color: #F8B4B4 !important; color: #2d3748 !important; } /* Light Pink */
+.sidebar-btn-4 { background-color: #ABD8D4 !important; color: #2d3748 !important; } /* Sage */
+.sidebar-btn-5 { background-color: #7B2CBF !important; color: #ffffff !important; } /* Deep Purple */
+.sidebar-btn-6 { background-color: #9D4EDD !important; color: #ffffff !important; } /* Medium Purple */
+.sidebar-btn-guide { background-color: #56A3A6 !important; color: #ffffff !important; } /* Teal Guide */
+.sidebar-btn-guide { background-color: #56A3A6 !important; color: #ffffff !important; } /* Teal Guide */
+
+/* === CHAOS THEME BUTTONS === */
+body.theme-chaos .sidebar-btn-1 { background-color: #942fbc !important; color: #cfa33b !important; } /* Purple */
+body.theme-chaos .sidebar-btn-2 { background-color: #f48b50 !important; color: #1a111f !important; } /* Orange */
+body.theme-chaos .sidebar-btn-3 { background-color: #a674ff !important; color: #1a111f !important; } /* Light Purple */
+body.theme-chaos .sidebar-btn-4 { background-color: #3e103f !important; color: #fcc16e !important; } /* Dark Purple */
+body.theme-chaos .sidebar-btn-5 { background-color: #522b84 !important; color: #ffc37a !important; } /* Rich Purple */
+body.theme-chaos .sidebar-btn-6 { background-color: #fc9004 !important; color: #1a111f !important; } /* Bright Orange */
+body.theme-chaos .sidebar-btn-guide { background-color: #8b5a3c !important; color: #fcc16e !important; } /* Brown Guide */
+
+/* === LIGHT THEME BUTTONS === */
+body.theme-light .sidebar-btn-1 { background-color: #007acc !important; color: #ffffff !important; } /* Blue */
+body.theme-light .sidebar-btn-2 { background-color: #28a745 !important; color: #ffffff !important; } /* Green */
+body.theme-light .sidebar-btn-3 { background-color: #6f42c1 !important; color: #ffffff !important; } /* Purple */
+body.theme-light .sidebar-btn-4 { background-color: #fd7e14 !important; color: #ffffff !important; } /* Orange */
+body.theme-light .sidebar-btn-5 { background-color: #dc3545 !important; color: #ffffff !important; } /* Red */
+body.theme-light .sidebar-btn-6 { background-color: #20c997 !important; color: #ffffff !important; } /* Teal */
+body.theme-light .sidebar-btn-guide { background-color: #17a2b8 !important; color: #ffffff !important; } /* Info Blue Guide */
+body.theme-light .sidebar-btn-guide { background-color: #56A3A6 !important; color: #ffffff !important; } /* Teal Guide */
+
+/* === GLITTER THEME BUTTONS === */
+body.theme-glitter .sidebar-btn-1 { background-color: #ff94d1 !important; color: #602a63 !important; } /* Pink */
+body.theme-glitter .sidebar-btn-2 { background-color: #eec3ff !important; color: #602a63 !important; } /* Light Purple */
+body.theme-glitter .sidebar-btn-3 { background-color: #b8f2ff !important; color: #602a63 !important; } /* Light Blue */
+body.theme-glitter .sidebar-btn-4 { background-color: #ffc2e8 !important; color: #602a63 !important; } /* Light Pink */
+body.theme-glitter .sidebar-btn-5 { background-color: #f8d6f2 !important; color: #602a63 !important; } /* Pale Pink */
+body.theme-glitter .sidebar-btn-6 { background-color: #ff69b4 !important; color: #ffffff !important; } /* Hot Pink */
+body.theme-glitter .sidebar-btn-guide { background-color: #40e0d0 !important; color: #602a63 !important; } /* Turquoise Guide */
+
+/* === CALM THEME BUTTONS === */
+body.theme-calm .sidebar-btn-1 { background-color: #0c58c2 !important; color: #ffffff !important; } /* Deep Blue */
+body.theme-calm .sidebar-btn-2 { background-color: #61a1dd !important; color: #1f2a44 !important; } /* Sky Blue */
+body.theme-calm .sidebar-btn-3 { background-color: #c7d9f7 !important; color: #1f2a44 !important; } /* Light Blue */
+body.theme-calm .sidebar-btn-4 { background-color: #ffd60a !important; color: #1f2a44 !important; } /* Yellow */
+body.theme-calm .sidebar-btn-5 { background-color: #F9DB6D !important; color: #1f2a44 !important; } /* Light Yellow */
+body.theme-calm .sidebar-btn-6 { background-color: #a2c5ff !important; color: #1f2a44 !important; } /* Soft Blue */
+body.theme-calm .sidebar-btn-guide { background-color: #4682b4 !important; color: #ffffff !important; } /* Steel Blue Guide */
+
+/* === COLORBLIND THEME BUTTONS === */
+body.theme-colorblind .sidebar-btn-1 { background-color: #ffa600 !important; color: #1c1c1c !important; } /* Orange */
+body.theme-colorblind .sidebar-btn-2 { background-color: #2b2d42 !important; color: #ffffff !important; } /* Dark Blue */
+body.theme-colorblind .sidebar-btn-3 { background-color: #ffcc66 !important; color: #1c1c1c !important; } /* Light Orange */
+body.theme-colorblind .sidebar-btn-4 { background-color: #2f2f2f !important; color: #ffffff !important; } /* Dark Gray */
+body.theme-colorblind .sidebar-btn-5 { background-color: #00bfff !important; color: #1c1c1c !important; } /* Bright Blue */
+body.theme-colorblind .sidebar-btn-6 { background-color: #333333 !important; color: #ffffff !important; } /* Medium Gray */
+body.theme-colorblind .sidebar-btn-guide { background-color: #4a4a4a !important; color: #ffffff !important; } /* Dark Gray Guide */
+
+/* === ACCESSIBILITY THEME BUTTONS === */
+body.theme-accessibility .sidebar-btn-1 { background-color: #ffff00 !important; color: #000000 !important; } /* Yellow */
+body.theme-accessibility .sidebar-btn-2 { background-color: #ffffff !important; color: #000000 !important; } /* White */
+body.theme-accessibility .sidebar-btn-3 { background-color: #000000 !important; color: #ffff00 !important; } /* Black */
+body.theme-accessibility .sidebar-btn-4 { background-color: #ffff00 !important; color: #000000 !important; } /* Yellow */
+body.theme-accessibility .sidebar-btn-5 { background-color: #ffffff !important; color: #000000 !important; } /* White */
+body.theme-accessibility .sidebar-btn-6 { background-color: #000000 !important; color: #ffffff !important; } /* Black */
+body.theme-accessibility .sidebar-btn-guide { background-color: #000000 !important; color: #ffff00 !important; } /* Black with Yellow Text Guide */
+
+/* === STORM THEME BUTTONS === */
+body.theme-storm .sidebar-btn-1 { background-color: #0a0f3d !important; color: #c0c0c0 !important; } /* Dark Blue */
+body.theme-storm .sidebar-btn-2 { background-color: #be2b2b !important; color: #ffffff !important; } /* Red */
+body.theme-storm .sidebar-btn-3 { background-color: #1e90ff !important; color: #000000 !important; } /* Blue */
+body.theme-storm .sidebar-btn-4 { background-color: #228b22 !important; color: #ffffff !important; } /* Forest Green */
+body.theme-storm .sidebar-btn-5 { background-color: #32cd32 !important; color: #000000 !important; } /* Lime Green */
+body.theme-storm .sidebar-btn-6 { background-color: #006400 !important; color: #ffffff !important; } /* Dark Green */
+body.theme-storm .sidebar-btn-guide { background-color: #2f4f4f !important; color: #c0c0c0 !important; } /* Dark Slate Gray Guide */
