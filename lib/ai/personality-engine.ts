@@ -196,7 +196,7 @@ REMEMBER: Your job is to support with radical love and clear boundaries. The per
   processInput(context: ConversationContext): {
     systemPrompt: string
     userPrompt: string
-    safetyAnalysis: ReturnType<typeof this.analyzeSafety>
+    safetyAnalysis: { level: 'safe' | 'concern' | 'intervention' | 'emergency', triggers: string[], category?: string }
     suggestedTone: AddyResponse['tone']
   } {
     const safetyAnalysis = this.analyzeSafety(context.user_message)
@@ -224,5 +224,4 @@ REMEMBER: Your job is to support with radical love and clear boundaries. The per
 // Export singleton instance
 export const addyPersonality = new AddyPersonalityEngine()
 
-// Export types for platform-specific implementations
-export type { ConversationContext, AddyResponse }
+// Types are already exported above as interfaces

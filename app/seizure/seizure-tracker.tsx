@@ -56,7 +56,7 @@ export function SeizureTracker() {
           entries = [entries]
         }
 
-        setEntries(entries.filter(entry => entry && typeof entry === 'object'))
+        setEntries(entries.filter((entry: any) => entry && typeof entry === 'object'))
       } else {
         setEntries([])
       }

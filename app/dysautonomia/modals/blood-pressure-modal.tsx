@@ -376,10 +376,9 @@ export function BloodPressureModal({ isOpen, onClose, onSave, editingEntry }: Ep
           <div className="space-y-3">
             <Label>Tags (Optional)</Label>
             <TagInput
-              tags={tags}
-              setTags={setTags}
+              value={tags}
+              onChange={setTags}
               placeholder="Add tags like 'medication', 'morning', 'stress', 'nope'..."
-              categoryFilter={['health', 'tracker']}
             />
           </div>
 

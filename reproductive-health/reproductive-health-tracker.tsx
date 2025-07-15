@@ -333,7 +333,7 @@ export default function ReproductiveHealthTracker() {
               <PopoverContent className="w-auto p-0">
                 <MobileCalendar
                   selected={currentDate}
-                  onSelect={(date: Date) => {
+                  onSelect={(date) => {
                     setCurrentDate(date)
                     setIsCalendarOpen(false)
                   }}
@@ -427,7 +427,7 @@ export default function ReproductiveHealthTracker() {
               <div className="space-y-4">
                 <MobileCalendar
                   selected={currentDate}
-                  onSelect={(date: Date) => setCurrentDate(date)}
+                  onSelect={(date) => setCurrentDate(date)}
                   className="w-full mx-auto rounded-md border"
                   modifiers={{
                     menstrual: entries.filter(e => e.flow && e.flow !== 'none').map(e => new Date(e.date)),

@@ -62,7 +62,7 @@ export function DiabetesHistory({
       parsedEntries = [parsedEntries]
     }
     
-    return parsedEntries.filter(entry => entry && typeof entry === 'object')
+    return parsedEntries.filter((entry: any) => entry && typeof entry === 'object') as DiabetesEntry[]
   }
 
   const displayEntries = parseEntries(entries)

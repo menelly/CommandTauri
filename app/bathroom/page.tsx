@@ -116,7 +116,7 @@ export default function BathroomTracker() {
 
       if (bathroomRecord?.content?.entries) {
         // Parse entries with JSON parsing fix
-        let entries = bathroomRecord.content.entries
+        let entries: any = bathroomRecord.content.entries
         if (typeof entries === 'string') {
           try {
             entries = JSON.parse(entries)
@@ -129,7 +129,7 @@ export default function BathroomTracker() {
           entries = [entries]
         }
 
-        const bathroomEntries = entries.filter(entry => entry && typeof entry === 'object')
+        const bathroomEntries = entries.filter((entry: any) => entry && typeof entry === 'object') as BathroomEntry[]
         setEntries(bathroomEntries.sort((a, b) => a.time.localeCompare(b.time)))
         console.log(`💩 Loaded ${bathroomEntries.length} bathroom entries for ${selectedDate}`)
       } else {

@@ -163,7 +163,7 @@ export default function HydrationTracker() {
 
   const handleSave = async (entryData: Omit<HydrationEntry, 'id' | 'createdAt' | 'updatedAt'>) => {
     try {
-      setIsLoading(true)
+      // Loading state is managed by useDailyData hook
       const hydrationEntry: HydrationEntry = {
         id: editingEntry?.id || `hydration-${Date.now()}`,
         ...entryData,
@@ -196,7 +196,7 @@ export default function HydrationTracker() {
         variant: "destructive"
       })
     } finally {
-      setIsLoading(false)
+      // Loading state is managed by useDailyData hook
     }
   }
 

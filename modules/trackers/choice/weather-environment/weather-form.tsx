@@ -155,10 +155,9 @@ export function WeatherForm({ isOpen, onClose, onSave, initialData, isEditing = 
           <div className="space-y-3">
             <Label className="text-base font-medium">Tags</Label>
             <TagInput
-              tags={weatherTags}
-              setTags={setWeatherTags}
+              value={weatherTags}
+              onChange={setWeatherTags}
               placeholder="Add tags like 'barometric-pressure', 'seasonal', 'storm-front'..."
-              categoryFilter={['weather', 'environment']}
             />
           </div>
 

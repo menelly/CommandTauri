@@ -3,8 +3,7 @@
 import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Slider } from "@/components/ui/slider"
@@ -14,7 +13,7 @@ import { ReproductiveHealthEntry, FLOW_LEVELS, MOOD_OPTIONS, SYMPTOM_OPTIONS } f
 
 interface MenstrualFormProps {
   formData: Partial<ReproductiveHealthEntry>
-  updateFormData: (field: keyof ReproductiveHealthEntry, value: any) => void
+  updateFormData: (field: keyof ReproductiveHealthEntry, value: unknown) => void
   onSave: () => void
   isLoading: boolean
 }
@@ -123,7 +122,7 @@ export function MenstrualForm({ formData, updateFormData, onSave, isLoading }: M
             🤒 Symptoms
           </CardTitle>
           <CardDescription>
-            Track any symptoms you're experiencing
+            Track any symptoms you&apos;re experiencing
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -204,7 +203,7 @@ export function MenstrualForm({ formData, updateFormData, onSave, isLoading }: M
         <CardContent>
           <TagInput
             value={formData.tags || []}
-            onChange={(tags: string[]) => updateFormData('tags', tags)}
+            onChange={(tags) => updateFormData('tags', tags)}
             placeholder="Add tags like 'heavy-day', 'pms', 'cramps'..."
           />
         </CardContent>

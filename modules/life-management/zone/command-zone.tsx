@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Target, Heart, Brain } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Plus, Package, Clock, Moon, ChevronRight, ChevronDown, Backpack } from 'lucide-react'
@@ -40,6 +41,13 @@ interface ScheduleBlock {
   color: string
 }
 
+interface SurvivalBoxItem {
+  id: string
+  name: string
+  completed: boolean
+  essential: boolean
+}
+
 export default function CommandZone() {
   const [dailyTasks, setDailyTasks] = useState<DailyTask[]>([])
   const [newTask, setNewTask] = useState('')
@@ -55,6 +63,12 @@ export default function CommandZone() {
     { id: '3', name: 'Lunch Break', startTime: '12:00', endTime: '13:00', color: 'bg-green-100' },
     { id: '4', name: 'Afternoon Tasks', startTime: '13:00', endTime: '17:00', color: 'bg-purple-100' },
     { id: '5', name: 'Evening Wind Down', startTime: '17:00', endTime: '21:00', color: 'bg-orange-100' },
+  ])
+  const [survivalBox, setSurvivalBox] = useState<SurvivalBoxItem[]>([
+    { id: '1', name: 'Emergency Contacts', completed: false, essential: true },
+    { id: '2', name: 'Medications', completed: false, essential: true },
+    { id: '3', name: 'Water & Snacks', completed: false, essential: true },
+    { id: '4', name: 'Comfort Items', completed: false, essential: false },
   ])
 
   // Load tasks from localStorage on mount

@@ -620,8 +620,10 @@ export default function DiabetesTracker() {
               await db.daily_data.update(record.id!, {
                 content: updatedRecordTimers,
                 metadata: {
-                  ...record.metadata,
-                  updated_at: getCurrentTimestamp()
+                  created_at: record.metadata?.created_at || getCurrentTimestamp(),
+                  updated_at: getCurrentTimestamp(),
+                  user_id: record.metadata?.user_id || 'default-user',
+                  version: (record.metadata?.version || 1) + 1
                 }
               })
               console.log('🗑️ Updated timer record for', record.date)
@@ -1526,8 +1528,8 @@ function DiabetesHistory() {
         index === self.findIndex(t => t.id === timer.id)
       )
 
-      // Sort entries by timestamp (newest first)
-      allEntries.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+      // Sort entries by created_at (newest first)
+      allEntries.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
       setHistoryEntries(allEntries)
       setHistoryTimers(uniqueTimers)
@@ -1649,8 +1651,7 @@ function DiabetesHistory() {
                     <div key={entry.id} className="border rounded-lg p-4">
                       <div className="flex justify-between items-start mb-2">
                         <div className="text-sm text-muted-foreground">
-                          {entry.timestamp ? formatTimestamp(entry.timestamp) :
-                           entry.created_at ? formatTimestamp(entry.created_at) :
+                          {entry.created_at ? formatTimestamp(entry.created_at) :
                            entry.id ? formatTimestamp(entry.id.split('-')[1] || 'Unknown') : 'Unknown time'}
                         </div>
                         <div className="flex gap-1">

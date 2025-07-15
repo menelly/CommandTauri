@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, use } from "react"
 import { ChevronLeft, ChevronRight, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { getFirstDayOfWeek, getWeekOfYear, formatDateForUrl, getShortDayName } from "@/lib/utils/dateUtils"

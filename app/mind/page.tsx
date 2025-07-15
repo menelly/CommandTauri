@@ -27,6 +27,7 @@ interface TrackerButton {
   helpContent: string
   icon: React.ReactNode
   status: 'available' | 'coming-soon' | 'planned'
+  href?: string
 }
 
 export default function MentalHealthIndex() {

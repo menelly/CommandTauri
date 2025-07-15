@@ -112,7 +112,7 @@ export const sanitizeChartData = <T extends Record<string, any>>(
   }).map(item => {
     const sanitized = { ...item }
     numericFields.forEach(field => {
-      sanitized[field] = sanitizeChartNumber(item[field])
+      sanitized[field] = sanitizeChartNumber(item[field]) as T[keyof T]
     })
     return sanitized
   })

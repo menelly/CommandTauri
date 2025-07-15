@@ -367,10 +367,9 @@ export function GeneralEpisodeModal({ isOpen, onClose, onSave, editingEntry }: E
           <div className="space-y-3">
             <Label>Tags (Optional)</Label>
             <TagInput
-              tags={tags}
-              setTags={setTags}
+              value={tags}
+              onChange={setTags}
               placeholder="Add tags like 'complex', 'flare', 'mixed-symptoms', 'nope'..."
-              categoryFilter={['health', 'tracker']}
             />
           </div>
 

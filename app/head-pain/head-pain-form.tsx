@@ -125,7 +125,7 @@ export function HeadPainForm({ isOpen, onClose, onSave, editingEntry, selectedDa
       auraDescription: auraDescription.trim() || undefined,
       associatedSymptoms,
       triggers,
-      duration: durationValue && durationUnit ? `${durationValue} ${durationUnit}` : undefined,
+      duration: durationValue && durationUnit ? `${durationValue} ${durationUnit}` : '',
       onsetTime: onsetTime.trim() || undefined,
       treatments,
       treatmentEffectiveness: treatments.length > 0 ? treatmentEffectiveness : undefined,
@@ -311,7 +311,7 @@ export function HeadPainForm({ isOpen, onClose, onSave, editingEntry, selectedDa
               <Checkbox
                 id="aura-present"
                 checked={auraPresent}
-                onCheckedChange={setAuraPresent}
+                onCheckedChange={(checked) => setAuraPresent(checked === true)}
               />
               <Label htmlFor="aura-present" className="font-medium">
                 Aura Present (visual, sensory, or speech symptoms before/during headache)

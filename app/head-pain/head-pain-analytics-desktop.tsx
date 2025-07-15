@@ -398,6 +398,7 @@ export default function HeadPainAnalyticsDesktop({ className }: AnalyticsProps) 
           </CardContent>
         </Card>
       ) : (
+        <div className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Pain Intensity Distribution */}
         <Card>
@@ -423,7 +424,10 @@ export default function HeadPainAnalyticsDesktop({ className }: AnalyticsProps) 
                 </Pie>
                 <Tooltip formatter={(value, name, props) => [value, props.payload.range]} />
                 <Legend
-                  formatter={(value, entry) => `${entry.payload.range} (${entry.payload.count})`}
+                  formatter={(value, entry) => {
+                    const payload = entry.payload as any;
+                    return payload ? `${payload.range} (${payload.count})` : value;
+                  }}
                   wrapperStyle={{ fontSize: '12px' }}
                 />
               </PieChart>
@@ -503,19 +507,21 @@ export default function HeadPainAnalyticsDesktop({ className }: AnalyticsProps) 
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value, name, props) => [value, props.payload.impact]} />
+                <Tooltip formatter={(value, name, props) => [value, (props.payload as any)?.impact || 'Unknown']} />
                 <Legend
-                  formatter={(value, entry) => `${entry.payload.impact} (${entry.payload.count})`}
+                  formatter={(value, entry) => {
+                    const payload = entry.payload as any;
+                    return payload ? `${payload.impact} (${payload.count})` : value;
+                  }}
                   wrapperStyle={{ fontSize: '12px' }}
                 />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
-      </div>
 
-      {/* Episode Frequency Trend */}
-      <Card>
+        {/* Episode Frequency Trend */}
+        <Card>
         <CardHeader>
           <CardTitle>Episode Frequency Over Time</CardTitle>
           <CardDescription>Number of headache episodes per day</CardDescription>
@@ -575,6 +581,7 @@ export default function HeadPainAnalyticsDesktop({ className }: AnalyticsProps) 
             )}
           </CardContent>
         </Card>
+        </div>
 
         <Card>
           <CardHeader>
@@ -716,6 +723,7 @@ export default function HeadPainAnalyticsDesktop({ className }: AnalyticsProps) 
             </div>
           </CardContent>
         </Card>
+        </div>
         </div>
       )}
     </div>

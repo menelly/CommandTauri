@@ -244,10 +244,9 @@ export function AllergenForm({ isOpen, onClose, onSave, initialData, isEditing =
           <div className="space-y-3">
             <Label className="text-base font-medium">Tags</Label>
             <TagInput
-              tags={allergenTags}
-              setTags={setAllergenTags}
+              value={allergenTags}
+              onChange={setAllergenTags}
               placeholder="Add tags like 'seasonal', 'indoor', 'outdoor'..."
-              categoryFilter={['allergens', 'environment']}
             />
           </div>
 

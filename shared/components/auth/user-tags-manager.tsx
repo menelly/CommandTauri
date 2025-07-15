@@ -9,8 +9,8 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Trash2, Plus, Edit2, Save, X, Tag, Eye, EyeOff } from "lucide-react"
-// TODO: Migrate user tags to WatermelonDB
-// import { db, UserTag } from "@/lib/database"
+import { db } from "@/lib/database"
+import type { UserTag } from "@/lib/database"
 import { toast } from "@/hooks/use-toast"
 
 interface UserTagsManagerProps {

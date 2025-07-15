@@ -523,8 +523,8 @@ export function PainForm({ initialData, onSave, isLoading }: PainFormProps) {
           </CardHeader>
           <CardContent>
             <TagInput
-              tags={formData.tags || []}
-              setTags={(tags) => updateFormData('tags', tags)}
+              value={formData.tags || []}
+              onChange={(tags: string[]) => updateFormData('tags', tags)}
               placeholder="Add tags like 'migraine', 'flare-up', 'chronic', 'acute'..."
             />
           </CardContent>

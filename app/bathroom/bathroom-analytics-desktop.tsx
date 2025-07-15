@@ -388,9 +388,12 @@ export default function BathroomAnalyticsDesktop({ className }: AnalyticsProps) 
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value, name, props) => [value, props.payload.fullStatus]} />
+                <Tooltip formatter={(value, name, props) => [value, (props.payload as any)?.fullStatus || 'Unknown']} />
                 <Legend
-                  formatter={(value, entry) => `${entry.payload.fullStatus} (${entry.payload.count})`}
+                  formatter={(value, entry) => {
+                    const payload = entry.payload as any;
+                    return payload ? `${payload.fullStatus} (${payload.count})` : value;
+                  }}
                   wrapperStyle={{ fontSize: '12px' }}
                 />
               </PieChart>

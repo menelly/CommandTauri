@@ -377,10 +377,9 @@ export function TemperatureModal({ isOpen, onClose, onSave, editingEntry }: Epis
           <div className="space-y-3">
             <Label>Tags (Optional)</Label>
             <TagInput
-              tags={tags}
-              setTags={setTags}
+              value={tags}
+              onChange={setTags}
               placeholder="Add tags like 'heat', 'cold', 'sweating', 'weather', 'nope'..."
-              categoryFilter={['health', 'tracker']}
             />
           </div>
 

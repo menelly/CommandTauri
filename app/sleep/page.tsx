@@ -88,17 +88,7 @@ export default function SleepTracker() {
       setEntries(sleepEntries)
       console.log('🍉 SLEEP DEBUG: Loaded entries:', sleepEntries)
 
-      // Load today's entry if exists
-      if (sleepEntries.length > 0 && selectedDate === format(new Date(), 'yyyy-MM-dd')) {
-        const todayEntry = sleepEntries[0]
-        setHoursSlept([todayEntry.hoursSlept])
-        setQuality(todayEntry.quality)
-        setWokeUpMultipleTimes(todayEntry.wokeUpMultipleTimes)
-        setBedTime(todayEntry.bedTime || "")
-        setWakeTime(todayEntry.wakeTime || "")
-        setNotes(todayEntry.notes)
-        setTags(todayEntry.tags || [])
-      }
+      // Entries are loaded and will be passed to SleepForm when editing
     } catch (error) {
       console.error('Failed to load sleep entries:', error)
       toast({
@@ -343,9 +333,9 @@ export default function SleepTracker() {
                               <p className="text-sm mb-3">{entry['notes'] || entry.notes}</p>
                             )}
 
-                            {tags && tags.length > 0 && (
+                            {entry.tags && entry.tags.length > 0 && (
                               <div className="flex flex-wrap gap-1">
-                                {tags.map((tag) => (
+                                {entry.tags.map((tag: string) => (
                                   <Badge key={tag} variant="secondary" className="text-xs">
                                     {tag}
                                   </Badge>

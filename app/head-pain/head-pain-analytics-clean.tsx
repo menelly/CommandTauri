@@ -63,7 +63,7 @@ export default function HeadPainAnalyticsDesktop({ className }: AnalyticsProps) 
       const cleanEntries = allEntries.map(entry => ({
         ...entry,
         painIntensity: headPainIntensityToNumber(entry.painIntensity),
-        treatmentEffectiveness: headPainEffectivenessToNumber(entry.treatmentEffectiveness)
+        treatmentEffectiveness: entry.treatmentEffectiveness ? headPainEffectivenessToNumber(entry.treatmentEffectiveness) : 0
       })).filter(entry => 
         entry.painIntensity >= 0 && entry.painIntensity <= 10 &&
         entry.treatmentEffectiveness >= 0 && entry.treatmentEffectiveness <= 10
@@ -106,7 +106,7 @@ export default function HeadPainAnalyticsDesktop({ className }: AnalyticsProps) 
   // Calculate basic analytics using safe math
   const totalEpisodes = entries.length
   const avgPainIntensity = safeAverage(entries.map(e => e.painIntensity)).toFixed(1)
-  const avgTreatmentEffectiveness = safeAverage(entries.map(e => e.treatmentEffectiveness)).toFixed(1)
+  const avgTreatmentEffectiveness = safeAverage(entries.map(e => e.treatmentEffectiveness || 0)).toFixed(1)
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -220,9 +220,9 @@ export default function HeadPainAnalyticsDesktop({ className }: AnalyticsProps) 
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={[
-                    { range: 'Poor (0-3)', count: entries.filter(e => e.treatmentEffectiveness >= 0 && e.treatmentEffectiveness <= 3).length },
-                    { range: 'Fair (4-6)', count: entries.filter(e => e.treatmentEffectiveness >= 4 && e.treatmentEffectiveness <= 6).length },
-                    { range: 'Good (7-10)', count: entries.filter(e => e.treatmentEffectiveness >= 7 && e.treatmentEffectiveness <= 10).length }
+                    { range: 'Poor (0-3)', count: entries.filter(e => e.treatmentEffectiveness !== undefined && e.treatmentEffectiveness >= 0 && e.treatmentEffectiveness <= 3).length },
+                    { range: 'Fair (4-6)', count: entries.filter(e => e.treatmentEffectiveness !== undefined && e.treatmentEffectiveness >= 4 && e.treatmentEffectiveness <= 6).length },
+                    { range: 'Good (7-10)', count: entries.filter(e => e.treatmentEffectiveness !== undefined && e.treatmentEffectiveness >= 7 && e.treatmentEffectiveness <= 10).length }
                   ].filter(item => item.count > 0)}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="range" />

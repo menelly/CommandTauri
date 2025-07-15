@@ -365,10 +365,9 @@ export default function PainAnalyticsDesktop({ className }: AnalyticsProps) {
               </ResponsiveContainer>
             </CardContent>
           </Card>
-        </div>
 
-        {/* Pain Trend Over Time */}
-        <Card>
+          {/* Pain Trend Over Time */}
+          <Card>
           <CardHeader>
             <CardTitle>Pain Trend Over Time</CardTitle>
             <CardDescription>Average daily pain levels and episode frequency</CardDescription>

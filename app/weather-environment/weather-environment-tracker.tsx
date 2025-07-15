@@ -499,7 +499,7 @@ export default function WeatherEnvironmentTracker({ selectedDate = new Date() }:
             Track weather patterns and environmental allergens
           </p>
         </div>
-        <DailyDashboardToggle />
+        <DailyDashboardToggle trackerId="weather-environment" trackerName="Weather & Environment" />
       </div>
 
       {/* Date Navigation */}

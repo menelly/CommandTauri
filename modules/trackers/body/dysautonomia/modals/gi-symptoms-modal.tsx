@@ -358,10 +358,9 @@ export function GiSymptomsModal({ isOpen, onClose, onSave, editingEntry }: Episo
           <div className="space-y-3">
             <Label>Tags (Optional)</Label>
             <TagInput
-              tags={tags}
-              setTags={setTags}
+              value={tags}
+              onChange={setTags}
               placeholder="Add tags like 'gastroparesis', 'food', 'medication', 'nope'..."
-              categoryFilter={['health', 'tracker']}
             />
           </div>
 

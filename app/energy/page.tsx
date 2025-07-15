@@ -100,7 +100,7 @@ export default function EnergyTracker() {
             entries = [entries]
           }
 
-          allEntries.push(...entries.filter(entry => entry && typeof entry === 'object'))
+          allEntries.push(...entries.filter((entry: any) => entry && typeof entry === 'object'))
         }
       }
 

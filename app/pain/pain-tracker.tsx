@@ -181,7 +181,7 @@ export default function PainTracker() {
         if (!Array.isArray(entries)) {
           entries = [entries]
         }
-        setEntries(entries.filter(entry => entry.date === date))
+        setEntries(entries.filter((entry: any) => entry.date === date))
       } else {
         setEntries([])
       }
@@ -374,7 +374,7 @@ export default function PainTracker() {
       </Card>
 
       {/* Main content with proper tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
+      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "track" | "history" | "analytics")}>
         <TabsList className="grid w-full grid-cols-2 lg:grid-cols-3">
           <TabsTrigger value="track" className="flex items-center gap-2">
             <Plus className="h-4 w-4" />

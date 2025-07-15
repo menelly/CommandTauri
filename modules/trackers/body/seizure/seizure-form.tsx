@@ -323,7 +323,7 @@ export function SeizureForm({ isOpen, onClose, onSave, editEntry }: SeizureFormP
                 <Checkbox
                   id="witnessPresent"
                   checked={witnessPresent}
-                  onCheckedChange={setWitnessPresent}
+                  onCheckedChange={(checked) => setWitnessPresent(checked === true)}
                 />
                 <Label htmlFor="witnessPresent">Witness Present</Label>
               </div>
@@ -331,7 +331,7 @@ export function SeizureForm({ isOpen, onClose, onSave, editEntry }: SeizureFormP
                 <Checkbox
                   id="injuriesOccurred"
                   checked={injuriesOccurred}
-                  onCheckedChange={setInjuriesOccurred}
+                  onCheckedChange={(checked) => setInjuriesOccurred(checked === true)}
                 />
                 <Label htmlFor="injuriesOccurred">Injuries Occurred</Label>
               </div>
@@ -394,7 +394,7 @@ export function SeizureForm({ isOpen, onClose, onSave, editEntry }: SeizureFormP
                 <Checkbox
                   id="medicationTaken"
                   checked={medicationTaken}
-                  onCheckedChange={setMedicationTaken}
+                  onCheckedChange={(checked) => setMedicationTaken(checked === true)}
                 />
                 <Label htmlFor="medicationTaken">Rescue Medication Taken</Label>
               </div>
@@ -402,7 +402,7 @@ export function SeizureForm({ isOpen, onClose, onSave, editEntry }: SeizureFormP
                 <Checkbox
                   id="medicationMissed"
                   checked={medicationMissed}
-                  onCheckedChange={setMedicationMissed}
+                  onCheckedChange={(checked) => setMedicationMissed(checked === true)}
                 />
                 <Label htmlFor="medicationMissed">Regular Medication Missed</Label>
               </div>
@@ -447,10 +447,9 @@ export function SeizureForm({ isOpen, onClose, onSave, editEntry }: SeizureFormP
           <div>
             <Label>Tags (optional)</Label>
             <TagInput
-              tags={tags}
-              setTags={setTags}
+              value={tags}
+              onChange={setTags}
               placeholder="Add tags like 'breakthrough', 'stress', 'sleep-deprived'..."
-              categoryFilter={['health', 'tracker']}
             />
           </div>
 

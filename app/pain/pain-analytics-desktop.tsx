@@ -443,6 +443,7 @@ export default function PainAnalyticsDesktop({ className }: AnalyticsProps) {
           </CardContent>
         </Card>
       ) : (
+        <div className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Pain Level Distribution */}
         <Card>
@@ -468,7 +469,10 @@ export default function PainAnalyticsDesktop({ className }: AnalyticsProps) {
                 </Pie>
                 <Tooltip formatter={(value, name, props) => [value, props.payload.range]} />
                 <Legend
-                  formatter={(value, entry) => `${entry.payload.range} (${entry.payload.count})`}
+                  formatter={(value, entry) => {
+                    const payload = entry.payload as any;
+                    return payload ? `${payload.range} (${payload.count})` : value;
+                  }}
                   wrapperStyle={{ fontSize: '12px' }}
                 />
               </PieChart>
@@ -550,17 +554,18 @@ export default function PainAnalyticsDesktop({ className }: AnalyticsProps) {
                 </Pie>
                 <Tooltip formatter={(value, name, props) => [value, props.payload.type]} />
                 <Legend
-                  formatter={(value, entry) => `${entry.payload.type} (${entry.payload.count})`}
+                  formatter={(value, entry) => {
+                    const payload = entry.payload as any;
+                    return payload ? `${payload.type} (${payload.count})` : value;
+                  }}
                   wrapperStyle={{ fontSize: '12px' }}
                 />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
-      </div>
-
-      {/* Pain Trend Over Time */}
-      <Card>
+        {/* Pain Trend Over Time */}
+        <Card>
         <CardHeader>
           <CardTitle>Pain Trend Over Time</CardTitle>
           <CardDescription>Average daily pain levels and episode frequency</CardDescription>
@@ -595,10 +600,11 @@ export default function PainAnalyticsDesktop({ className }: AnalyticsProps) {
             </LineChart>
           </ResponsiveContainer>
         </CardContent>
-      </Card>
+        </Card>
+        </div>
 
-      {/* Treatment Effectiveness & Health Insights */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Treatment Effectiveness & Health Insights */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Treatment Effectiveness</CardTitle>
@@ -745,6 +751,7 @@ export default function PainAnalyticsDesktop({ className }: AnalyticsProps) {
             </div>
           </CardContent>
         </Card>
+        </div>
         </div>
       )}
     </div>

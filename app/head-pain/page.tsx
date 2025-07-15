@@ -454,7 +454,7 @@ export default function HeadPainTracker() {
           isOpen={isAddDialogOpen}
           onClose={() => setIsAddDialogOpen(false)}
           onSave={handleAddEntry}
-          selectedDate={selectedDate}
+          selectedDate={new Date(selectedDate)}
         />
 
         {/* Edit Entry Dialog */}
@@ -466,7 +466,7 @@ export default function HeadPainTracker() {
           }}
           onSave={handleUpdateEntry}
           editingEntry={editingEntry}
-          selectedDate={selectedDate}
+          selectedDate={new Date(selectedDate)}
         />
       </div>
     </AppCanvas>

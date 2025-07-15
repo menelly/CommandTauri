@@ -101,7 +101,7 @@ export default function FoodChoiceTracker() {
     }
   }
 
-  const hasAnyData = entry.simpleEntries.length > 0 || entry.detailedEntries.length > 0 || entry.generalNotes.trim()
+  const hasAnyData = entry.simpleEntries.length > 0 || entry.detailedEntries.length > 0 || (entry.generalNotes && entry.generalNotes.trim())
 
   return (
     <AppCanvas>

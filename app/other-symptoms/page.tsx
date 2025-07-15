@@ -877,8 +877,8 @@ export default function OtherSymptomsTracker() {
               <div>
                 <Label htmlFor="tags">Tags</Label>
                 <TagInput
-                  tags={tags}
-                  onTagsChange={setTags}
+                  value={tags}
+                  onChange={setTags}
                   placeholder="Add tags like 'stress', 'weather', 'medication'..."
                 />
               </div>

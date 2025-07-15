@@ -22,7 +22,7 @@ export type {
 export { providerParserConfig } from './configs/provider';
 
 // React component
-export { default as TextParserComponent } from '../../components/text-parser';
+export { default as TextParserComponent } from '../../../components/text-parser';
 
 // Convenience functions for common use cases
 import { TextParser } from './core';

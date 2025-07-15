@@ -269,6 +269,7 @@ export function predictOvulation(
 ): OvulationPrediction {
   const today = new Date()
 
+
   // DEBUG: Log what we're working with
   console.log('🔮 PREDICTOR DEBUG: Input entries:', entries.length)
   console.log('🔮 PREDICTOR DEBUG: LMP Date:', lmpDate)
@@ -334,11 +335,13 @@ export function predictOvulation(
   const estimatedOvulationDay = Math.round(averageCycleLength * 0.5) // Roughly middle of cycle
   const daysUntilEstimatedOvulation = estimatedOvulationDay - cycleDay
 
+  // Continue with cycle-based prediction since we have LMP
+
   // Fall back to cycle-based estimation
   if (cycleDay >= 5 && cycleDay <= (averageCycleLength - 5)) {
     const fertileStart = Math.max(1, estimatedOvulationDay - 5)
     const fertileEnd = Math.min(averageCycleLength, estimatedOvulationDay + 1)
-
+    
     if (cycleDay >= fertileStart && cycleDay <= fertileEnd) {
       return {
         predictedDay: estimatedOvulationDay,
@@ -348,7 +351,7 @@ export function predictOvulation(
         fertileWindowEnd: fertileEnd,
         daysUntilOvulation: daysUntilEstimatedOvulation,
         status: daysUntilEstimatedOvulation > 0 ? 'pre-ovulation' : 'post-ovulation',
-        message: daysUntilEstimatedOvulation > 0
+        message: daysUntilEstimatedOvulation > 0 
           ? `Estimated ovulation in ${daysUntilEstimatedOvulation} days (cycle day ${estimatedOvulationDay})`
           : `Estimated ovulation was ${Math.abs(daysUntilEstimatedOvulation)} days ago`
       }

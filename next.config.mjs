@@ -1,29 +1,29 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Build configuration for Tauri desktop + mobile
   eslint: {
-    ignoreDuringBuilds: true,
-    dirs: [], // Don't lint any directories during build
+    ignoreDuringBuilds: false, // Let's actually see the lints!
+    dirs: ['app', 'components', 'lib', 'modules'], // Lint these directories
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false, // Let's see TypeScript errors too!
   },
   images: {
     unoptimized: true,
   },
-  // Enable static export for Electron
+  // Enable static export for Tauri
   output: 'export',
   trailingSlash: true,
   distDir: 'out',
-  experimental: {
-    swcPlugins: [
-      ['@swc/plugin-transform-imports', {}]
-    ],
-    // Enable ES modules support
-    esmExternals: true,
-  },
+
+  // Handle ES modules properly
+  transpilePackages: ['canvas-confetti'],
+
+  // Unified webpack configuration
   webpack: (config, { isServer }) => {
-    // Fix for transformers.js in browser environment
+    // Browser-only configurations
     if (!isServer) {
+      // Node.js fallbacks for browser
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
@@ -35,7 +35,7 @@ const nextConfig = {
         process: false,
       }
 
-      // Completely ignore Sharp and related modules
+      // Ignore problematic modules
       config.resolve.alias = {
         ...config.resolve.alias,
         'sharp': false,
@@ -44,7 +44,7 @@ const nextConfig = {
         '@img/sharp-wasm32/versions': false,
       }
 
-      // Add module rules to ignore Sharp imports
+      // Fix transformers.js Sharp imports
       config.module.rules.push({
         test: /node_modules\/@huggingface\/transformers\/.*\.js$/,
         use: {
@@ -55,22 +55,23 @@ const nextConfig = {
           },
         },
       })
+
+      // Exclude problematic externals
+      config.externals = config.externals || [];
+      config.externals.push({
+        'react-native-sqlite-storage': 'react-native-sqlite-storage',
+        'better-sqlite3': 'better-sqlite3',
+        'sharp': 'sharp',
+        'onnxruntime-node': 'onnxruntime-node',
+      });
     }
-    return config
-  },
-  // Force Next.js to use Babel instead of SWC for WatermelonDB decorators
-  swcMinify: false,
-  compiler: {
-    // This tells Next.js to use Babel
-  },
-  // Handle ES modules properly
-  transpilePackages: ['canvas-confetti'],
-  webpack: (config) => {
-    // Handle ES modules
+
+    // Handle ES module extensions
     config.resolve.extensionAlias = {
       '.js': ['.js', '.ts', '.tsx'],
       '.mjs': ['.mjs', '.js'],
     }
+
     return config
   },
 }

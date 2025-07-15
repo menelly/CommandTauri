@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Slider } from "@/components/ui/slider"
-import { Thermometer, Moon, Activity, Droplets, Calendar } from 'lucide-react'
+
+import { Thermometer, Activity, Calendar } from 'lucide-react'
 import { TagInput } from "@/components/tag-input"
 import { ReproductiveHealthEntry, OPK_LEVELS, FERTILITY_SYMPTOM_OPTIONS } from './reproductive-health-tracker'
 
@@ -29,7 +29,7 @@ export const FERNING_OPTIONS = [
 
 interface FertilityFormProps {
   formData: Partial<ReproductiveHealthEntry>
-  updateFormData: (field: keyof ReproductiveHealthEntry, value: any) => void
+  updateFormData: (field: keyof ReproductiveHealthEntry, value: unknown) => void
   onSave: () => void
   isLoading: boolean
 }
@@ -261,7 +261,7 @@ export function FertilityForm({ formData, updateFormData, onSave, isLoading }: F
                 <div className="mt-2">
                   <TagInput
                     value={formData.tags || []}
-                    onChange={(tags: string[]) => updateFormData('tags', tags)}
+                    onChange={(tags) => updateFormData('tags', tags)}
                     placeholder="Add tags like 'ovulation', 'fertile-window', 'ttc'..."
                   />
                 </div>

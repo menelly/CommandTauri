@@ -755,10 +755,9 @@ export default function ProvidersPage() {
                   <div className="space-y-2 md:col-span-2">
                     <Label htmlFor="tags">Tags</Label>
                     <TagInput
-                      tags={formData.tags || []}
-                      setTags={(newTags) => setFormData(prev => ({ ...prev, tags: newTags }))}
+                      value={formData.tags || []}
+                      onChange={(newTags: string[]) => setFormData(prev => ({ ...prev, tags: newTags }))}
                       placeholder="Add tags like 'endo', 'primary', 'therapist'..."
-                      categoryFilter={['health', 'medical']}
                       maxTags={10}
                     />
                     <p className="text-xs text-muted-foreground">

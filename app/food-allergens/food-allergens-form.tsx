@@ -439,8 +439,8 @@ export function FoodAllergensForm({ initialData, onSubmit, onCancel }: FoodAller
           <div className="space-y-2">
             <Label>Tags</Label>
             <TagInput
-              tags={formData.tags}
-              setTags={(tags) => updateFormData('tags', tags)}
+              value={formData.tags}
+              onChange={(tags: string[]) => updateFormData('tags', tags)}
               placeholder="Add tags for easier searching..."
             />
           </div>

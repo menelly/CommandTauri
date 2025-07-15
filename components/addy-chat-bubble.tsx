@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 // import { ScrollArea } from "@/components/ui/scroll-area" // Component is empty
 import { Send, X, Minimize2 } from "lucide-react"
-import { type ConversationContext, type AddyResponse } from "@/lib/ai/personality-engine"
+import { type ConversationContext, type AddyResponse } from "@/shared/ai/personality-engine"
 import addyAI from "@/lib/ai/transformers-client"
 
 interface ChatMessage {
@@ -53,7 +53,7 @@ export default function AddyChatBubble() {
       }
 
       // Check if the client-side AI is ready or loading
-      if (addyAI.isReady()) {
+      if (await addyAI.isReady()) {
         setIsAiAvailable(true)
       } else if (addyAI.isLoadingModel()) {
         setIsAiAvailable(false)

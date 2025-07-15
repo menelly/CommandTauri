@@ -408,7 +408,10 @@ export default function UpperDigestiveAnalyticsDesktop({ className }: AnalyticsP
                 </Pie>
                 <Tooltip formatter={(value, name, props) => [value, props.payload.label]} />
                 <Legend
-                  formatter={(value, entry) => `${entry.payload.severity} (${entry.payload.count})`}
+                  formatter={(value, entry) => {
+                    const payload = entry.payload as any;
+                    return payload ? `${payload.severity} (${payload.count})` : value;
+                  }}
                   wrapperStyle={{ fontSize: '12px' }}
                 />
               </PieChart>
