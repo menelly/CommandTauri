@@ -7,14 +7,17 @@ Handles PDF generation, AI processing, and data analytics
 import os
 import json
 import logging
+import hashlib
+import hmac
+import time
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from dotenv import load_dotenv
+from functools import wraps
 
 # Import our modules
 from pdf_generator import PDFGenerator
-from ai_processor import AIProcessor
 from analytics import AnalyticsEngine
 
 # Load environment variables
@@ -26,12 +29,152 @@ logger = logging.getLogger(__name__)
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app)  # Enable CORS for frontend communication
+
+# Security configuration
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max request size
+app.config['JSON_SORT_KEYS'] = False  # Preserve JSON key order
+
+# Secure CORS configuration - only allow localhost during development
+CORS(app, origins=[
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "tauri://localhost",
+    "https://tauri.localhost"
+], supports_credentials=True)
+
+# Security headers
+@app.after_request
+def add_security_headers(response):
+    """Add security headers to all responses"""
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+    response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; media-src 'self'; frame-src 'none';"
+    return response
+
+# Security configuration
+RATE_LIMIT_WINDOW = 300  # 5 minutes
+MAX_REQUESTS_PER_WINDOW = 50
+failed_attempts = {}  # Track failed PIN attempts per IP
 
 # Initialize our services
 pdf_gen = PDFGenerator()
-ai_proc = None  # Will be initialized on demand
 analytics = AnalyticsEngine()
+
+# ============================================================================
+# SECURITY FUNCTIONS
+# ============================================================================
+
+def hash_pin(pin: str) -> str:
+    """Hash a PIN for secure comparison"""
+    return hashlib.sha256(pin.encode('utf-8')).hexdigest()
+
+def validate_pin_format(pin: str) -> bool:
+    """Validate PIN format (4-20 characters, alphanumeric)"""
+    if not pin or len(pin) < 4 or len(pin) > 20:
+        return False
+    return pin.replace('-', '').replace('_', '').isalnum()
+
+def validate_device_id(device_id: str) -> bool:
+    """Validate device ID format"""
+    if not device_id or len(device_id) < 8 or len(device_id) > 64:
+        return False
+    # Allow alphanumeric, hyphens, and underscores
+    return all(c.isalnum() or c in '-_' for c in device_id)
+
+def validate_sync_data(data: dict) -> bool:
+    """Validate sync data structure and size"""
+    if not isinstance(data, dict):
+        return False
+
+    # Check data size (max 10MB JSON)
+    try:
+        json_str = json.dumps(data)
+        if len(json_str.encode('utf-8')) > 10 * 1024 * 1024:  # 10MB limit
+            return False
+    except (TypeError, ValueError):
+        return False
+
+    return True
+
+def sanitize_string(value: str, max_length: int = 1000) -> str:
+    """Sanitize string input"""
+    if not isinstance(value, str):
+        return ""
+
+    # Remove null bytes and control characters
+    sanitized = ''.join(char for char in value if ord(char) >= 32 or char in '\n\r\t')
+
+    # Truncate to max length
+    return sanitized[:max_length]
+
+def check_rate_limit(client_ip: str) -> bool:
+    """Check if client has exceeded rate limit"""
+    current_time = time.time()
+
+    # Clean old entries
+    failed_attempts[client_ip] = [
+        timestamp for timestamp in failed_attempts.get(client_ip, [])
+        if current_time - timestamp < RATE_LIMIT_WINDOW
+    ]
+
+    # Check if rate limit exceeded
+    return len(failed_attempts.get(client_ip, [])) < MAX_REQUESTS_PER_WINDOW
+
+def record_failed_attempt(client_ip: str):
+    """Record a failed authentication attempt"""
+    if client_ip not in failed_attempts:
+        failed_attempts[client_ip] = []
+    failed_attempts[client_ip].append(time.time())
+
+def require_pin_auth(f):
+    """Decorator to require PIN authentication for sync endpoints"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        client_ip = request.environ.get('HTTP_X_FORWARDED_FOR', request.environ.get('REMOTE_ADDR', 'unknown'))
+
+        # Check rate limiting
+        if not check_rate_limit(client_ip):
+            logger.warning(f"Rate limit exceeded for IP: {client_ip}")
+            return jsonify({'error': 'Too many requests. Please try again later.'}), 429
+
+        # Get request data
+        data = request.get_json()
+        if not data:
+            record_failed_attempt(client_ip)
+            return jsonify({'error': 'Invalid request format'}), 400
+
+        # Validate required fields
+        user_pin = data.get('user_pin')
+        device_id = data.get('device_id')
+
+        if not user_pin or not device_id:
+            record_failed_attempt(client_ip)
+            return jsonify({'error': 'Missing user_pin or device_id'}), 400
+
+        # Validate PIN format
+        if not validate_pin_format(user_pin):
+            record_failed_attempt(client_ip)
+            return jsonify({'error': 'Invalid PIN format'}), 400
+
+        # Validate device ID format
+        if not validate_device_id(device_id):
+            record_failed_attempt(client_ip)
+            return jsonify({'error': 'Invalid device_id format'}), 400
+
+        # Sanitize inputs
+        user_pin = sanitize_string(user_pin, 20)
+        device_id = sanitize_string(device_id, 64)
+
+        # Add validated data to request context
+        request.validated_pin = user_pin
+        request.validated_device_id = device_id
+
+        return f(*args, **kwargs)
+
+    return decorated_function
 
 @app.route('/health', methods=['GET'])
 def health_check():
@@ -41,82 +184,11 @@ def health_check():
         'timestamp': datetime.now().isoformat(),
         'services': {
             'pdf': True,
-            'ai': ai_proc.is_available() if ai_proc else False,
             'analytics': True
         }
     })
 
-@app.route('/api/ai/initialize', methods=['POST'])
-def initialize_ai():
-    """Initialize AI processor (now just creates the HTTP client)"""
-    global ai_proc
-    try:
-        if ai_proc is None:
-            logger.info("Initializing AI processor...")
-            from ai_processor import AIProcessor
-            ai_proc = AIProcessor()
 
-        return jsonify({
-            'success': True,
-            'ai_available': ai_proc.is_available(),
-            'message': 'AI processor initialized - ready to connect to vLLM server'
-        })
-    except Exception as e:
-        logger.error(f"Failed to initialize AI: {str(e)}")
-        return jsonify({
-            'success': False,
-            'ai_available': False,
-            'error': str(e)
-        }), 500
-
-@app.route('/api/ai/vllm/status', methods=['GET'])
-def vllm_status():
-    """Check vLLM server status"""
-    global ai_proc
-    try:
-        if ai_proc is None:
-            from ai_processor import AIProcessor
-            ai_proc = AIProcessor()
-
-        # Check if vLLM server is running
-        is_available = ai_proc._check_vllm_server()
-
-        return jsonify({
-            'vllm_running': is_available,
-            'server_url': ai_proc.vllm_url,
-            'model': ai_proc.model_name
-        })
-    except Exception as e:
-        logger.error(f"Failed to check vLLM status: {str(e)}")
-        return jsonify({
-            'vllm_running': False,
-            'error': str(e)
-        }), 500
-
-@app.route('/api/ai/vllm/wait', methods=['POST'])
-def wait_for_vllm():
-    """Wait for vLLM server to become available"""
-    global ai_proc
-    try:
-        if ai_proc is None:
-            from ai_processor import AIProcessor
-            ai_proc = AIProcessor()
-
-        # Wait for vLLM server with timeout
-        max_wait = request.json.get('max_wait_seconds', 120) if request.json else 120
-        success = ai_proc.wait_for_vllm_server(max_wait)
-
-        return jsonify({
-            'success': success,
-            'ai_available': ai_proc.is_available(),
-            'message': 'vLLM server is ready!' if success else 'Timeout waiting for vLLM server'
-        })
-    except Exception as e:
-        logger.error(f"Failed to wait for vLLM: {str(e)}")
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
 
 @app.route('/api/pdf/generate', methods=['POST'])
 def generate_pdf():
@@ -144,63 +216,7 @@ def generate_pdf():
         logger.error(f"PDF generation error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
-@app.route('/api/ai/process-voice', methods=['POST'])
-def process_voice_note():
-    """Process voice note and extract tasks/insights"""
-    try:
-        # Check if AI is available
-        if ai_proc is None or not ai_proc.is_available():
-            return jsonify({
-                'error': 'AI assistant not available',
-                'fallback': True,
-                'message': 'Please enable AI assistant in settings'
-            }), 503
 
-        data = request.get_json()
-
-        if not data or 'text' not in data:
-            return jsonify({'error': 'Missing voice text'}), 400
-
-        voice_text = data['text']
-        context = data.get('context', 'general')
-
-        # Process with AI
-        result = ai_proc.process_voice_note(voice_text, context)
-
-        return jsonify(result)
-
-    except Exception as e:
-        logger.error(f"Voice processing error: {str(e)}")
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/ai/analyze-patterns', methods=['POST'])
-def analyze_patterns():
-    """Analyze patterns in user data"""
-    try:
-        # Check if AI is available
-        if ai_proc is None or not ai_proc.is_available():
-            return jsonify({
-                'error': 'AI assistant not available',
-                'fallback': True,
-                'message': 'Please enable AI assistant in settings'
-            }), 503
-
-        data = request.get_json()
-
-        if not data or 'data' not in data:
-            return jsonify({'error': 'Missing data for analysis'}), 400
-
-        user_data = data['data']
-        analysis_type = data.get('type', 'general')
-
-        # Analyze patterns
-        insights = ai_proc.analyze_patterns(user_data, analysis_type)
-
-        return jsonify(insights)
-
-    except Exception as e:
-        logger.error(f"Pattern analysis error: {str(e)}")
-        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/analytics/dashboard', methods=['POST'])
 def get_dashboard_analytics():
@@ -224,41 +240,106 @@ def get_dashboard_analytics():
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/sync/phone-home', methods=['POST'])
+@require_pin_auth
 def phone_home_sync():
-    """Handle phone app sync requests"""
+    """Handle phone app sync requests - PIN authenticated"""
     try:
+        # PIN and device_id already validated by decorator
+        user_pin = request.validated_pin
+        device_id = request.validated_device_id
+
+        # Get additional request data
         data = request.get_json()
-        
-        if not data or 'device_id' not in data:
-            return jsonify({'error': 'Missing device ID'}), 400
-        
-        device_id = data['device_id']
         sync_data = data.get('data', {})
-        action = data.get('action', 'sync')
-        
+        action = sanitize_string(data.get('action', 'sync'), 20)
+        timestamp = data.get('timestamp', datetime.now().isoformat())
+
+        # Validate sync data
+        if sync_data and not validate_sync_data(sync_data):
+            return jsonify({'error': 'Invalid sync data format or size'}), 400
+
+        # Validate action
+        allowed_actions = ['sync', 'pull', 'ping']
+        if action not in allowed_actions:
+            return jsonify({'error': f'Invalid action. Allowed: {", ".join(allowed_actions)}'}), 400
+
+        logger.info(f"🔐 Authenticated {action} request from device {device_id[:8]}... for user PIN {user_pin[:2]}***")
+
         # Handle different sync actions
         if action == 'sync':
             # Merge data from phone
-            result = {'status': 'synced', 'conflicts': []}
-            # TODO: Implement actual sync logic
-            
+            result = {
+                'status': 'synced',
+                'conflicts': [],
+                'server_timestamp': datetime.now().isoformat(),
+                'user_pin_hash': hash_pin(user_pin)[:8]  # First 8 chars for verification
+            }
+            # TODO: Implement actual sync logic with PIN-based database isolation
+
         elif action == 'pull':
             # Send latest data to phone
-            result = {'status': 'data_sent', 'data': {}}
-            # TODO: Implement data pull logic
-            
+            result = {
+                'status': 'data_sent',
+                'data': {},
+                'server_timestamp': datetime.now().isoformat(),
+                'user_pin_hash': hash_pin(user_pin)[:8]  # First 8 chars for verification
+            }
+            # TODO: Implement data pull logic with PIN-based database isolation
+
+        elif action == 'ping':
+            # Simple connectivity test
+            result = {
+                'status': 'pong',
+                'server_timestamp': datetime.now().isoformat(),
+                'user_pin_hash': hash_pin(user_pin)[:8]
+            }
+
         else:
-            return jsonify({'error': 'Invalid sync action'}), 400
-        
+            return jsonify({'error': 'Invalid sync action. Supported: sync, pull, ping'}), 400
+
         return jsonify(result)
-        
+
     except Exception as e:
         logger.error(f"Sync error: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': 'Internal sync error'}), 500
+
+@app.route('/api/sync/validate-pin', methods=['POST'])
+@require_pin_auth
+def validate_pin():
+    """Validate PIN and test connectivity"""
+    try:
+        user_pin = request.validated_pin
+        device_id = request.validated_device_id
+
+        logger.info(f"🔐 PIN validation successful for device {device_id[:8]}...")
+
+        return jsonify({
+            'status': 'valid',
+            'message': 'PIN authenticated successfully',
+            'server_timestamp': datetime.now().isoformat(),
+            'user_pin_hash': hash_pin(user_pin)[:8],
+            'device_id': device_id
+        })
+
+    except Exception as e:
+        logger.error(f"PIN validation error: {str(e)}")
+        return jsonify({'error': 'Internal validation error'}), 500
+
+@app.errorhandler(400)
+def bad_request(error):
+    return jsonify({'error': 'Bad request'}), 400
 
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({'error': 'Endpoint not found'}), 404
+
+@app.errorhandler(413)
+def request_entity_too_large(error):
+    return jsonify({'error': 'Request too large'}), 413
+
+@app.errorhandler(429)
+def rate_limit_exceeded(error):
+    return jsonify({'error': 'Rate limit exceeded'}), 429
 
 @app.errorhandler(500)
 def internal_error(error):

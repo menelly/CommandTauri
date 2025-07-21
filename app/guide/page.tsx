@@ -6,11 +6,15 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Mic, Upload, FileText, Sparkles, Cpu, Zap } from "lucide-react"
-import { useAI, useAIFeature } from "@/lib/contexts/ai-context"
+// AI functionality temporarily disabled
 
 export default function GuidePage() {
-  const { isAIEnabled, enableAI, currentModel, availableModels, switchModel, isVLLMStarting } = useAI()
-  const { isAvailable, isLoading, isStarting, showFallback } = useAIFeature()
+  // AI functionality temporarily disabled
+  const isAIEnabled = false
+  const isAvailable = false
+  const isLoading = false
+  const isStarting = false
+  const showFallback = true
 
   return (
     <div className="container mx-auto p-6 space-y-6">

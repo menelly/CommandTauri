@@ -13,7 +13,7 @@ import { DataManagementModal } from "./data-management-modal"
 import { NotificationsModal } from "./notifications-modal"
 import { TagsModal } from "./tags-modal"
 import { SupportModal } from "./support-modal"
-import { AISettingsModal } from "./ai-settings-modal"
+// AI settings temporarily disabled
 
 export default function SettingsPage() {
   // Modal state management
@@ -31,13 +31,7 @@ export default function SettingsPage() {
       icon: Palette,
       component: VisualSettingsModal
     },
-    {
-      id: 'ai',
-      title: 'Smart Assistant',
-      description: 'Addy & Nam auto-startup, model preferences',
-      icon: Bot,
-      component: AISettingsModal
-    },
+
     {
       id: 'localization',
       title: 'Localization',

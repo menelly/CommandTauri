@@ -1,7 +1,6 @@
 'use client'
 
 import { useDatabase } from '@/lib/database/hooks/use-database'
-import { AIProvider } from '@/lib/contexts/ai-context'
 import { UserProvider, useUser } from '@/lib/contexts/user-context'
 import { Toaster } from '@/components/ui/toaster'
 import PinLogin from '@/components/pin-login'
@@ -60,10 +59,10 @@ function AppContent({ children }: AppWrapperProps) {
   }
 
   return (
-    <AIProvider>
+    <>
       {children}
       <Toaster />
-    </AIProvider>
+    </>
   )
 }
 
