@@ -154,7 +154,7 @@ export default function PhysicalHealthIndex() {
       case 'food-allergens': return '/food-allergens'
       case 'weather-environment': return '/weather-environment'
       case 'seizure-tracking': return '/seizure'
-      case 'diabetes-tracker': return '/diabetes-tracker'
+      case 'diabetes-tracker': return '/diabetes'
       case 'vitals': return '/vitals'
       case 'other-symptoms': return '/other-symptoms'
       default: return '#' // TODO: Implement navigation to other trackers

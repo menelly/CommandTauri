@@ -1,6 +1,6 @@
 /**
  * DIABETES TRACKER TYPES
- * TypeScript interfaces for diabetes tracking data
+ * Type definitions for diabetes tracking system
  */
 
 export interface DiabetesEntry {
@@ -22,13 +22,6 @@ export interface DiabetesEntry {
   created_at: string
 }
 
-export interface DiabetesHistoryProps {
-  entries: DiabetesEntry[]
-  onEdit: (entry: DiabetesEntry) => void
-  onDelete: (id: string) => void
-  currentDate: string
-}
-
 export interface Timer {
   id: string
   type: 'cgm' | 'pump' | 'glp1'
@@ -36,4 +29,19 @@ export interface Timer {
   inserted_at: string  // When the device was inserted
   expires_at: string   // When it needs to be changed
   user_id: string
+}
+
+export interface DiabetesAnalyticsProps {
+  entries: DiabetesEntry[]
+  currentDate: string
+}
+
+export interface DiabetesHistoryProps {
+  // No props needed - self-contained
+}
+
+export interface TimerManagerProps {
+  timers: Timer[]
+  onTimersChange: (timers: Timer[]) => void
+  currentUserId: string
 }

@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Legend } from 'recharts'
-import { Calendar, TrendingUp, AlertTriangle, Clock, Target, Download } from 'lucide-react'
+import { Calendar, TrendingUp, AlertTriangle, Clock, Target, Download, Loader2 } from 'lucide-react'
 import { useDailyData, CATEGORIES } from '@/lib/database'
 import { format, subDays, parseISO, startOfWeek, endOfWeek, eachDayOfInterval } from 'date-fns'
 import { UPPER_DIGESTIVE_SYMPTOMS, UPPER_DIGESTIVE_TRIGGERS, UPPER_DIGESTIVE_TREATMENTS, SEVERITY_LABELS } from './upper-digestive-constants'
@@ -33,9 +33,10 @@ const COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3
 
 export default function UpperDigestiveAnalyticsDesktop({ className }: AnalyticsProps) {
   const { getCategoryData, getDateRange } = useDailyData()
-  const [entries, setEntries] = useState<UpperDigestiveEntry[]>([])
+  const [analyticsData, setAnalyticsData] = useState<any>(null)
   const [timeRange, setTimeRange] = useState('30') // days
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   // Load data based on time range
   useEffect(() => {
@@ -44,14 +45,16 @@ export default function UpperDigestiveAnalyticsDesktop({ className }: AnalyticsP
 
   const loadAnalyticsData = async () => {
     setLoading(true)
+    setError(null)
     try {
       const days = parseInt(timeRange)
       const endDate = new Date()
       const startDate = subDays(endDate, days - 1)
-      
+
       const dateRange = eachDayOfInterval({ start: startDate, end: endDate })
       const allEntries: UpperDigestiveEntry[] = []
 
+      // Collect all entries from database
       for (const date of dateRange) {
         const dateKey = format(date, 'yyyy-MM-dd')
         const records = await getCategoryData(dateKey, CATEGORIES.TRACKER)
@@ -73,76 +76,48 @@ export default function UpperDigestiveAnalyticsDesktop({ className }: AnalyticsP
         }
       }
 
-      setEntries(allEntries)
+      // Send to Flask for analytics processing
+      const response = await fetch('http://localhost:5000/api/analytics/upper-digestive', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          entries: allEntries,
+          dateRange: days
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error(`Analytics request failed: ${response.status}`)
+      }
+
+      const analytics = await response.json()
+      setAnalyticsData(analytics)
+
     } catch (error) {
       console.error('Failed to load analytics data:', error)
+      setError(error instanceof Error ? error.message : 'Failed to load analytics')
     } finally {
       setLoading(false)
     }
   }
 
-  // Map severity labels to numbers for calculations
-  const severityToNumber = (severity: string): number => {
-    switch (severity?.toLowerCase()) {
-      case 'mild': return 3
-      case 'moderate': return 6
-      case 'severe': return 9
-      default: return 0
-    }
-  }
+  // Extract data from Flask analytics response
+  const totalEntries = analyticsData?.total_episodes || 0
+  const avgSeverity = analyticsData?.severity?.average || 0
 
-  // Calculate analytics
-  const totalEntries = entries.length
-  const avgSeverity = entries.length > 0
-    ? (entries.reduce((sum, entry) => sum + severityToNumber(entry.severity || ''), 0) / entries.length).toFixed(1)
-    : '0'
+  const topSymptoms = analyticsData?.symptoms?.top_symptoms || []
 
-  // Symptom frequency analysis
-  const symptomFrequency = entries.reduce((acc, entry) => {
-    entry.symptoms.forEach(symptom => {
-      acc[symptom] = (acc[symptom] || 0) + 1
-    })
-    return acc
-  }, {} as Record<string, number>)
+  const topTriggers = analyticsData?.triggers?.top_triggers || []
 
-  const topSymptoms = Object.entries(symptomFrequency)
-    .sort(([,a], [,b]) => b - a)
-    .slice(0, 10)
-    .map(([symptom, count]) => ({ symptom, count }))
+  const topTreatments = analyticsData?.treatments?.top_treatments || []
 
-  // Trigger analysis
-  const triggerFrequency = entries.reduce((acc, entry) => {
-    entry.triggers.forEach(trigger => {
-      acc[trigger] = (acc[trigger] || 0) + 1
-    })
-    return acc
-  }, {} as Record<string, number>)
+  const severityDistribution = analyticsData?.severity?.distribution || {}
+  const timePatterns = analyticsData?.time_patterns?.by_period || {}
+  const insights = analyticsData?.insights || []
 
-  const topTriggers = Object.entries(triggerFrequency)
-    .sort(([,a], [,b]) => b - a)
-    .slice(0, 8)
-    .map(([trigger, count]) => ({ trigger, count }))
-
-  // Treatment effectiveness (simplified)
-  const treatmentFrequency = entries.reduce((acc, entry) => {
-    entry.treatments.forEach(treatment => {
-      acc[treatment] = (acc[treatment] || 0) + 1
-    })
-    return acc
-  }, {} as Record<string, number>)
-
-  const topTreatments = Object.entries(treatmentFrequency)
-    .sort(([,a], [,b]) => b - a)
-    .slice(0, 8)
-    .map(([treatment, count]) => ({ treatment, count }))
-
-  // Severity distribution
-  const severityDistribution = entries.reduce((acc, entry) => {
-    const severity = entry.severity || 'unknown'
-    acc[severity] = (acc[severity] || 0) + 1
-    return acc
-  }, {} as Record<string, number>)
-
+  // Format data for charts
   const severityData = Object.entries(severityDistribution)
     .map(([severity, count]) => ({
       severity: severity.charAt(0).toUpperCase() + severity.slice(1),
@@ -154,73 +129,19 @@ export default function UpperDigestiveAnalyticsDesktop({ className }: AnalyticsP
       return order.indexOf(a.label) - order.indexOf(b.label)
     })
 
-  // Time pattern analysis (by hour)
-  const timePatterns = entries.reduce((acc, entry) => {
-    const hour = parseInt(entry.time.split(':')[0])
-    const timeSlot = hour < 6 ? 'Night (12-6am)' :
-                   hour < 12 ? 'Morning (6am-12pm)' :
-                   hour < 18 ? 'Afternoon (12-6pm)' :
-                   'Evening (6pm-12am)'
-    acc[timeSlot] = (acc[timeSlot] || 0) + 1
-    return acc
-  }, {} as Record<string, number>)
-
   const timeData = Object.entries(timePatterns)
     .map(([time, count]) => ({ time, count }))
 
-  // Weekly trend
-  const weeklyData = entries.reduce((acc, entry) => {
-    const date = entry.date
-    acc[date] = (acc[date] || 0) + 1
-    return acc
-  }, {} as Record<string, number>)
+  // For trend chart - we'll use a simple daily count for now
+  const trendData = [{ date: 'No trend data', count: 0 }] // Placeholder
 
-  const trendData = Object.entries(weeklyData)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([date, count]) => ({
-      date: format(parseISO(date), 'MMM dd'),
-      count
-    }))
+  // No more client-side calculations needed - all handled by Flask!
 
-  // Export data for Python analysis
+  // Export Flask analytics data
   const exportAnalyticsData = () => {
-    const analyticsData = {
-      summary: {
-        totalEntries,
-        avgSeverity: parseFloat(avgSeverity),
-        timeRange: parseInt(timeRange),
-        dateRange: {
-          start: format(subDays(new Date(), parseInt(timeRange) - 1), 'yyyy-MM-dd'),
-          end: format(new Date(), 'yyyy-MM-dd')
-        }
-      },
-      symptoms: {
-        frequency: symptomFrequency,
-        topSymptoms: topSymptoms.slice(0, 5)
-      },
-      triggers: {
-        frequency: triggerFrequency,
-        topTriggers: topTriggers.slice(0, 5)
-      },
-      treatments: {
-        frequency: treatmentFrequency,
-        topTreatments: topTreatments.slice(0, 5)
-      },
-      severity: {
-        distribution: severityDistribution,
-        average: parseFloat(avgSeverity)
-      },
-      timePatterns: timePatterns,
-      trends: weeklyData,
-      rawEntries: entries.map(entry => ({
-        date: entry.date,
-        time: entry.time,
-        symptoms: entry.symptoms,
-        severity: parseInt(entry.severity || '0'),
-        triggers: entry.triggers,
-        treatments: entry.treatments,
-        notes: entry.notes
-      }))
+    if (!analyticsData) {
+      console.error('No analytics data to export')
+      return
     }
 
     const blob = new Blob([JSON.stringify(analyticsData, null, 2)], { type: 'application/json' })
@@ -238,7 +159,10 @@ export default function UpperDigestiveAnalyticsDesktop({ className }: AnalyticsP
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold">Upper Digestive Analytics</h2>
+          <h2 className="text-2xl font-bold flex items-center gap-2">
+            <Loader2 className="h-5 w-5 animate-spin" />
+            Upper Digestive Analytics
+          </h2>
           <div className="animate-pulse bg-muted h-10 w-32 rounded"></div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -253,6 +177,32 @@ export default function UpperDigestiveAnalyticsDesktop({ className }: AnalyticsP
             </Card>
           ))}
         </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold">Upper Digestive Analytics</h2>
+          <Button onClick={loadAnalyticsData} variant="outline" size="sm">
+            <TrendingUp className="h-4 w-4 mr-2" />
+            Retry
+          </Button>
+        </div>
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-center">
+              <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-destructive" />
+              <h3 className="text-lg font-semibold mb-2">Analytics Error</h3>
+              <p className="text-muted-foreground mb-4">{error}</p>
+              <Button onClick={loadAnalyticsData} variant="outline">
+                Try Again
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     )
   }
@@ -331,6 +281,28 @@ export default function UpperDigestiveAnalyticsDesktop({ className }: AnalyticsP
           </CardContent>
         </Card>
       </div>
+
+      {/* Insights Section */}
+      {insights && insights.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5" />
+              Key Insights
+            </CardTitle>
+            <CardDescription>AI-powered insights from your digestive health data</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {insights.map((insight: string, index: number) => (
+                <div key={index} className="flex items-start gap-2 p-3 bg-muted/50 rounded-lg">
+                  <div className="text-sm">{insight}</div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -472,7 +444,7 @@ export default function UpperDigestiveAnalyticsDesktop({ className }: AnalyticsP
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {topTreatments.map((treatment, index) => (
+            {topTreatments.map((treatment: any, index: number) => (
               <div key={treatment.treatment} className="flex items-center justify-between">
                 <span className="text-sm font-medium">{treatment.treatment}</span>
                 <div className="flex items-center gap-2">
@@ -534,7 +506,7 @@ export default function UpperDigestiveAnalyticsDesktop({ className }: AnalyticsP
                     <div>
                       <p className="text-sm font-medium text-green-700 dark:text-green-400">Time Pattern Detected</p>
                       <p className="text-sm text-green-600 dark:text-green-300">
-                        Most episodes occur during {Object.entries(timePatterns).sort(([,a], [,b]) => b - a)[0]?.[0]}.
+                        Most episodes occur during {Object.entries(timePatterns).sort(([,a], [,b]) => (b as number) - (a as number))[0]?.[0]}.
                         Consider preventive measures during this time.
                       </p>
                     </div>

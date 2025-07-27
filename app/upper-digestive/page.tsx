@@ -17,7 +17,7 @@ import { useDailyData, CATEGORIES, formatDateForStorage } from "@/lib/database"
 import { useGoblinMode } from "@/lib/goblin-mode-context"
 import { useToast } from "@/hooks/use-toast"
 import { format } from "date-fns"
-import UpperDigestiveAnalyticsDesktop from "./upper-digestive-analytics-desktop"
+import DigestiveFlaskAnalytics from '../../modules/trackers/body/upper-digestive/digestive-flask-analytics'
 
 interface UpperDigestiveEntry {
   id: string
@@ -542,7 +542,10 @@ export default function UpperDigestiveTracker() {
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-4">
-            <UpperDigestiveAnalyticsDesktop />
+            <DigestiveFlaskAnalytics
+              entries={entries}
+              currentDate={selectedDate}
+            />
           </TabsContent>
         </Tabs>
 

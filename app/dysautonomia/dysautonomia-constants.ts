@@ -34,6 +34,13 @@ export const EPISODE_TYPES = [
     color: 'bg-orange-100 text-orange-800 border-orange-200'
   },
   {
+    id: 'spo2',
+    name: 'SpO2 Episode',
+    icon: '💨',
+    description: 'Oxygen desaturation, breathing issues',
+    color: 'bg-cyan-100 text-cyan-800 border-cyan-200'
+  },
+  {
     id: 'general',
     name: 'General Episode',
     icon: '🔄',
@@ -46,13 +53,20 @@ export const EPISODE_TYPES = [
 export const DYSAUTONOMIA_SYMPTOMS = [
   // Orthostatic/POTS Symptoms
   'Dizziness',
-  'Lightheadedness', 
+  'Lightheadedness',
   'Fainting/Near Fainting',
   'Heart Palpitations',
   'Chest Pain',
   'Shortness of Breath',
   'Blood Pressure Drop',
   'Rapid Heart Rate',
+
+  // SpO2/Respiratory Symptoms - Because oxygen is NOT optional! 💨
+  'Low SpO2/Desaturation',
+  'Breathing Difficulties',
+  'Air Hunger',
+  'Feeling Like Suffocating',
+  'Watch/Ring Oxygen Alerts',
   
   // Temperature Regulation
   'Temperature Dysregulation',
@@ -151,7 +165,16 @@ export const DYSAUTONOMIA_INTERVENTIONS = [
   // Lifestyle
   'Rest/Pacing',
   'Deep Breathing',
-  'Avoiding Triggers'
+  'Avoiding Triggers',
+
+  // SpO2/Respiratory Support - For when oxygen decides to be optional 💨
+  'Controlled Breathing Exercises',
+  'Pursed Lip Breathing',
+  'Supplemental Oxygen',
+  'Pulse Oximeter Monitoring',
+  'Position Change for Better Breathing',
+  'Slow Deep Breaths',
+  'Box Breathing (4-4-4-4)'
 ]
 
 // Position Change Options

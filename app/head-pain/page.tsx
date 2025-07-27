@@ -25,7 +25,7 @@ import { HeadPainEntry, HeadPainFormState } from './head-pain-types'
 import { getPainIntensityLabel, getPainIntensityColor, getFunctionalImpactColor, FUNCTIONAL_IMPACT_OPTIONS } from './head-pain-constants'
 import { HeadPainForm } from './head-pain-form'
 import AppCanvas from "@/components/app-canvas"
-import HeadPainAnalyticsDesktop from './head-pain-analytics-clean'
+import HeadPainFlaskAnalytics from '../../modules/trackers/body/head-pain/head-pain-flask-analytics'
 
 export default function HeadPainTracker() {
   const { saveData, getCategoryData, deleteData, getDateRange, isLoading } = useDailyData()
@@ -445,7 +445,10 @@ export default function HeadPainTracker() {
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-4">
-            <HeadPainAnalyticsDesktop />
+            <HeadPainFlaskAnalytics
+              entries={entries}
+              currentDate={selectedDate}
+            />
           </TabsContent>
         </Tabs>
 

@@ -18,13 +18,14 @@ import { useRouter } from 'next/navigation'
 import { DysautonomiaEntry } from './dysautonomia-types'
 import { EPISODE_TYPES, RELATED_TRACKERS, getEpisodeTypeInfo, getSeverityLabel, getSeverityColor } from './dysautonomia-constants'
 import { DysautonomiaHistory } from './dysautonomia-history'
-import { DysautonomiaAnalyticsDesktop } from './dysautonomia-analytics-desktop'
+import DysautonomiaFlaskAnalytics from './dysautonomia-flask-analytics'
 
 // Modal imports (will create these next)
 import { PotsEpisodeModal } from './modals/pots-episode-modal'
 import { BloodPressureModal } from './modals/blood-pressure-modal'
 import { GiSymptomsModal } from './modals/gi-symptoms-modal'
 import { TemperatureModal } from './modals/temperature-modal'
+import { SpO2EpisodeModal } from './modals/spo2-episode-modal'
 import { GeneralEpisodeModal } from './modals/general-episode-modal'
 
 // Database imports
@@ -55,10 +56,10 @@ export default function DysautonomiaTracker() {
     try {
       const records = await getCategoryData(selectedDate, CATEGORIES.TRACKER)
       const record = records.find(record => record.subcategory === 'dysautonomia')
-      
+
       if (record && record.content && record.content.entries) {
         let entries = record.content.entries
-        
+
         // Handle cursed string data (from old migrations)
         if (typeof entries === 'string') {
           try {
@@ -68,7 +69,7 @@ export default function DysautonomiaTracker() {
             entries = []
           }
         }
-        
+
         setEntries(entries)
       } else {
         setEntries([])
@@ -80,6 +81,52 @@ export default function DysautonomiaTracker() {
         description: "Failed to load dysautonomia episodes",
         variant: "destructive"
       })
+    }
+  }
+
+  // Load ALL entries across multiple days for analytics
+  const loadAllEntries = async (days: number = 30): Promise<DysautonomiaEntry[]> => {
+    try {
+      const allEntries: DysautonomiaEntry[] = []
+      const endDate = new Date()
+
+      // Load data for each day in the range
+      for (let i = 0; i < days; i++) {
+        const currentDate = new Date(endDate)
+        currentDate.setDate(endDate.getDate() - i)
+        const dateStr = format(currentDate, 'yyyy-MM-dd')
+
+        const records = await getCategoryData(dateStr, CATEGORIES.TRACKER)
+        const record = records.find(record => record.subcategory === 'dysautonomia')
+
+        if (record && record.content && record.content.entries) {
+          let entries = record.content.entries
+
+          // Handle cursed string data (from old migrations)
+          if (typeof entries === 'string') {
+            try {
+              entries = JSON.parse(entries)
+            } catch (e) {
+              console.error('Failed to parse JSON for date:', dateStr, e)
+              continue
+            }
+          }
+
+          // Add entries with proper date field
+          const entriesWithDate = entries.map((entry: DysautonomiaEntry) => ({
+            ...entry,
+            date: dateStr // Ensure date is set correctly
+          }))
+
+          allEntries.push(...entriesWithDate)
+        }
+      }
+
+      console.log(`🩺 Loaded ${allEntries.length} dysautonomia entries across ${days} days`)
+      return allEntries
+    } catch (error) {
+      console.error('Error loading all dysautonomia entries:', error)
+      return []
     }
   }
 
@@ -357,7 +404,11 @@ export default function DysautonomiaTracker() {
 
         {/* Analytics Tab */}
         <TabsContent value="analytics">
-          <DysautonomiaAnalyticsDesktop />
+          <DysautonomiaFlaskAnalytics
+            entries={entries}
+            currentDate={selectedDate}
+            loadAllEntries={loadAllEntries}
+          />
         </TabsContent>
       </Tabs>
 
@@ -394,6 +445,16 @@ export default function DysautonomiaTracker() {
 
       <TemperatureModal
         isOpen={activeModal === 'temperature'}
+        onClose={() => {
+          setActiveModal(null)
+          setEditingEntry(null)
+        }}
+        onSave={editingEntry ? handleUpdateEntry : handleSaveEntry}
+        editingEntry={editingEntry}
+      />
+
+      <SpO2EpisodeModal
+        isOpen={activeModal === 'spo2'}
         onClose={() => {
           setActiveModal(null)
           setEditingEntry(null)

@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Utensils, Plus, Edit, Trash2, Calendar, AlertCircle, Info } from "lucide-react"
+import DigestiveFlaskAnalytics from './digestive-flask-analytics'
 import { useDailyData, CATEGORIES, formatDateForStorage } from "@/lib/database"
 import { useGoblinMode } from "@/lib/goblin-mode-context"
 import { useToast } from "@/hooks/use-toast"
@@ -541,13 +542,10 @@ export default function UpperDigestiveTracker() {
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-4">
-            <Alert>
-              <Info className="h-4 w-4" />
-              <AlertDescription>
-                Analytics features will be available in the desktop version.
-                For now, use the History tab to review your symptom patterns.
-              </AlertDescription>
-            </Alert>
+            <DigestiveFlaskAnalytics
+              entries={entries}
+              currentDate={selectedDate}
+            />
           </TabsContent>
         </Tabs>
 

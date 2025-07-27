@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "tauri": "tauri",
-    "tauri:dev": "set \"PATH=%PATH%;C:\\Users\\shali\\scoop\\persist\\rustup\\.cargo\\bin\" && tauri dev",
+    "flask": "cd backend && python app.py",
+    "tauri:dev": "concurrently \"npm run flask\" \"set \\\"PATH=%PATH%;C:\\\\Users\\\\shali\\\\scoop\\\\persist\\\\rustup\\\\.cargo\\\\bin\\\" && tauri dev\"",
     "tauri:build": "set \"PATH=%PATH%;C:\\Users\\shali\\scoop\\persist\\rustup\\.cargo\\bin\" && tauri build"
   },
   "dependencies": {

@@ -12,19 +12,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { Heart, ArrowLeft, BarChart3, History, Plus, ExternalLink } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
+import { useNotifications } from '@/hooks/use-notifications'
 import { useRouter } from 'next/navigation'
 
 // Local imports
 import { DysautonomiaEntry } from './dysautonomia-types'
 import { EPISODE_TYPES, RELATED_TRACKERS, getEpisodeTypeInfo, getSeverityLabel, getSeverityColor } from './dysautonomia-constants'
 import { DysautonomiaHistory } from './dysautonomia-history'
-import { DysautonomiaAnalyticsDesktop } from './dysautonomia-analytics-desktop'
+import DysautonomiaFlaskAnalytics from '../../modules/trackers/body/dysautonomia/dysautonomia-flask-analytics'
 
 // Modal imports (will create these next)
 import { PotsEpisodeModal } from './modals/pots-episode-modal'
 import { BloodPressureModal } from './modals/blood-pressure-modal'
 import { GiSymptomsModal } from './modals/gi-symptoms-modal'
 import { TemperatureModal } from './modals/temperature-modal'
+import { SpO2EpisodeModal } from './modals/spo2-episode-modal'
 import { GeneralEpisodeModal } from './modals/general-episode-modal'
 
 // Database imports
@@ -34,6 +36,7 @@ import { format, addDays, subDays } from 'date-fns'
 export default function DysautonomiaTracker() {
   const { saveData, getCategoryData, deleteData, isLoading } = useDailyData()
   const { toast } = useToast()
+  // const { episodeAlert } = useNotifications() // TODO: Add episode alerts
   const router = useRouter()
   
   // State following DATABASE_STRUCTURE_BIBLE patterns
@@ -55,10 +58,10 @@ export default function DysautonomiaTracker() {
     try {
       const records = await getCategoryData(selectedDate, CATEGORIES.TRACKER)
       const record = records.find(record => record.subcategory === 'dysautonomia')
-      
+
       if (record && record.content && record.content.entries) {
         let entries = record.content.entries
-        
+
         // Handle cursed string data (from old migrations)
         if (typeof entries === 'string') {
           try {
@@ -68,7 +71,7 @@ export default function DysautonomiaTracker() {
             entries = []
           }
         }
-        
+
         setEntries(entries)
       } else {
         setEntries([])
@@ -80,6 +83,42 @@ export default function DysautonomiaTracker() {
         description: "Failed to load dysautonomia episodes",
         variant: "destructive"
       })
+    }
+  }
+
+  // Load ALL entries across date range for analytics
+  const loadAllEntriesForAnalytics = async (days: number = 30): Promise<DysautonomiaEntry[]> => {
+    try {
+      const allEntries: DysautonomiaEntry[] = []
+      const today = new Date()
+
+      // Load entries from the last X days
+      for (let i = 0; i < days; i++) {
+        const date = format(subDays(today, i), 'yyyy-MM-dd')
+        const records = await getCategoryData(date, CATEGORIES.TRACKER)
+        const record = records.find(record => record.subcategory === 'dysautonomia')
+
+        if (record && record.content && record.content.entries) {
+          let entries = record.content.entries
+
+          // Handle cursed string data
+          if (typeof entries === 'string') {
+            try {
+              entries = JSON.parse(entries)
+            } catch (e) {
+              console.error('Failed to parse JSON for date:', date, e)
+              continue
+            }
+          }
+
+          allEntries.push(...entries)
+        }
+      }
+
+      return allEntries
+    } catch (error) {
+      console.error('Error loading all entries for analytics:', error)
+      return []
     }
   }
 
@@ -357,7 +396,11 @@ export default function DysautonomiaTracker() {
 
         {/* Analytics Tab */}
         <TabsContent value="analytics">
-          <DysautonomiaAnalyticsDesktop />
+          <DysautonomiaFlaskAnalytics
+            entries={entries}
+            currentDate={selectedDate}
+            loadAllEntries={loadAllEntriesForAnalytics}
+          />
         </TabsContent>
       </Tabs>
 
@@ -394,6 +437,16 @@ export default function DysautonomiaTracker() {
 
       <TemperatureModal
         isOpen={activeModal === 'temperature'}
+        onClose={() => {
+          setActiveModal(null)
+          setEditingEntry(null)
+        }}
+        onSave={editingEntry ? handleUpdateEntry : handleSaveEntry}
+        editingEntry={editingEntry}
+      />
+
+      <SpO2EpisodeModal
+        isOpen={activeModal === 'spo2'}
         onClose={() => {
           setActiveModal(null)
           setEditingEntry(null)

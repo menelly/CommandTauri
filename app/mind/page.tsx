@@ -47,7 +47,8 @@ export default function MentalHealthIndex() {
       shortDescription: 'Mood, anxiety, depression, therapy notes',
       helpContent: 'Comprehensive mental health tracking including mood patterns, anxiety levels, depression symptoms, and therapy session notes. Integrates with other mental health trackers for a complete picture.',
       icon: <Brain className="h-5 w-5" />,
-      status: 'coming-soon'
+      status: 'available',
+      href: '/mental-health'
     },
     {
       id: 'mood-check-in',

@@ -223,20 +223,129 @@ def get_dashboard_analytics():
     """Get analytics for dashboard"""
     try:
         data = request.get_json()
-        
+
         if not data or 'data' not in data:
             return jsonify({'error': 'Missing data'}), 400
-        
+
         user_data = data['data']
         date_range = data.get('dateRange', 30)  # Default 30 days
-        
+
         # Generate analytics
         dashboard_data = analytics.generate_dashboard(user_data, date_range)
-        
+
         return jsonify(dashboard_data)
-        
+
     except Exception as e:
         logger.error(f"Analytics error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/analytics/dysautonomia', methods=['POST'])
+def get_dysautonomia_analytics():
+    """Get medical-grade dysautonomia analytics 🩺"""
+    try:
+        data = request.get_json()
+
+        if not data or 'entries' not in data:
+            return jsonify({'error': 'Missing dysautonomia entries'}), 400
+
+        entries = data['entries']
+        date_range = data.get('dateRange', 30)  # Default 30 days
+
+        # Generate dysautonomia analytics
+        analytics_data = analytics.analyze_dysautonomia(entries, date_range)
+
+        return jsonify(analytics_data)
+
+    except Exception as e:
+        logger.error(f"Dysautonomia analytics error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/analytics/upper-digestive', methods=['POST'])
+def get_upper_digestive_analytics():
+    """Get medical-grade upper digestive analytics 🤢"""
+    try:
+        data = request.get_json()
+
+        if not data or 'entries' not in data:
+            return jsonify({'error': 'Missing upper digestive entries'}), 400
+
+        entries = data['entries']
+        date_range = data.get('dateRange', 30)  # Default 30 days
+
+        # Generate upper digestive analytics
+        analytics_data = analytics.analyze_upper_digestive(entries, date_range)
+
+        return jsonify(analytics_data)
+
+    except Exception as e:
+        logger.error(f"Upper digestive analytics error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/analytics/head-pain', methods=['POST'])
+def get_head_pain_analytics():
+    """Get medical-grade head pain analytics 🧠"""
+    try:
+        data = request.get_json()
+
+        if not data or 'entries' not in data:
+            return jsonify({'error': 'Missing head pain entries'}), 400
+
+        entries = data['entries']
+        date_range = data.get('dateRange', 30)  # Default 30 days
+
+        # Generate head pain analytics
+        analytics_data = analytics.analyze_head_pain(entries, date_range)
+
+        return jsonify(analytics_data)
+
+    except Exception as e:
+        logger.error(f"Head pain analytics error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/analytics/bathroom', methods=['POST'])
+def get_bathroom_analytics():
+    """Get medical-grade bathroom/lower digestive analytics 💩"""
+    try:
+        data = request.get_json()
+
+        if not data or 'entries' not in data:
+            return jsonify({'error': 'Missing bathroom entries'}), 400
+
+        entries = data['entries']
+        date_range = data.get('dateRange', 30)  # Default 30 days
+
+        logger.info(f"Analyzing {len(entries)} bathroom entries over {date_range} days")
+
+        # Generate bathroom analytics
+        analytics_data = analytics.analyze_bathroom(entries, date_range)
+
+        return jsonify(analytics_data)
+
+    except Exception as e:
+        logger.error(f"Bathroom analytics error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/analytics/diabetes', methods=['POST'])
+def get_diabetes_analytics():
+    """Get medical-grade diabetes analytics 🩸"""
+    try:
+        data = request.get_json()
+
+        if not data or 'entries' not in data:
+            return jsonify({'error': 'Missing diabetes entries'}), 400
+
+        entries = data['entries']
+        date_range = data.get('dateRange', 30)  # Default 30 days
+
+        logger.info(f"Analyzing {len(entries)} diabetes entries over {date_range} days")
+
+        # Generate diabetes analytics
+        analytics_data = analytics.analyze_diabetes_data(entries, date_range)
+
+        return jsonify(analytics_data)
+
+    except Exception as e:
+        logger.error(f"Diabetes analytics error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/sync/phone-home', methods=['POST'])

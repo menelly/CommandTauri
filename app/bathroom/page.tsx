@@ -17,7 +17,7 @@ import { useDailyData, CATEGORIES, formatDateForStorage } from "@/lib/database"
 import { useGoblinMode } from "@/lib/goblin-mode-context"
 import { useToast } from "@/hooks/use-toast"
 import { format } from "date-fns"
-import BathroomAnalyticsDesktop from "./bathroom-analytics-desktop"
+import BathroomFlaskAnalytics from "./bathroom-flask-analytics"
 
 interface BathroomEntry {
   id: string
@@ -95,6 +95,7 @@ export default function BathroomTracker() {
   
   // UI state
   const [entries, setEntries] = useState<BathroomEntry[]>([])
+  const [historyEntries, setHistoryEntries] = useState<BathroomEntry[]>([])
   const [editingEntry, setEditingEntry] = useState<BathroomEntry | null>(null)
   const [activeTab, setActiveTab] = useState("entry")
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
@@ -102,12 +103,20 @@ export default function BathroomTracker() {
   // Load entries on mount
   useEffect(() => {
     loadEntries()
+    loadHistoryEntries()
   }, [])
 
   // Load entries for selected date
   useEffect(() => {
     loadEntries()
   }, [selectedDate])
+
+  // Load history entries when history tab is accessed
+  useEffect(() => {
+    if (activeTab === 'history') {
+      loadHistoryEntries()
+    }
+  }, [activeTab])
 
   const loadEntries = async () => {
     try {
@@ -139,6 +148,63 @@ export default function BathroomTracker() {
     } catch (error) {
       console.error('Failed to load bathroom entries:', error)
       setEntries([])
+    }
+  }
+
+  // Load entries across multiple dates for analytics
+  const loadAllEntries = async (days: number): Promise<BathroomEntry[]> => {
+    try {
+      const endDate = new Date()
+      const startDate = new Date()
+      startDate.setDate(endDate.getDate() - days + 1)
+
+      const allEntries: BathroomEntry[] = []
+
+      // Load entries for each day in the range
+      for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+        const dateKey = format(d, 'yyyy-MM-dd')
+        const records = await getCategoryData(dateKey, CATEGORIES.TRACKER)
+        const bathroomRecord = records.find(record => record.subcategory === 'bathroom')
+
+        if (bathroomRecord?.content?.entries) {
+          let entries: any = bathroomRecord.content.entries
+          if (typeof entries === 'string') {
+            try {
+              entries = JSON.parse(entries)
+            } catch (e) {
+              console.error('Failed to parse JSON:', e)
+              entries = []
+            }
+          }
+          if (Array.isArray(entries)) {
+            allEntries.push(...entries)
+          }
+        }
+      }
+
+      console.log(`💩 Loaded ${allEntries.length} bathroom entries across ${days} days`)
+      return allEntries
+    } catch (error) {
+      console.error('Failed to load all bathroom entries:', error)
+      return []
+    }
+  }
+
+  // Load history entries (last 30 days for history tab)
+  const loadHistoryEntries = async () => {
+    try {
+      const historyData = await loadAllEntries(30) // Load last 30 days
+      // Sort by date and time, most recent first
+      const sortedEntries = historyData.sort((a, b) => {
+        const dateCompare = b.date.localeCompare(a.date)
+        if (dateCompare !== 0) return dateCompare
+        return b.time.localeCompare(a.time)
+      })
+      setHistoryEntries(sortedEntries)
+      console.log(`💩 Loaded ${sortedEntries.length} history entries`)
+    } catch (error) {
+      console.error('Failed to load history entries:', error)
+      setHistoryEntries([])
     }
   }
 
@@ -493,15 +559,15 @@ export default function BathroomTracker() {
                   Potty History
                 </CardTitle>
                 <CardDescription>
-                  Your documented digestive adventures for {format(new Date(selectedDate), 'MMMM d, yyyy')}
+                  Your documented digestive adventures over the last 30 days
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {entries.length === 0 ? (
+                {historyEntries.length === 0 ? (
                   <div className="text-center py-8">
                     <Utensils className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <p className="text-muted-foreground">
-                      No potty adventures logged for this date
+                      No potty adventures logged in the last 30 days
                     </p>
                     <p className="text-sm text-muted-foreground mt-2">
                       Your digestive goblins are being mysterious. Tap "Log Bathroom Visit" to document their shenanigans! 🧙‍♂️
@@ -509,7 +575,7 @@ export default function BathroomTracker() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {entries.map((entry) => {
+                    {historyEntries.map((entry) => {
                       const statusOption = getStatusOption(entry.status)
                       const painOption = getPainOption(entry.painLevel)
                       
@@ -524,7 +590,7 @@ export default function BathroomTracker() {
                                     {entry.status}
                                   </h3>
                                   <p className="text-sm text-muted-foreground">
-                                    {entry.time} • {entry.count} time{entry.count > 1 ? 's' : ''}
+                                    {format(new Date(entry.date), 'MMM d, yyyy')} at {entry.time} • {entry.count} time{entry.count > 1 ? 's' : ''}
                                   </p>
                                 </div>
                               </div>
@@ -607,7 +673,11 @@ export default function BathroomTracker() {
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-4">
-            <BathroomAnalyticsDesktop />
+            <BathroomFlaskAnalytics
+              entries={entries}
+              currentDate={selectedDate}
+              loadAllEntries={loadAllEntries}
+            />
           </TabsContent>
         </Tabs>
 

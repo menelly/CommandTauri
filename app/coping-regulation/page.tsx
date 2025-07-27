@@ -30,11 +30,24 @@ interface CopingTechnique {
   id: string
   name: string
   description: string
-  icon: React.ComponentType<any>
+  iconName: string
   color: string
   type: 'breathing' | 'grounding' | 'muscle' | 'sensory' | 'cognitive'
   duration?: number // in seconds
   steps?: string[]
+}
+
+// Icon renderer function to avoid component storage issues
+const renderIcon = (iconName: string, className: string = "") => {
+  switch (iconName) {
+    case 'wind': return <Wind className={className} />
+    case 'zap': return <Zap className={className} />
+    case 'eye': return <Eye className={className} />
+    case 'headphones': return <Headphones className={className} />
+    case 'brain': return <Brain className={className} />
+    case 'heart': return <Heart className={className} />
+    default: return <Heart className={className} />
+  }
 }
 
 interface CopingSession {
@@ -52,7 +65,7 @@ const copingTechniques: CopingTechnique[] = [
     id: 'box-breathing',
     name: 'Box Breathing',
     description: 'Breathe in for 4, hold for 4, out for 4, hold for 4',
-    icon: Wind,
+    iconName: 'wind',
     color: 'bg-blue-500',
     type: 'breathing',
     duration: 240, // 4 minutes
@@ -62,7 +75,7 @@ const copingTechniques: CopingTechnique[] = [
     id: 'progressive-muscle',
     name: 'Progressive Muscle Relaxation',
     description: 'Tense and release muscle groups systematically',
-    icon: Zap,
+    iconName: 'zap',
     color: 'bg-purple-500',
     type: 'muscle',
     duration: 600, // 10 minutes
@@ -80,7 +93,7 @@ const copingTechniques: CopingTechnique[] = [
     id: '5-4-3-2-1-grounding',
     name: '5-4-3-2-1 Grounding',
     description: 'Name 5 things you see, 4 you hear, 3 you feel, 2 you smell, 1 you taste',
-    icon: Eye,
+    iconName: 'eye',
     color: 'bg-green-500',
     type: 'grounding',
     steps: [
@@ -95,7 +108,7 @@ const copingTechniques: CopingTechnique[] = [
     id: 'cold-water',
     name: 'Cold Water Reset',
     description: 'Use cold water to activate your dive response',
-    icon: Headphones,
+    iconName: 'headphones',
     color: 'bg-cyan-500',
     type: 'sensory',
     steps: [
@@ -109,7 +122,7 @@ const copingTechniques: CopingTechnique[] = [
     id: 'thought-stopping',
     name: 'Thought Stopping',
     description: 'Interrupt negative thought spirals',
-    icon: Brain,
+    iconName: 'brain',
     color: 'bg-orange-500',
     type: 'cognitive',
     steps: [
@@ -278,7 +291,7 @@ export default function CopingRegulationPage() {
         id: `custom-${Date.now()}`,
         name: newTechnique.name.trim(),
         description: newTechnique.description.trim(),
-        icon: Heart,
+        iconName: 'heart',
         color: 'bg-purple-500',
         type: 'cognitive',
         steps: newTechnique.steps.filter(step => step.trim())
@@ -344,7 +357,7 @@ export default function CopingRegulationPage() {
             <Card>
               <CardHeader className="text-center">
                 <div className={`w-16 h-16 ${selectedTechnique.color} rounded-full flex items-center justify-center mx-auto mb-4`}>
-                  <selectedTechnique.icon className="h-8 w-8 text-white" />
+                  {renderIcon(selectedTechnique.iconName, "h-8 w-8 text-white")}
                 </div>
                 <CardTitle className="text-2xl">{selectedTechnique.name}</CardTitle>
                 <CardDescription>{selectedTechnique.description}</CardDescription>
@@ -501,7 +514,6 @@ export default function CopingRegulationPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {recommendations.map((technique) => {
                   if (!technique) return null
-                  const IconComponent = technique.icon
                   return (
                     <Button
                       key={technique.id}
@@ -510,7 +522,7 @@ export default function CopingRegulationPage() {
                       className="h-auto p-4 flex flex-col items-center gap-2"
                     >
                       <div className={`w-12 h-12 ${technique.color} rounded-full flex items-center justify-center`}>
-                        <IconComponent className="h-6 w-6 text-white" />
+                        {renderIcon(technique.iconName, "h-6 w-6 text-white")}
                       </div>
                       <span className="font-medium">{technique.name}</span>
                     </Button>
@@ -523,10 +535,9 @@ export default function CopingRegulationPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {allTechniques.map((technique) => {
-            const IconComponent = technique.icon
             const sessionsCount = sessions.filter(s => s.techniqueId === technique.id).length
             const helpfulCount = sessions.filter(s => s.techniqueId === technique.id && s.helpful === true).length
-            
+
             return (
               <Card
                 key={technique.id}
@@ -536,7 +547,7 @@ export default function CopingRegulationPage() {
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
                     <div className={`p-3 rounded-lg ${technique.color} text-white`}>
-                      <IconComponent className="h-6 w-6" />
+                      {renderIcon(technique.iconName, "h-6 w-6")}
                     </div>
                     {sessionsCount > 0 && (
                       <div className="text-right">
