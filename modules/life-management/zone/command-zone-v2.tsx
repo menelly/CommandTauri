@@ -7,6 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Plus, Package, Clock, Moon, ChevronRight, ChevronDown, Backpack, Heart } from 'lucide-react'
 import SurvivalButton from '@/components/survival-button'
+import DailyPrompts from '@/components/daily-prompts'
 
 interface DailyTask {
   id: string
@@ -131,9 +132,16 @@ export default function CommandZone() {
         <p className="text-gray-600">Your daily quest hub - let's get stuff done! ✨</p>
       </div>
 
-      {/* SURVIVAL BOX - The heart of it all! */}
-      <div className="mb-8 max-w-2xl mx-auto">
-        <SurvivalButton />
+      {/* SURVIVAL BOX & DAILY PROMPTS - The heart of it all! */}
+      <div className="mb-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div>
+            <SurvivalButton />
+          </div>
+          <div>
+            <DailyPrompts />
+          </div>
+        </div>
       </div>
 
       {/* Quick Stats */}

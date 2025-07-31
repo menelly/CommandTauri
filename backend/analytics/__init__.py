@@ -24,6 +24,7 @@ from .dysautonomia_analytics import DysautonomiaAnalytics
 from .digestive_analytics import DigestiveAnalytics
 from .headpain_analytics import HeadPainAnalytics
 from .bathroom_analytics import BathroomAnalytics
+from .pain_analytics import PainAnalytics
 from .dashboard_analytics import DashboardAnalytics
 from .chart_utils import ChartUtils
 
@@ -44,6 +45,7 @@ class AnalyticsEngine:
         self.digestive = DigestiveAnalytics()
         self.headpain = HeadPainAnalytics()
         self.bathroom = BathroomAnalytics()
+        self.pain = PainAnalytics()
         self.dashboard = DashboardAnalytics()
         self.charts = ChartUtils()
         
@@ -70,3 +72,7 @@ class AnalyticsEngine:
     def analyze_bathroom(self, entries: List[Dict[str, Any]], date_range: int = 30) -> Dict[str, Any]:
         """Medical-grade bathroom/lower digestive analytics 💩"""
         return self.bathroom.analyze_bathroom(entries, date_range)
+
+    def analyze_pain(self, entries: List[Dict[str, Any]], date_range: int = 30) -> Dict[str, Any]:
+        """Medical-grade general pain analytics 🔥"""
+        return self.pain.analyze_pain(entries, date_range)

@@ -149,6 +149,45 @@ export default function HeadPainTracker() {
     }
   }, [activeTab])
 
+  // Load entries across multiple dates for analytics
+  const loadAllEntries = async (days: number): Promise<HeadPainEntry[]> => {
+    try {
+      const endDate = new Date()
+      const startDate = new Date()
+      startDate.setDate(endDate.getDate() - days + 1)
+
+      const allEntries: HeadPainEntry[] = []
+
+      // Load entries for each day in the range
+      for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+        const dateKey = format(d, 'yyyy-MM-dd')
+        const records = await getCategoryData(dateKey, CATEGORIES.TRACKER)
+        const headPainRecord = records.find(record => record.subcategory === 'head-pain')
+
+        if (headPainRecord?.content?.entries) {
+          let entries: any = headPainRecord.content.entries
+          if (typeof entries === 'string') {
+            try {
+              entries = JSON.parse(entries)
+            } catch (e) {
+              console.error('Failed to parse JSON:', e)
+              entries = []
+            }
+          }
+          if (Array.isArray(entries)) {
+            allEntries.push(...entries)
+          }
+        }
+      }
+
+      console.log(`🧠 Loaded ${allEntries.length} head pain entries across ${days} days`)
+      return allEntries
+    } catch (error) {
+      console.error('Failed to load all head pain entries:', error)
+      return []
+    }
+  }
+
   // Navigation functions
   const goToPreviousDay = () => {
     setSelectedDate(prev => format(subDays(new Date(prev), 1), 'yyyy-MM-dd'))
@@ -448,6 +487,7 @@ export default function HeadPainTracker() {
             <HeadPainFlaskAnalytics
               entries={entries}
               currentDate={selectedDate}
+              loadAllEntries={loadAllEntries}
             />
           </TabsContent>
         </Tabs>

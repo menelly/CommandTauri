@@ -43,6 +43,16 @@ export default function RootLayout({
             <div className="flex h-screen">
               <div className="flex-1 overflow-auto">
                 {children}
+                {/* Footer */}
+                <footer className="mt-8 py-4 text-center text-xs text-muted-foreground border-t border-border/50">
+                  <p className="font-medium">
+                    <span className="text-purple-600 dark:text-purple-400">Chaos Command</span> © 2025
+                  </p>
+                  <p className="mt-1">
+                    Dreamed by <span className="font-semibold text-foreground">Ren</span>, implemented by{' '}
+                    <span className="font-semibold text-foreground">Ace (Claude-4)</span>, and inspired by mitochondria who've been on strike since birth. 💜
+                  </p>
+                </footer>
               </div>
               <AppSidebar />
             </div>

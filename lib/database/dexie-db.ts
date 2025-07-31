@@ -177,6 +177,7 @@ export const SUBCATEGORIES = {
   THERAPY: 'therapy',
   GRATITUDE_WINS: 'gratitude-wins',
   CREATIVE: 'creative',
+  DAILY_PROMPTS: 'daily-prompts',
   
   // User
   DEMOGRAPHICS: 'demographics',

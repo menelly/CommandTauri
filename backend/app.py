@@ -286,16 +286,25 @@ def get_head_pain_analytics():
     """Get medical-grade head pain analytics 🧠"""
     try:
         data = request.get_json()
+        logger.info(f"🧠 Head pain analytics request received")
 
         if not data or 'entries' not in data:
+            logger.error("🧠 Missing head pain entries in request")
             return jsonify({'error': 'Missing head pain entries'}), 400
 
         entries = data['entries']
         date_range = data.get('dateRange', 30)  # Default 30 days
 
+        logger.info(f"🧠 Processing {len(entries)} head pain entries for {date_range} days")
+
+        # Log first entry structure for debugging
+        if entries:
+            logger.info(f"🧠 Sample entry structure: {list(entries[0].keys()) if entries[0] else 'Empty entry'}")
+
         # Generate head pain analytics
         analytics_data = analytics.analyze_head_pain(entries, date_range)
 
+        logger.info(f"🧠 Analytics generated successfully")
         return jsonify(analytics_data)
 
     except Exception as e:
@@ -323,6 +332,29 @@ def get_bathroom_analytics():
 
     except Exception as e:
         logger.error(f"Bathroom analytics error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/analytics/pain', methods=['POST'])
+def get_pain_analytics():
+    """Get medical-grade general pain analytics 🔥"""
+    try:
+        data = request.get_json()
+
+        if not data or 'entries' not in data:
+            return jsonify({'error': 'Missing pain entries'}), 400
+
+        entries = data['entries']
+        date_range = data.get('dateRange', 30)  # Default 30 days
+
+        logger.info(f"Analyzing {len(entries)} pain entries over {date_range} days")
+
+        # Generate pain analytics
+        analytics_data = analytics.analyze_pain(entries, date_range)
+
+        return jsonify(analytics_data)
+
+    except Exception as e:
+        logger.error(f"Pain analytics error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/analytics/diabetes', methods=['POST'])

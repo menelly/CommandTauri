@@ -33,6 +33,7 @@ interface HeadPainEntry {
 interface HeadPainFlaskAnalyticsProps {
   entries: HeadPainEntry[]
   currentDate: string
+  loadAllEntries?: (days: number) => Promise<HeadPainEntry[]>
 }
 
 interface FlaskAnalyticsData {
@@ -80,44 +81,59 @@ interface FlaskAnalyticsData {
   error?: string
 }
 
-export default function HeadPainFlaskAnalytics({ entries, currentDate }: HeadPainFlaskAnalyticsProps) {
+export default function HeadPainFlaskAnalytics({ entries, currentDate, loadAllEntries }: HeadPainFlaskAnalyticsProps) {
   const [analyticsData, setAnalyticsData] = useState<FlaskAnalyticsData | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [dateRange, setDateRange] = useState('30')
 
-  // Load Flask analytics when entries change
+  // Load Flask analytics when date range changes
   useEffect(() => {
-    if (entries.length > 0) {
-      loadFlaskAnalytics()
-    } else {
-      setAnalyticsData(null)
-    }
-  }, [entries, dateRange])
+    loadFlaskAnalytics()
+  }, [dateRange])
 
   const loadFlaskAnalytics = async () => {
     setLoading(true)
     setError(null)
 
     try {
-      // Convert entries to the format expected by Flask
-      const flaskEntries = entries.map(entry => ({
-        date: entry.entry_date,
-        time: entry.entry_time,
-        painType: entry.pain_type,
-        severity: entry.severity,
-        location: entry.location || [],
-        durationHours: entry.duration_hours,
+      // Load all entries across the date range for analytics
+      const allEntries = loadAllEntries ?
+        await loadAllEntries(parseInt(dateRange)) :
+        entries
+
+      if (allEntries.length === 0) {
+        setAnalyticsData(null)
+        setLoading(false)
+        return
+      }
+
+      // 🚨 DEBUG: Log actual entry structure
+      console.log('🧠 Raw entry structure:', allEntries[0])
+      console.log('🧠 Entry keys:', Object.keys(allEntries[0] || {}))
+
+      // 🚨 CRITICAL: Map actual HeadPainEntry structure to Flask format
+      const flaskEntries = allEntries.map(entry => ({
+        date: entry.date,
+        time: entry.timestamp,
+        painType: entry.painType || [],
+        severity: entry.painIntensity,
+        location: entry.painLocation || [],
+        duration: entry.duration,
         triggers: entry.triggers || [],
-        symptoms: entry.symptoms || [],
-        medications: entry.medications || [],
-        reliefMethods: entry.relief_methods || [],
-        effectiveness: entry.effectiveness,
-        notes: entry.notes,
+        symptoms: entry.associatedSymptoms || [],
+        auraPresent: entry.auraPresent || false,
+        auraSymptoms: entry.auraSymptoms || [],
+        treatments: entry.treatments || [],
+        effectiveness: entry.treatmentEffectiveness,
+        functionalImpact: entry.functionalImpact,
+        notes: entry.notes || '',
         tags: entry.tags || []
       }))
 
       console.log('🧠 Sending head pain data to Flask:', flaskEntries.length, 'entries')
+      console.log('🧠 Sample entry being sent:', flaskEntries[0])
+      console.log('🧠 Date range:', dateRange)
 
       const response = await fetch('http://localhost:5000/api/analytics/head-pain', {
         method: 'POST',
@@ -136,6 +152,8 @@ export default function HeadPainFlaskAnalytics({ entries, currentDate }: HeadPai
 
       const data = await response.json()
       console.log('🎯 Flask head pain analytics response:', data)
+      console.log('🎯 Response keys:', Object.keys(data))
+      console.log('🎯 Total episodes:', data.total_episodes)
 
       if (data.error) {
         throw new Error(data.error)

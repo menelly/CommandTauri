@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { toast } from "@/hooks/use-toast"
 import { useDailyData, CATEGORIES, formatDateForStorage } from "@/lib/database"
 import { format, addDays, subDays } from 'date-fns'
-import PainAnalyticsDesktop from './pain-analytics-clean'
+import PainFlaskAnalytics from './pain-flask-analytics'
 import {
   Calendar as CalendarIcon,
   ChevronLeft,
@@ -199,6 +199,45 @@ export default function PainTracker() {
   useEffect(() => {
     loadHistoryEntries()
   }, [])
+
+  // Load entries across multiple dates for analytics
+  const loadAllEntries = async (days: number): Promise<PainEntry[]> => {
+    try {
+      const endDate = new Date()
+      const startDate = new Date()
+      startDate.setDate(endDate.getDate() - days + 1)
+
+      const allEntries: PainEntry[] = []
+
+      // Load entries for each day in the range
+      for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+        const dateKey = format(d, 'yyyy-MM-dd')
+        const records = await getCategoryData(dateKey, CATEGORIES.TRACKER)
+        const painRecord = records.find(record => record.subcategory === 'pain')
+
+        if (painRecord?.content?.entries) {
+          let entries: any = painRecord.content.entries
+          if (typeof entries === 'string') {
+            try {
+              entries = JSON.parse(entries)
+            } catch (e) {
+              console.error('Failed to parse JSON:', e)
+              entries = []
+            }
+          }
+          if (Array.isArray(entries)) {
+            allEntries.push(...entries)
+          }
+        }
+      }
+
+      console.log(`🔥 Loaded ${allEntries.length} pain entries across ${days} days`)
+      return allEntries
+    } catch (error) {
+      console.error('Failed to load all pain entries:', error)
+      return []
+    }
+  }
 
 
 
@@ -537,7 +576,11 @@ export default function PainTracker() {
         </TabsContent>
 
         <TabsContent value="analytics" className="space-y-4">
-          <PainAnalyticsDesktop />
+          <PainFlaskAnalytics
+            entries={entries}
+            currentDate={selectedDate}
+            loadAllEntries={loadAllEntries}
+          />
         </TabsContent>
       </Tabs>
 

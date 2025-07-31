@@ -28,20 +28,50 @@ class HeadPainAnalytics:
         Migraine patterns, trigger analysis, aura detection, treatment effectiveness
         """
         try:
+            print(f"🧠 Head pain analytics received {len(entries)} entries")
             if not entries:
+                print("🧠 No entries provided, returning fallback")
                 return self._get_fallback_head_pain_analytics()
 
             # Filter out NOPE entries and recent entries
             end_date = datetime.now()
             start_date = end_date - timedelta(days=date_range)
 
-            analytics_entries = [
-                entry for entry in entries
-                if not (entry.get('tags', []) and 'NOPE' in entry.get('tags', []))
-                and datetime.fromisoformat(entry.get('date', '')) >= start_date
-            ]
+            analytics_entries = []
+            for entry in entries:
+                # Skip NOPE entries
+                if entry.get('tags', []) and 'NOPE' in entry.get('tags', []):
+                    continue
 
+                # Parse date safely
+                entry_date_str = entry.get('date', '')
+                if not entry_date_str:
+                    continue
+
+                try:
+                    # Try different date formats
+                    if 'T' in entry_date_str:
+                        entry_date = datetime.fromisoformat(entry_date_str.replace('Z', '+00:00'))
+                    else:
+                        # Handle YYYY-MM-DD format
+                        entry_date = datetime.strptime(entry_date_str, '%Y-%m-%d')
+
+                    # Convert to date for comparison (ignore time)
+                    entry_date_only = entry_date.date()
+                    start_date_only = start_date.date()
+
+                    if entry_date_only >= start_date_only:
+                        analytics_entries.append(entry)
+                        print(f"🧠 Added entry from {entry_date_str}")
+                    else:
+                        print(f"🧠 Skipped entry from {entry_date_str} (outside date range)")
+                except (ValueError, TypeError) as e:
+                    print(f"🧠 Skipping entry with invalid date format: {entry_date_str} - {e}")
+                    continue
+
+            print(f"🧠 After filtering: {len(analytics_entries)} valid entries for analysis")
             if not analytics_entries:
+                print("🧠 No valid entries after filtering, returning fallback")
                 return self._get_fallback_head_pain_analytics()
 
             # Core analytics
