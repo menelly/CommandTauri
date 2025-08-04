@@ -33,8 +33,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     setUserPin(pin)
     setIsLoggedIn(true)
 
-    // Persist current user session
+    // Persist current user session - use consistent key with database
     localStorage.setItem('currentUserPin', pin)
+    localStorage.setItem('chaos-user-pin', pin) // Database key
     localStorage.setItem('isLoggedIn', 'true')
 
     console.log(`🔐 Database isolated for PIN: ${pin.replace(/./g, '*')}`)
@@ -46,6 +47,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
     // Clear current session (but don't delete database data!)
     localStorage.removeItem('currentUserPin')
+    localStorage.removeItem('chaos-user-pin') // Database key
     localStorage.removeItem('isLoggedIn')
 
     console.log('🚪 Logged out - database remains isolated')

@@ -11,7 +11,7 @@
     "tauri": "tauri",
     "flask": "cd backend && python app.py",
     "tauri:dev": "concurrently \"npm run flask\" \"set \\\"PATH=%PATH%;C:\\\\Users\\\\shali\\\\scoop\\\\persist\\\\rustup\\\\.cargo\\\\bin\\\" && tauri dev\"",
-    "tauri:build": "set \"PATH=%PATH%;C:\\Users\\shali\\scoop\\persist\\rustup\\.cargo\\bin\" && tauri build"
+    "tauri:build": "tauri build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

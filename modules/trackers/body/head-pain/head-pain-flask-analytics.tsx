@@ -207,7 +207,15 @@ export default function HeadPainFlaskAnalytics({ entries, currentDate, loadAllEn
     )
   }
 
-  const { pain_analysis, duration, triggers, medications, patterns, relief, insights } = analyticsData
+  const {
+    pain_analysis = {},
+    duration = {},
+    triggers = {},
+    medications = {},
+    patterns = {},
+    relief = {},
+    insights = []
+  } = analyticsData || {}
 
   return (
     <div className="space-y-6">
@@ -255,7 +263,7 @@ export default function HeadPainFlaskAnalytics({ entries, currentDate, loadAllEn
         <Card>
           <CardContent className="p-4 text-center">
             <TrendingUp className="h-8 w-8 mx-auto mb-2 text-orange-500" />
-            <div className="text-2xl font-bold">{pain_analysis.avg_severity}/10</div>
+            <div className="text-2xl font-bold">{pain_analysis.avg_severity || 0}/10</div>
             <div className="text-sm text-muted-foreground">Avg Severity</div>
           </CardContent>
         </Card>
@@ -273,7 +281,7 @@ export default function HeadPainFlaskAnalytics({ entries, currentDate, loadAllEn
         <Card>
           <CardContent className="p-4 text-center">
             <Target className="h-8 w-8 mx-auto mb-2 text-green-500" />
-            <div className="text-2xl font-bold">{patterns.weekly_average}</div>
+            <div className="text-2xl font-bold">{patterns.weekly_average || 0}</div>
             <div className="text-sm text-muted-foreground">Weekly Average</div>
           </CardContent>
         </Card>
@@ -292,17 +300,17 @@ export default function HeadPainFlaskAnalytics({ entries, currentDate, loadAllEn
           <CardContent className="space-y-3">
             <div className="flex justify-between">
               <span>Most Common Type:</span>
-              <Badge variant="outline">{pain_analysis.most_common_type}</Badge>
+              <Badge variant="outline">{pain_analysis.most_common_type || 'N/A'}</Badge>
             </div>
             <div className="flex justify-between">
               <span>Max Severity:</span>
-              <Badge variant={pain_analysis.max_severity >= 8 ? "destructive" : "secondary"}>
-                {pain_analysis.max_severity}/10
+              <Badge variant={(pain_analysis.max_severity || 0) >= 8 ? "destructive" : "secondary"}>
+                {pain_analysis.max_severity || 0}/10
               </Badge>
             </div>
             <div className="space-y-2">
               <div className="text-sm font-medium">Pain Types:</div>
-              {Object.entries(pain_analysis.pain_types).slice(0, 3).map(([type, count]) => (
+              {Object.entries(pain_analysis.pain_types || {}).slice(0, 3).map(([type, count]) => (
                 <div key={type} className="flex justify-between text-sm">
                   <span>{type}:</span>
                   <span className="text-muted-foreground">{count}</span>
@@ -321,10 +329,10 @@ export default function HeadPainFlaskAnalytics({ entries, currentDate, loadAllEn
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {triggers.top_triggers.slice(0, 5).map((trigger, index) => (
+            {(triggers.top_triggers || []).slice(0, 5).map((trigger, index) => (
               <div key={trigger} className="flex justify-between">
                 <span className="text-sm">{trigger}</span>
-                <Badge variant="outline">{triggers.trigger_counts[trigger]}</Badge>
+                <Badge variant="outline">{(triggers.trigger_counts || {})[trigger]}</Badge>
               </div>
             ))}
           </CardContent>

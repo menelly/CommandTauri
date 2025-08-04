@@ -27,7 +27,8 @@ import {
   Pill,
   Clock,
   Settings,
-  History
+  History,
+  BarChart3
 } from 'lucide-react'
 import { cn } from "@/lib/utils"
 import { TagInput } from "@/components/tag-input"
@@ -278,8 +279,8 @@ export function FoodAllergensTracker() {
                 <PopoverTrigger asChild>
                   <Button variant="outline" className="w-[200px] sm:w-[240px] justify-start text-left font-normal text-sm">
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    <span className="hidden sm:inline">{format(selectedDate, "EEEE, MMMM d, yyyy")}</span>
-                    <span className="sm:hidden">{format(selectedDate, "MMM d, yyyy")}</span>
+                    <span className="hidden sm:inline">{selectedDate ? format(selectedDate, "EEEE, MMMM d, yyyy") : 'Invalid Date'}</span>
+                    <span className="sm:hidden">{selectedDate ? format(selectedDate, "MMM d, yyyy") : 'Invalid Date'}</span>
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
@@ -334,7 +335,7 @@ export function FoodAllergensTracker() {
 
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="allergens" className="flex items-center gap-2">
             <Shield className="h-4 w-4" />
             My Allergens
@@ -346,6 +347,10 @@ export function FoodAllergensTracker() {
           <TabsTrigger value="history" className="flex items-center gap-2">
             <History className="h-4 w-4" />
             History
+          </TabsTrigger>
+          <TabsTrigger value="analytics" className="flex items-center gap-2">
+            <BarChart3 className="h-4 w-4" />
+            Analytics
           </TabsTrigger>
         </TabsList>
 
@@ -402,7 +407,7 @@ export function FoodAllergensTracker() {
                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
                           <span className="flex items-center gap-1">
                             <Clock className="h-3 w-3" />
-                            {format(new Date(entry.timestamp), "h:mm a")}
+                            {entry.timestamp ? format(new Date(entry.timestamp), "h:mm a") : 'Invalid Time'}
                           </span>
                           <span>Source: {entry.exposureSource}</span>
                         </div>
@@ -430,7 +435,7 @@ export function FoodAllergensTracker() {
                       <div>
                         <Label className="text-sm font-medium">Symptoms</Label>
                         <div className="flex flex-wrap gap-1 mt-1">
-                          {entry.symptoms.map((symptom, index) => (
+                          {(entry.symptoms || []).map((symptom, index) => (
                             <Badge key={index} variant="secondary" className="text-xs">
                               {symptom}
                             </Badge>
@@ -440,7 +445,7 @@ export function FoodAllergensTracker() {
                       <div>
                         <Label className="text-sm font-medium">Treatment Given</Label>
                         <div className="flex flex-wrap gap-1 mt-1">
-                          {entry.treatmentGiven.map((treatment, index) => (
+                          {(entry.treatmentGiven || []).map((treatment, index) => (
                             <Badge key={index} variant="outline" className="text-xs">
                               {treatment}
                             </Badge>
@@ -456,11 +461,11 @@ export function FoodAllergensTracker() {
                       </div>
                     )}
                     
-                    {entry.tags.length > 0 && (
+                    {(entry.tags || []).length > 0 && (
                       <div className="mt-4">
                         <Label className="text-sm font-medium">Tags</Label>
                         <div className="flex flex-wrap gap-1 mt-1">
-                          {entry.tags.map((tag, index) => (
+                          {(entry.tags || []).map((tag, index) => (
                             <Badge key={index} variant="outline" className="text-xs">
                               {tag}
                             </Badge>
@@ -477,6 +482,22 @@ export function FoodAllergensTracker() {
 
         <TabsContent value="history">
           <FoodAllergensHistory />
+        </TabsContent>
+
+        {/* Analytics Tab */}
+        <TabsContent value="analytics">
+          <Card>
+            <CardContent className="text-center py-12">
+              <BarChart3 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Flask Analytics Coming Soon</h3>
+              <p className="text-muted-foreground">
+                Advanced allergen pattern analysis with mathematical insights will be available here.
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                🧮 Mathematical engines for allergen correlation analysis in development
+              </p>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
 

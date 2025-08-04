@@ -1,12 +1,16 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Database, Download, Upload, Shield, Zap } from "lucide-react"
+import { Database, Download, Upload, Shield, Zap, Beaker } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useDailyData } from "@/lib/database/hooks/use-daily-data"
+import { exportGSpotData, importGSpotData, downloadGSpotExport } from "@/lib/database/g-spot-crypto"
+import { exportAllData } from "@/lib/database/migration-helper"
+import TestPinManagerComponent from "@/components/test-pin-manager"
 
 interface DataManagementModalProps {
   isOpen: boolean
@@ -18,6 +22,15 @@ export function DataManagementModal({ isOpen, onClose }: DataManagementModalProp
   const [pinInput, setPinInput] = useState("")
   const [confirmPinInput, setConfirmPinInput] = useState("")
   const [showGSpotExplanation, setShowGSpotExplanation] = useState(false)
+  const [isExecutingGSpot, setIsExecutingGSpot] = useState(false)
+  const [showImportDialog, setShowImportDialog] = useState(false)
+  const [importPin, setImportPin] = useState("")
+  const [importHour, setImportHour] = useState("")
+  const [importFile, setImportFile] = useState<File | null>(null)
+
+  // Database hook for G-Spot protocol
+  // Testing if IDE autocomplete demon has been exorcised! 🔥
+  const { secureOverwriteAllData, generateBlandData } = useDailyData()
 
   // Check if PIN is set on component mount
   useEffect(() => {
@@ -25,262 +38,360 @@ export function DataManagementModal({ isOpen, onClose }: DataManagementModalProp
     setHasPin(!!savedPin)
   }, [])
 
-  const handleSetPin = () => {
-    if (pinInput.length < 4) {
-      alert("PIN must be at least 4 characters")
+  // G-Spot Protocol Execution
+  const executeGSpotProtocol = async () => {
+    try {
+      setIsExecutingGSpot(true)
+
+      // Generate bland data (30 days worth)
+      console.log('🔥 G-SPOT: Generating bland data...')
+      const blandData = await generateBlandData(30)
+
+      // Execute secure overwrite
+      console.log('🔥 G-SPOT: Executing secure overwrite...')
+      await secureOverwriteAllData(blandData)
+
+      alert(`✅ G-Spot Protocol Complete!\n\n${blandData.length} bland records have been securely written.\n\nYour health data has been replaced with generic, unremarkable patterns.`)
+
+      // Close the modal
+      onClose()
+
+    } catch (error) {
+      console.error('G-Spot Protocol failed:', error)
+      alert(`❌ G-Spot Protocol Failed: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    } finally {
+      setIsExecutingGSpot(false)
+    }
+  }
+
+  // Handle G-Spot Export with proper encryption
+  const handleGSpotExport = async () => {
+    if (!hasPin) {
+      alert("Please set a PIN first for secure data export")
       return
     }
+
+    try {
+      const pin = localStorage.getItem('chaos-data-pin')
+      if (!pin) {
+        alert("PIN not found. Please set a PIN first.")
+        return
+      }
+
+      // Get all health data
+      const allDataString = await exportAllData()
+      const allData = JSON.parse(allDataString)
+
+      // Export with G-Spot encryption
+      const { filename, content, hour } = await exportGSpotData(allData.daily_data, pin)
+
+      // Download the disguised file
+      downloadGSpotExport(filename, content)
+
+      alert(`🔐 G-Spot Export Complete!\n\nFile: ${filename}\nHour of Detonation: ${hour}\n\nSave this hour! You'll need it to decrypt the data.`)
+
+    } catch (error) {
+      console.error('G-Spot export failed:', error)
+      alert(`❌ Export Failed!\n\nError: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    }
+  }
+
+  // Handle G-Spot Import
+  const handleGSpotImport = async () => {
+    if (!importFile || !importPin || !importHour) {
+      alert('Please provide all required fields')
+      return
+    }
+
+    try {
+      // Read the file
+      const fileContent = await importFile.text()
+
+      // Import and decrypt
+      const importData = await importGSpotData(fileContent, importPin, parseInt(importHour))
+
+      // Confirm before overwriting
+      if (confirm(`🔓 G-Spot Import Ready!\n\nFound ${importData.data_count} health records.\n\nThis will COMPLETELY REPLACE your current data. Continue?`)) {
+        // Overwrite with imported data
+        await secureOverwriteAllData(importData.health_data)
+
+        alert(`✅ G-Spot Import Complete!\n\n${importData.data_count} records restored successfully!`)
+
+        // Reset import form
+        setImportFile(null)
+        setImportPin("")
+        setImportHour("")
+        setShowImportDialog(false)
+        onClose()
+      }
+
+    } catch (error) {
+      console.error('G-Spot import failed:', error)
+      alert(`❌ G-Spot Import Failed: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    }
+  }
+
+  // Handle PIN setup
+  const handlePinSetup = () => {
     if (pinInput !== confirmPinInput) {
-      alert("PINs don't match")
+      alert('PINs do not match')
       return
     }
-    
+    if (pinInput.length < 4) {
+      alert('PIN must be at least 4 characters')
+      return
+    }
+
     localStorage.setItem('chaos-data-pin', pinInput)
     setHasPin(true)
     setPinInput("")
     setConfirmPinInput("")
-    alert("PIN set successfully! This will be required for data import/export.")
+    alert('✅ Security PIN has been set!')
   }
 
-  const handleRemovePin = () => {
-    if (confirm("Remove PIN protection? This will make data export/import less secure.")) {
-      localStorage.removeItem('chaos-data-pin')
-      setHasPin(false)
-    }
-  }
+  // Handle G-Spot Protocol with PIN verification
+  const handleGSpotWithPin = () => {
+    const enteredPin = prompt("⚠️ DANGER ZONE ⚠️\n\nEnter your security PIN to proceed with G-Spot Protocol:")
+    if (!enteredPin) return
 
-  const handleExportByTag = () => {
-    if (!hasPin) {
-      alert("Please set a PIN first for secure data export")
-      return
-    }
-    // TODO: Implement tag-based export
-    alert("Export by tag feature coming soon!")
-  }
-
-  const handlePdfExport = () => {
-    if (!hasPin) {
-      alert("Please set a PIN first for secure data export")
-      return
-    }
-    // TODO: Implement PDF export for doctors
-    alert("PDF export for doctors coming soon!")
-  }
-
-  const handleEncryptedJsonExport = () => {
-    if (!hasPin) {
-      alert("Please set a PIN first for secure data export")
-      return
-    }
-    // TODO: Implement encrypted JSON export
-    alert("Encrypted JSON export coming soon!")
-  }
-
-  const handleGSpotTap = () => {
-    setShowGSpotExplanation(true)
-  }
-
-  const handleGSpotLongPress = () => {
-    if (!hasPin) {
-      alert("PIN required for G-Spot protocol")
-      return
-    }
-    
-    const enteredPin = prompt("Enter your PIN to execute G-Spot protocol:")
     const savedPin = localStorage.getItem('chaos-data-pin')
-    
     if (enteredPin === savedPin) {
       if (confirm("⚠️ NUCLEAR OPTION ⚠️\n\nThis will COMPLETELY ERASE all your health data and replace it with bland starter backup data. This action CANNOT be undone.\n\nAre you absolutely sure?")) {
-        // TODO: Implement G-Spot protocol
-        alert("G-Spot protocol would execute here (not implemented yet)")
+        executeGSpotProtocol()
       }
     } else {
       alert("Incorrect PIN")
     }
   }
 
+  if (!isOpen) return null
+  
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg max-w-2xl max-h-[80vh] overflow-y-auto p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold flex items-center gap-2">
             <Database className="h-5 w-5" />
             Data Management
-          </DialogTitle>
-        </DialogHeader>
+          </h2>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+        </div>
 
-        <div className="space-y-6 py-4">
-          {/* PIN Setup Section */}
-          <div className="p-4 border rounded-lg">
-            <div className="flex items-center gap-2 mb-3">
-              <Shield className="h-4 w-4" />
-              <Label className="text-sm font-medium">Security PIN</Label>
-              {hasPin && <Badge variant="default">Set</Badge>}
-            </div>
-            
-            {!hasPin ? (
-              <div className="space-y-3">
-                <p className="text-sm text-muted-foreground">
-                  Set a PIN to secure your data exports and imports
-                </p>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label htmlFor="pin">PIN (min 4 chars)</Label>
-                    <Input
-                      id="pin"
-                      type="password"
-                      value={pinInput}
-                      onChange={(e) => setPinInput(e.target.value)}
-                      placeholder="Enter PIN"
-                    />
+        <Tabs defaultValue="data-management" className="py-4">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="data-management" className="flex items-center gap-2">
+              <Database className="h-4 w-4" />
+              Data Management
+            </TabsTrigger>
+            <TabsTrigger value="test-pins" className="flex items-center gap-2">
+              <Beaker className="h-4 w-4" />
+              Test PINs
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="data-management" className="space-y-6 mt-6">
+            {/* PIN Setup Section */}
+            <div className="p-4 border rounded-lg">
+              <div className="flex items-center gap-2 mb-3">
+                <Shield className="h-4 w-4" />
+                <Label className="text-sm font-medium">Security PIN</Label>
+                {hasPin && <Badge variant="default">Set</Badge>}
+              </div>
+              
+              {!hasPin ? (
+                <div className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    Set a security PIN to protect dangerous operations like G-Spot Protocol
+                  </p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label htmlFor="pin">PIN</Label>
+                      <Input
+                        id="pin"
+                        type="password"
+                        value={pinInput}
+                        onChange={(e) => setPinInput(e.target.value)}
+                        placeholder="Enter PIN"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="confirm-pin">Confirm PIN</Label>
+                      <Input
+                        id="confirm-pin"
+                        type="password"
+                        value={confirmPinInput}
+                        onChange={(e) => setConfirmPinInput(e.target.value)}
+                        placeholder="Confirm PIN"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="confirm-pin">Confirm PIN</Label>
-                    <Input
-                      id="confirm-pin"
-                      type="password"
-                      value={confirmPinInput}
-                      onChange={(e) => setConfirmPinInput(e.target.value)}
-                      placeholder="Confirm PIN"
-                    />
-                  </div>
+                  <Button onClick={handlePinSetup} className="w-full">
+                    <Shield className="h-4 w-4 mr-2" />
+                    Set Security PIN
+                  </Button>
                 </div>
-                <Button onClick={handleSetPin} className="w-full">
-                  Set PIN
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                <p className="text-sm text-muted-foreground">
-                  PIN is set and protecting your data exports
-                </p>
-                <Button onClick={handleRemovePin} variant="outline" size="sm">
-                  Remove PIN
-                </Button>
-              </div>
-            )}
-          </div>
-
-          {/* Export Options */}
-          <div className="space-y-3">
-            <Label className="text-sm font-medium">Export Data</Label>
-            
-            <Button 
-              onClick={handleExportByTag} 
-              variant="outline" 
-              className="w-full justify-start"
-              disabled={!hasPin}
-            >
-              <Download className="h-4 w-4 mr-2" />
-              Export by Tag
-            </Button>
-            
-            <Button 
-              onClick={handlePdfExport} 
-              variant="outline" 
-              className="w-full justify-start"
-              disabled={!hasPin}
-            >
-              <Download className="h-4 w-4 mr-2" />
-              PDF for Doctors
-            </Button>
-            
-            <Button 
-              onClick={handleEncryptedJsonExport} 
-              variant="outline" 
-              className="w-full justify-start"
-              disabled={!hasPin}
-            >
-              <Download className="h-4 w-4 mr-2" />
-              Encrypted JSON Backup
-            </Button>
-
-            {!hasPin && (
-              <p className="text-xs text-muted-foreground">
-                Set a PIN above to enable data export features
-              </p>
-            )}
-          </div>
-
-          {/* Import Options */}
-          <div className="space-y-3">
-            <Label className="text-sm font-medium">Import Data</Label>
-            
-            <Button 
-              variant="outline" 
-              className="w-full justify-start"
-              disabled={!hasPin}
-            >
-              <Upload className="h-4 w-4 mr-2" />
-              Import Encrypted Backup
-            </Button>
-
-            {!hasPin && (
-              <p className="text-xs text-muted-foreground">
-                Set a PIN above to enable data import features
-              </p>
-            )}
-          </div>
-
-          {/* G-Spot Protocol */}
-          <div className="p-4 border-2 border-destructive/20 rounded-lg bg-destructive/5">
-            <div className="flex items-center gap-2 mb-3">
-              <Zap className="h-4 w-4 text-destructive" />
-              <Label className="text-sm font-medium text-destructive">Emergency Protocol</Label>
+              ) : (
+                <p className="text-sm text-green-600">✅ Security PIN is configured</p>
+              )}
             </div>
-            
-            <Button
-              variant="destructive"
-              className="w-full"
-              onClick={handleGSpotTap}
-              onMouseDown={(e) => {
-                const timer = setTimeout(() => {
-                  handleGSpotLongPress()
-                }, 1000)
-                
-                const cleanup = () => {
-                  clearTimeout(timer)
-                  document.removeEventListener('mouseup', cleanup)
-                }
-                document.addEventListener('mouseup', cleanup)
-              }}
-            >
-              💥 G-Spot Protocol
-            </Button>
-            
-            <p className="text-xs text-muted-foreground mt-2">
-              Tap to explain • Long hold + PIN to execute
-            </p>
-            <p className="text-xs text-muted-foreground mt-1 px-3">
-              they won't find it they don't think it exists anyways
-            </p>
 
-            {showGSpotExplanation && (
-              <div className="mt-3 p-3 bg-muted rounded border">
-                <p className="text-sm">
-                  <strong>G-Spot Protocol:</strong> Emergency data reset that completely erases all health data 
-                  and overwrites it with bland, generic starter data. Designed for situations where you need 
-                  to quickly sanitize your health tracking data. This is irreversible and nuclear.
-                </p>
+            {/* Export Section */}
+            <div className="p-4 border rounded-lg">
+              <div className="flex items-center gap-2 mb-3">
+                <Download className="h-4 w-4" />
+                <Label className="text-sm font-medium">Export Data</Label>
+              </div>
+              
+              <div className="space-y-3">
                 <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={() => setShowGSpotExplanation(false)}
-                  className="mt-2"
+                  onClick={() => exportAllData()}
+                  variant="outline" 
+                  className="w-full"
                 >
-                  Got it
+                  <Download className="h-4 w-4 mr-2" />
+                  Export All Data (JSON)
+                </Button>
+                
+                <Button
+                  onClick={handleGSpotExport}
+                  variant="outline"
+                  className="w-full"
+                >
+                  <Zap className="h-4 w-4 mr-2" />
+                  G-Spot Export (Encrypted)
                 </Button>
               </div>
-            )}
-          </div>
-        </div>
+            </div>
 
-        <div className="flex justify-end gap-2 pt-4">
-          <Button variant="outline" onClick={onClose}>
-            Close
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+            {/* Import Section */}
+            <div className="p-4 border rounded-lg">
+              <div className="flex items-center gap-2 mb-3">
+                <Upload className="h-4 w-4" />
+                <Label className="text-sm font-medium">Import Data</Label>
+              </div>
+
+              <div className="space-y-3">
+                {!showImportDialog ? (
+                  <Button
+                    onClick={() => setShowImportDialog(true)}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    <Upload className="h-4 w-4 mr-2" />
+                    Import G-Spot Data
+                  </Button>
+                ) : (
+                  <div className="space-y-3 p-3 border rounded bg-gray-50">
+                    <div>
+                      <Label htmlFor="import-file">G-Spot File</Label>
+                      <Input
+                        id="import-file"
+                        type="file"
+                        accept=".json"
+                        onChange={(e) => setImportFile(e.target.files?.[0] || null)}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label htmlFor="import-pin">PIN</Label>
+                        <Input
+                          id="import-pin"
+                          type="password"
+                          value={importPin}
+                          onChange={(e) => setImportPin(e.target.value)}
+                          placeholder="Enter PIN"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="import-hour">Hour of Detonation</Label>
+                        <Input
+                          id="import-hour"
+                          type="number"
+                          min="0"
+                          max="23"
+                          value={importHour}
+                          onChange={(e) => setImportHour(e.target.value)}
+                          placeholder="0-23"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={handleGSpotImport}
+                        className="flex-1"
+                        disabled={!importFile || !importPin || !importHour}
+                      >
+                        <Upload className="h-4 w-4 mr-2" />
+                        Import Data
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setShowImportDialog(false)
+                          setImportFile(null)
+                          setImportPin("")
+                          setImportHour("")
+                        }}
+                        variant="outline"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* G-Spot Protocol Section */}
+            <div className="p-4 border-2 border-red-200 rounded-lg bg-red-50">
+              <div className="flex items-center gap-2 mb-3">
+                <Zap className="h-4 w-4 text-red-600" />
+                <Label className="text-sm font-medium text-red-800">G-Spot Protocol</Label>
+                <Badge variant="destructive">DANGER</Badge>
+              </div>
+              
+              <div className="space-y-3">
+                <p className="text-sm text-red-700">
+                  Emergency data replacement with bland, unremarkable patterns. 
+                  <button 
+                    onClick={() => setShowGSpotExplanation(!showGSpotExplanation)}
+                    className="text-red-600 underline ml-1"
+                  >
+                    Learn more
+                  </button>
+                </p>
+                
+                {showGSpotExplanation && (
+                  <div className="text-xs text-red-600 bg-red-100 p-3 rounded">
+                    <p className="font-medium mb-2">What is G-Spot Protocol?</p>
+                    <p>
+                      A nuclear option that completely replaces your health data with algorithmically generated
+                      "bland" patterns that appear normal but contain no real personal information.
+                      Use this if you need to quickly sanitize your data for privacy reasons.
+                    </p>
+                    <p className="text-xs italic mt-2 text-red-500">
+                      They can't find it if they don't think it exists anyways. 😏
+                    </p>
+                  </div>
+                )}
+                
+                <Button 
+                  onClick={hasPin ? handleGSpotWithPin : executeGSpotProtocol}
+                  variant="destructive" 
+                  className="w-full"
+                  disabled={isExecutingGSpot}
+                >
+                  <Zap className="h-4 w-4 mr-2" />
+                  {isExecutingGSpot ? 'Executing...' : 'Execute G-Spot Protocol'}
+                </Button>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="test-pins" className="mt-6">
+            <TestPinManagerComponent onClose={onClose} />
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
   )
 }

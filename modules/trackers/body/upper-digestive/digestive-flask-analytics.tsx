@@ -13,6 +13,8 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Loader2, Utensils, TrendingUp, AlertCircle, Clock, Target, Activity } from 'lucide-react'
+import { useDailyData, CATEGORIES } from "@/lib/database"
+import { format, subDays } from "date-fns"
 
 interface DigestiveEntry {
   entry_date: string
@@ -88,23 +90,58 @@ export default function DigestiveFlaskAnalytics({ entries, currentDate }: Digest
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [dateRange, setDateRange] = useState('30')
+  const { getCategoryData } = useDailyData()
 
-  // Load Flask analytics when entries change
+  // Load Flask analytics when date range changes
   useEffect(() => {
-    if (entries.length > 0) {
-      loadFlaskAnalytics()
-    } else {
-      setAnalyticsData(null)
-    }
-  }, [entries, dateRange])
+    loadFlaskAnalytics()
+  }, [dateRange, currentDate])
 
   const loadFlaskAnalytics = async () => {
     setLoading(true)
     setError(null)
 
     try {
+      // Load entries from multiple dates across the date range
+      const days = parseInt(dateRange)
+      const endDate = new Date(currentDate)
+      const allEntries: any[] = []
+
+      // Generate date range
+      const dateRangeArray = []
+      for (let i = 0; i < days; i++) {
+        dateRangeArray.push(subDays(endDate, i))
+      }
+
+      // Collect all entries from database
+      for (const date of dateRangeArray) {
+        const dateKey = format(date, 'yyyy-MM-dd')
+        const records = await getCategoryData(dateKey, CATEGORIES.TRACKER)
+        const upperDigestiveRecord = records.find(record => record.subcategory === 'upper-digestive')
+
+        if (upperDigestiveRecord?.content?.entries) {
+          let entries = upperDigestiveRecord.content.entries
+          if (typeof entries === 'string') {
+            try {
+              entries = JSON.parse(entries)
+            } catch (e) {
+              console.error('Failed to parse JSON:', e)
+              entries = []
+            }
+          }
+          if (Array.isArray(entries)) {
+            // Add the date to each entry since it's missing from the database entries
+            const entriesWithDate = entries.map(entry => ({
+              ...entry,
+              date: entry.date || dateKey  // Use the dateKey if entry.date is missing
+            }))
+            allEntries.push(...entriesWithDate)
+          }
+        }
+      }
+
       // Convert entries to the format expected by Flask
-      const flaskEntries = entries.map(entry => ({
+      const flaskEntries = allEntries.map(entry => ({
         date: entry.date,
         time: entry.time,
         symptoms: entry.symptoms || [],
@@ -115,7 +152,9 @@ export default function DigestiveFlaskAnalytics({ entries, currentDate }: Digest
         tags: entry.tags || []
       }))
 
-      console.log('🍽️ Sending digestive data to Flask:', flaskEntries.length, 'entries')
+      console.log('🍽️ Sending digestive data to Flask:', flaskEntries.length, 'entries from', days, 'days')
+      console.log('📊 Sample entry:', flaskEntries[0])
+      console.log('📅 Date range:', dateRangeArray.map(d => format(d, 'yyyy-MM-dd')))
 
       const response = await fetch('http://localhost:5000/api/analytics/upper-digestive', {
         method: 'POST',

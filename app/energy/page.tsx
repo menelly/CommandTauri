@@ -409,9 +409,10 @@ export default function EnergyTracker() {
         )}
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2" style={{ backgroundColor: 'var(--surface-1)', borderColor: 'var(--border-soft)' }}>
+          <TabsList className="grid w-full grid-cols-3" style={{ backgroundColor: 'var(--surface-1)', borderColor: 'var(--border-soft)' }}>
             <TabsTrigger value="entry" style={{ color: 'var(--text-main)' }}>Energy Entry</TabsTrigger>
             <TabsTrigger value="history" style={{ color: 'var(--text-main)' }}>Energy History</TabsTrigger>
+            <TabsTrigger value="analytics" style={{ color: 'var(--text-main)' }}>Analytics</TabsTrigger>
           </TabsList>
 
           <TabsContent value="entry" className="space-y-6">
@@ -734,6 +735,22 @@ export default function EnergyTracker() {
             )}
           </CardContent>
         </Card>
+          </TabsContent>
+
+          {/* Analytics Tab */}
+          <TabsContent value="analytics">
+            <Card>
+              <CardContent className="text-center py-12">
+                <Activity className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Flask Analytics Coming Soon</h3>
+                <p className="text-muted-foreground">
+                  Advanced energy pattern analysis with mathematical insights will be available here.
+                </p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  🧮 Mathematical engines for energy correlation analysis in development
+                </p>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </div>

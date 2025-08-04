@@ -40,6 +40,7 @@ export default function AppSidebar() {
       isVisible: true,
       buttonClass: "sidebar-btn-3"
     },
+    /* MVP-HIDDEN: Planning Section - Nothing implemented yet
     {
       id: "planning",
       text: "Plan",
@@ -48,6 +49,7 @@ export default function AppSidebar() {
       isVisible: true,
       buttonClass: "sidebar-btn-2"
     },
+    */
     {
       id: "manage",
       text: "Manage",
@@ -65,6 +67,14 @@ export default function AppSidebar() {
       buttonClass: "sidebar-btn-6"
     },
     {
+      id: "test-pins",
+      text: "Test PINs",
+      emoji: "🧪",
+      targetPageId: "test-pins",
+      isVisible: true,
+      buttonClass: "sidebar-btn-dev"
+    },
+    {
       id: "journal",
       text: "Journal",
       emoji: "📝",
@@ -72,6 +82,7 @@ export default function AppSidebar() {
       isVisible: true,
       buttonClass: "sidebar-btn-2"
     },
+    /* MVP-HIDDEN: Forge Section - Complex feature not needed for core period tracking
     {
       id: "forge",
       text: "Forge",
@@ -80,6 +91,7 @@ export default function AppSidebar() {
       isVisible: true,
       buttonClass: "sidebar-btn-guide"
     },
+    */
 
   ]
 
@@ -95,17 +107,21 @@ export default function AppSidebar() {
       { id: 'mood-check', name: 'Mood Check', icon: '🎭' },
       { id: 'anxiety-tracker', name: 'Anxiety', icon: '😰' },
     ],
+    /* MVP-HIDDEN: Planning submenu items
     'planning': [
       { id: 'monthly-calendar', name: 'Monthly Calendar', icon: '📆' },
       { id: 'task-lists', name: 'Task Lists', icon: '✅' },
       { id: 'goals-tracker', name: 'Goals', icon: '🎯' },
     ],
+    */
     'manage': [
       { id: 'medications', name: 'Medications & Supplements', icon: '💊', href: '/medications' },
       { id: 'providers', name: 'Healthcare Providers', icon: '👩‍⚕️', href: '/providers' },
       { id: 'timeline', name: 'Diagnoses & Timeline', icon: '📋', href: '/timeline' },
       { id: 'missed-work', name: 'Missed Work', icon: '💼' },
+      /* MVP-HIDDEN: Chore Chart - Adulting features for later release
       { id: 'chore-chart', name: 'Chore Chart', icon: '🏠' },
+      */
     ],
     'patterns': [
       { id: 'symptom-correlations', name: 'Symptom Correlations', icon: '📈' },

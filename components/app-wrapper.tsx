@@ -4,6 +4,7 @@ import { useDatabase } from '@/lib/database/hooks/use-database'
 import { UserProvider, useUser } from '@/lib/contexts/user-context'
 import { Toaster } from '@/components/ui/toaster'
 import PinLogin from '@/components/pin-login'
+import KonamiEasterEgg from '@/components/konami-easter-egg'
 
 interface AppWrapperProps {
   children: React.ReactNode
@@ -61,6 +62,7 @@ function AppContent({ children }: AppWrapperProps) {
   return (
     <>
       {children}
+      <KonamiEasterEgg />
       <Toaster />
     </>
   )

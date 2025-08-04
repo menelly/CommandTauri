@@ -449,7 +449,7 @@ export default function PainTracker() {
                 <PopoverTrigger asChild>
                   <Button variant="outline" className="min-w-[200px]">
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {format(new Date(selectedDate), 'EEEE, MMMM d, yyyy')}
+                    {selectedDate ? format(new Date(selectedDate), 'EEEE, MMMM d, yyyy') : 'Invalid Date'}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
@@ -491,7 +491,7 @@ export default function PainTracker() {
             <CardHeader>
               <CardTitle>Today's Pain Episodes</CardTitle>
               <CardDescription>
-                Pain entries for {format(new Date(selectedDate), 'MMMM d, yyyy')}
+                Pain entries for {selectedDate ? format(new Date(selectedDate), 'MMMM d, yyyy') : 'Invalid Date'}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -532,7 +532,7 @@ export default function PainTracker() {
                             <p className="text-sm">{entry.notes}</p>
                           )}
                           <p className="text-xs text-muted-foreground">
-                            {format(new Date(entry.created_at), 'h:mm a')}
+                            {entry.created_at ? format(new Date(entry.created_at), 'h:mm a') : 'Invalid Time'}
                           </p>
                         </div>
                         <div className="flex items-center gap-2">
@@ -590,7 +590,7 @@ export default function PainTracker() {
           <DialogHeader>
             <DialogTitle>Log Pain Episode</DialogTitle>
             <DialogDescription>
-              Record details about your pain episode for {format(new Date(selectedDate), 'MMMM d, yyyy')}
+              Record details about your pain episode for {selectedDate ? format(new Date(selectedDate), 'MMMM d, yyyy') : 'Invalid Date'}
             </DialogDescription>
           </DialogHeader>
           <PainForm

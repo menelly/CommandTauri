@@ -111,7 +111,7 @@ export function PainHistory({ entries, onDelete, onEdit, isLoading }: PainHistor
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg flex items-center gap-2">
                     <Calendar className="h-4 w-4" />
-                    {format(new Date(entry.date), 'EEEE, MMMM d, yyyy')}
+                    {entry.date ? format(new Date(entry.date), 'EEEE, MMMM d, yyyy') : 'Invalid Date'}
                   </CardTitle>
                   <div className="flex items-center gap-2">
                     <div className={`flex items-center gap-1 font-bold text-lg ${getPainLevelColor(entry.painLevel)}`}>

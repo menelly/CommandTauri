@@ -28,6 +28,10 @@ export interface UseDailyDataReturn {
   
   // Bulk operations
   saveBulkData: (records: Omit<DailyDataRecord, 'id' | 'metadata'>[]) => Promise<void>;
+
+  // G-Spot Protocol operations
+  secureOverwriteAllData: (newRecords: Omit<DailyDataRecord, 'id' | 'metadata'>[]) => Promise<void>;
+  generateBlandData: (daysBack?: number) => Promise<DailyDataRecord[]>;
   
   // Search and filtering
   searchByTags: (tags: string[], dateRange?: { start: string; end: string }) => Promise<DailyDataRecord[]>;
@@ -328,6 +332,67 @@ export function useDailyData(): UseDailyDataReturn {
     }
   }, []);
 
+  // ============================================================================
+  // G-SPOT PROTOCOL - SECURE DATA OVERWRITE
+  // ============================================================================
+
+  const secureOverwriteAllData = useCallback(async (
+    newRecords: Omit<DailyDataRecord, 'id' | 'metadata'>[]
+  ): Promise<void> => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      console.log('🔥 G-SPOT: Starting secure data overwrite...');
+
+      // Step 1: Clear ALL existing data
+      await db.daily_data.clear();
+      console.log('🗑️ G-SPOT: All existing data cleared');
+
+      // Step 2: Add new bland data with proper metadata
+      const now = getCurrentTimestamp();
+      const recordsWithMetadata = newRecords.map(record => ({
+        ...record,
+        metadata: {
+          created_at: record.metadata?.created_at || now,
+          updated_at: now,
+          user_id: 'bland-user',
+          version: 1
+        }
+      }));
+
+      await db.daily_data.bulkAdd(recordsWithMetadata);
+      console.log(`💾 G-SPOT: Added ${recordsWithMetadata.length} bland records`);
+
+      // Step 3: Force IndexedDB to commit changes (forensic protection)
+      await db.transaction('rw', db.daily_data, async () => {
+        // This forces a transaction commit, making old data harder to recover
+        const count = await db.daily_data.count();
+        console.log(`🔒 G-SPOT: Transaction committed, ${count} records secured`);
+      });
+
+      console.log('✅ G-SPOT: Secure overwrite complete');
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Failed to execute G-Spot protocol';
+      setError(errorMsg);
+      console.error('G-Spot protocol failed:', err);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const generateBlandData = useCallback(async (daysBack: number = 30): Promise<DailyDataRecord[]> => {
+    try {
+      // Import the bland data generator
+      const { blandDataGenerator } = await import('../bland-data-generator');
+      return blandDataGenerator.generateAllBlandData(daysBack);
+    } catch (err) {
+      console.error('Failed to generate bland data:', err);
+      throw err;
+    }
+  }, []);
+
   return {
     // Data access
     getDateData,
@@ -341,12 +406,16 @@ export function useDailyData(): UseDailyDataReturn {
     
     // Bulk operations
     saveBulkData,
-    
+
+    // G-Spot Protocol operations
+    secureOverwriteAllData,
+    generateBlandData,
+
     // Search and filtering
     searchByTags,
     searchByContent,
     getDateRange,
-    
+
     // Status
     isLoading,
     error

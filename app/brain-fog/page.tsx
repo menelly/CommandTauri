@@ -400,7 +400,7 @@ export default function BrainFogTracker() {
                           <div className="text-2xl">🧠</div>
                           <div>
                             <h3 className="font-semibold">
-                              {format(new Date(`${entry.date}T${entry.time}`), 'h:mm a')}
+                              {entry.date && entry.time ? format(new Date(`${entry.date}T${entry.time}`), 'h:mm a') : 'Invalid Time'}
                             </h3>
                             <p className="text-sm text-muted-foreground">
                               Severity: {entry.severity}/10
@@ -518,7 +518,7 @@ export default function BrainFogTracker() {
                 {editingEntry ? 'Edit Brain Fog Entry' : 'Log Brain Fog Symptoms'}
               </DialogTitle>
               <DialogDescription>
-                Record your cognitive symptoms and brain fog levels for {format(new Date(selectedDate), 'PPP')}
+                Record your cognitive symptoms and brain fog levels for {selectedDate ? format(new Date(selectedDate), 'PPP') : 'Invalid Date'}
               </DialogDescription>
             </DialogHeader>
 

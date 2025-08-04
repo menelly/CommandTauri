@@ -31,6 +31,10 @@ class DigestiveAnalytics:
             if not entries:
                 return self._get_fallback_upper_digestive_analytics()
 
+            print(f"🔍 DEBUG: Received {len(entries)} entries")
+            if entries:
+                print(f"🔍 DEBUG: Sample entry: {entries[0]}")
+
             # Filter out NOPE entries and recent entries
             end_date = datetime.now()
             start_date = end_date - timedelta(days=date_range)
@@ -44,14 +48,17 @@ class DigestiveAnalytics:
                 # Handle date parsing safely
                 entry_date_str = entry.get('date', '')
                 if not entry_date_str:
+                    print(f"🔍 DEBUG: Entry missing date: {entry}")
                     continue
 
                 try:
                     entry_date = datetime.fromisoformat(entry_date_str)
                     if entry_date >= start_date:
                         analytics_entries.append(entry)
-                except ValueError:
-                    # Skip entries with invalid dates
+                    else:
+                        print(f"🔍 DEBUG: Entry too old: {entry_date_str} < {start_date}")
+                except ValueError as e:
+                    print(f"🔍 DEBUG: Date parse error for '{entry_date_str}': {e}")
                     continue
 
             if not analytics_entries:

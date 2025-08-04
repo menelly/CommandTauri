@@ -37,7 +37,9 @@ app.config['JSON_SORT_KEYS'] = False  # Preserve JSON key order
 # Secure CORS configuration - only allow localhost during development
 CORS(app, origins=[
     "http://localhost:3000",
+    "http://localhost:3001",  # Added for Next.js fallback port
     "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",  # Added for Next.js fallback port
     "tauri://localhost",
     "https://tauri.localhost"
 ], supports_credentials=True)
@@ -272,8 +274,12 @@ def get_upper_digestive_analytics():
         entries = data['entries']
         date_range = data.get('dateRange', 30)  # Default 30 days
 
+        logger.info(f"🍽️ Analyzing {len(entries)} digestive entries over {date_range} days")
+
         # Generate upper digestive analytics
         analytics_data = analytics.analyze_upper_digestive(entries, date_range)
+
+        logger.info(f"🎯 Generated digestive analytics with {analytics_data.get('total_episodes', 0)} episodes")
 
         return jsonify(analytics_data)
 

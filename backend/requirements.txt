@@ -9,9 +9,9 @@ reportlab==4.0.7
 pillow==10.1.0
 
 # Data processing (minimal set)
-numpy==1.24.4
+numpy>=1.26.0
 pandas>=2.2.0
-matplotlib==3.8.2
+matplotlib>=3.8.0
 
 # API clients (keep for future flexibility)
 openai==1.3.7
