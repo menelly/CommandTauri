@@ -47,14 +47,7 @@ export default function MentalHealthIndex() {
       icon: <Brain className="h-5 w-5" />,
       status: 'coming-soon'
     },
-    {
-      id: 'mood-check-in',
-      name: 'Mood Check-in',
-      shortDescription: 'Emotional state with custom emojis',
-      helpContent: 'Quick daily mood tracking with customizable emoji scales. Track emotional states, energy levels, and overall mental weather. Simple enough for bad brain days, detailed enough for patterns.',
-      icon: <Smile className="h-5 w-5" />,
-      status: 'coming-soon'
-    },
+
     {
       id: 'anxiety-tracker',
       name: 'Anxiety Tracker',
@@ -63,14 +56,7 @@ export default function MentalHealthIndex() {
       icon: <Frown className="h-5 w-5" />,
       status: 'coming-soon'
     },
-    {
-      id: 'panic-meltdowns',
-      name: 'Panic & Meltdowns',
-      shortDescription: 'Crisis tracking, triggers, recovery',
-      helpContent: 'Track panic attacks, meltdowns, and overwhelm episodes. Record triggers, warning signs, what helped, and recovery time. Build your personal crisis management toolkit.',
-      icon: <AlertTriangle className="h-5 w-5" />,
-      status: 'coming-soon'
-    },
+
     {
       id: 'self-care-tracker',
       name: 'Self-Care Tracker',

@@ -181,14 +181,7 @@ export default function MonthlyCalendar() {
     return `/calendar/day/${dateStr}`
   }
 
-  // Handle week click (navigate to weekly view)
-  const getWeekHref = (weekIndex: number): string => {
-    const year = currentDate.getFullYear()
-    const month = currentDate.getMonth()
-    const firstDayOfWeek = new Date(year, month, 1 + (weekIndex * 7))
-    const actualWeekNumber = getWeekOfYear(firstDayOfWeek)
-    return `/calendar/week/${year}-W${actualWeekNumber}`
-  }
+
 
   // Toggle bookmark
   const toggleBookmark = () => {
@@ -266,21 +259,7 @@ export default function MonthlyCalendar() {
 
               {/* Calendar weeks */}
               {calendarData.map((week, weekIndex) => (
-                <div key={weekIndex} className="grid grid-cols-8 gap-1 mb-1">
-                  {/* Week number button */}
-                  <div className="flex items-center justify-center">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      asChild
-                      className="text-xs text-muted-foreground hover:text-foreground p-1 h-8 w-8"
-                      title={`Go to week ${getWeekOfYear(new Date(currentDate.getFullYear(), currentDate.getMonth(), 1 + (weekIndex * 7)))}`}
-                    >
-                      <a href={getWeekHref(weekIndex)}>
-                        W{getWeekOfYear(new Date(currentDate.getFullYear(), currentDate.getMonth(), 1 + (weekIndex * 7)))}
-                      </a>
-                    </Button>
-                  </div>
+                <div key={weekIndex} className="grid grid-cols-7 gap-1 mb-1">
                   
                   {/* Day cells */}
                   {week.days.map((day, dayIndex) => (

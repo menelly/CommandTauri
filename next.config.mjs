@@ -11,8 +11,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Enable static export for Tauri
-  output: 'export',
+  // Temporarily disable static export to get dynamic routes working
+  // output: 'export',
   trailingSlash: true,
   distDir: 'out',
 

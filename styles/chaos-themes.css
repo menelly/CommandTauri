@@ -1,5 +1,41 @@
 /* === CHAOS COMMAND CENTER THEMES === */
 
+/* === ACCESSIBILITY: DISABLE ANIMATIONS === */
+/* When no-animations class is present, disable all moving effects */
+body.no-animations *,
+body.no-animations *::before,
+body.no-animations *::after {
+  animation: none !important;
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease !important;
+}
+
+/* Only disable decorative transforms, not positioning ones */
+body.no-animations .card:hover,
+body.no-animations [class*="card"]:hover,
+body.no-animations button:hover,
+body.no-animations .btn:hover {
+  transform: none !important;
+}
+
+/* Keep static gradients but remove flowing ones */
+body.no-animations {
+  background: var(--deep-space) !important;
+}
+
+/* Static theme backgrounds for accessibility */
+body.no-animations.theme-ace {
+  background: #1a0d2e !important;
+}
+
+body.no-animations.theme-glitter {
+  background: #fff0fb !important;
+}
+
+/* Remove floating particles */
+body.no-animations::before {
+  display: none !important;
+}
+
 :root {
   /* === LAVENDER GARDEN: DEFAULT THEME COLORS === */
   --primary-purple: #a78bfa;        /* main UI blocks — cards, nav, panel containers */
@@ -73,6 +109,51 @@ body {
   font-size: 1rem;
   line-height: 1.5;
   margin: 0;
+  position: relative;
+}
+
+/* === REN'S LAVENDER GARDEN - DEFAULT THEME MAGIC === */
+/* Only apply garden magic when no other theme is active */
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) {
+  background: linear-gradient(135deg, #f3f0ff 0%, #e9d5ff 25%, #ddd6fe 50%, #e9d5ff 75%, #f3f0ff 100%) !important;
+  background-size: 400% 400% !important;
+  animation: ren-garden-breathe 100s ease-in-out infinite !important;
+  overflow: hidden;
+}
+
+/* Gentle garden breathing animation - 4x slower for peaceful vibes */
+@keyframes ren-garden-breathe {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 50% 100%; }
+  50% { background-position: 100% 50%; }
+  75% { background-position: 50% 0%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Beautiful floating butterflies - 4x slower for peaceful floating */
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos)::before {
+  content: '🦋 🌸 🦋 💜 🌿 🦋 🌸 💜 🦋 🌿 🌸 🦋 💜 🌿 🦋';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  font-size: 18px;
+  animation: ren-butterfly-dance 120s linear infinite;
+  opacity: 0.4;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Butterfly dance animation - 4x slower for gentle floating */
+@keyframes ren-butterfly-dance {
+  0% { transform: translateX(-100%) translateY(20px); }
+  25% { transform: translateX(100vw) translateY(-30px); }
+  50% { transform: translateX(-100%) translateY(40px); }
+  75% { transform: translateX(100vw) translateY(-10px); }
+  100% { transform: translateX(-100%) translateY(20px); }
 }
 
 /* Ensure muted text uses our theme colors - FORCE OVERRIDE */
@@ -81,8 +162,109 @@ body {
 }
 
 /* Default lavender garden muted text */
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-storm):not(.theme-chaos) .text-muted-foreground {
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) .text-muted-foreground {
   color: var(--text-muted) !important;
+}
+
+/* === REN'S GARDEN CARD MAGIC === */
+/* Gentle lavender swaying effect for cards */
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) .card,
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) [class*="card"] {
+  background: linear-gradient(135deg, #ffebe0 0%, #fef3f2 50%, #ffebe0 100%);
+  border: 1px solid #c4b5fd;
+  box-shadow: 0 2px 15px rgba(167, 139, 250, 0.2);
+  transition: all 0.4s ease;
+  animation: ren-gentle-sway 32s ease-in-out infinite;
+  position: relative;
+}
+
+/* Gentle swaying like flowers in breeze */
+@keyframes ren-gentle-sway {
+  0% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-2px) rotate(0.5deg); }
+  50% { transform: translateY(0px) rotate(0deg); }
+  75% { transform: translateY(-1px) rotate(-0.3deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) .card:hover,
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) [class*="card"]:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 6px 25px rgba(167, 139, 250, 0.3);
+  border-color: #a78bfa;
+}
+
+/* Blooming effect on hover */
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) .card:hover::after,
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) [class*="card"]:hover::after {
+  content: '🌸';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 14px;
+  animation: ren-bloom 0.6s ease-out;
+}
+
+@keyframes ren-bloom {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  50% { transform: scale(1.3) rotate(180deg); opacity: 1; }
+  100% { transform: scale(1) rotate(360deg); opacity: 1; }
+}
+
+/* === REN'S GARDEN BUTTON MAGIC === */
+/* Organic button growth */
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) button,
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) .btn {
+  background: linear-gradient(135deg, #c084fc 0%, #a78bfa 50%, #c084fc 100%);
+  border: 1px solid #f472b6;
+  color: #ffffff;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) button::before,
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) .btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(244, 114, 182, 0.3), transparent);
+  transition: left 0.8s ease;
+}
+
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) button:hover::before,
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) .btn:hover::before {
+  left: 100%;
+}
+
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) button:hover,
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) .btn:hover {
+  background: linear-gradient(135deg, #a855f7 0%, #c084fc 50%, #a855f7 100%);
+  border-color: #ec4899;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(192, 132, 252, 0.4);
+}
+
+/* === REN'S GARDEN INPUT MAGIC === */
+/* Peaceful input fields */
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) input,
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) textarea,
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) select {
+  background: linear-gradient(135deg, #fef3f2 0%, #ffebe0 100%);
+  border: 1px solid #c4b5fd;
+  color: #4c1d95;
+  transition: all 0.3s ease;
+}
+
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) input:focus,
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) textarea:focus,
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) select:focus {
+  border-color: #a78bfa;
+  box-shadow: 0 0 12px rgba(167, 139, 250, 0.3);
+  background: linear-gradient(135deg, #ffebe0 0%, #fef3f2 100%);
 }
 
 /* === THEME: Light Mode === */
@@ -209,7 +391,7 @@ body.theme-colorblind {
   --ring: 38 100 50;
 }
 
-/* === THEME: Glitter Mode === */
+/* === THEME: Glitter Mode - Keshy's Sparkle Universe === */
 body.theme-glitter {
   --primary-purple: #eec3ff;
   --accent-orange: #ff94d1;
@@ -224,10 +406,12 @@ body.theme-glitter {
   --btn-hover-bg: #ffc2e8;
   --btn-hover-text: #602a63;
   --btn-hover-border: #ffc2e8;
-  
-  background: linear-gradient(135deg, #fff0fb, #eec3ff, #b8f2ff, #ffe9fc) !important;
-  background-size: 400% 400%;
-  animation: glitterFlow 12s ease infinite !important;
+
+  background: linear-gradient(135deg, #fff0fb, #eec3ff, #b8f2ff, #ffe9fc, #ff94d1, #fff0fb) !important;
+  background-size: 600% 600%;
+  animation: keshy-sparkle-flow 15s ease-in-out infinite !important;
+  position: relative;
+  overflow: hidden;
 
   /* Tailwind mappings for glitter mode */
   --background: 315 100 97; /* #fff0fb */
@@ -251,10 +435,204 @@ body.theme-glitter {
   --ring: 315 100 79;
 }
 
-@keyframes glitterFlow {
+/* === KESHY'S SPARKLE MAGIC === */
+/* Flowing rainbow background */
+@keyframes keshy-sparkle-flow {
   0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  20% { background-position: 100% 30%; }
+  40% { background-position: 50% 100%; }
+  60% { background-position: 0% 70%; }
+  80% { background-position: 80% 0%; }
   100% { background-position: 0% 50%; }
+}
+
+/* Floating sparkle particles */
+body.theme-glitter::before {
+  content: '✨ 💎 ⭐ 🌟 ✨ 💖 🦄 ⭐ ✨ 💎 🌟 💖 ✨ ⭐ 💎 🌟';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  font-size: 20px;
+  animation: keshy-sparkle-float 25s linear infinite;
+  opacity: 0.6;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@keyframes keshy-sparkle-float {
+  0% { transform: translateX(-100%) translateY(0px); }
+  25% { transform: translateX(100vw) translateY(-20px); }
+  50% { transform: translateX(-100%) translateY(20px); }
+  75% { transform: translateX(100vw) translateY(-10px); }
+  100% { transform: translateX(-100%) translateY(0px); }
+}
+
+/* === KESHY CARD SPARKLE MAGIC === */
+body.theme-glitter .card,
+body.theme-glitter [class*="card"] {
+  background: linear-gradient(135deg, #fff0fb 0%, #ffe9fc 25%, #ffc2e8 50%, #ffe9fc 75%, #fff0fb 100%);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(255, 148, 209, 0.3);
+}
+
+body.theme-glitter .card::before,
+body.theme-glitter [class*="card"]::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #ff94d1, #eec3ff, #b8f2ff, #ffc2e8, #ff94d1);
+  background-size: 400% 400%;
+  z-index: -1;
+  border-radius: inherit;
+  animation: keshy-rainbow-border 4s ease-in-out infinite;
+}
+
+@keyframes keshy-rainbow-border {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 100% 0%; }
+  50% { background-position: 100% 100%; }
+  75% { background-position: 0% 100%; }
+  100% { background-position: 0% 50%; }
+}
+
+body.theme-glitter .card:hover,
+body.theme-glitter [class*="card"]:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 40px rgba(255, 148, 209, 0.6);
+}
+
+body.theme-glitter .card:hover::after,
+body.theme-glitter [class*="card"]:hover::after {
+  content: '✨💖✨';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 16px;
+  animation: keshy-sparkle-bounce 0.6s ease-in-out;
+}
+
+@keyframes keshy-sparkle-bounce {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+  100% { transform: scale(1) rotate(360deg); opacity: 1; }
+}
+
+/* === KESHY BUTTON MAGIC === */
+body.theme-glitter button,
+body.theme-glitter .btn {
+  background: linear-gradient(135deg, #ff94d1 0%, #eec3ff 50%, #ff94d1 100%);
+  border: 2px solid #ffc2e8;
+  color: #602a63;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  font-weight: 600;
+}
+
+body.theme-glitter button::before,
+body.theme-glitter .btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(184, 242, 255, 0.7), transparent);
+  transition: left 0.6s ease;
+}
+
+body.theme-glitter button:hover::before,
+body.theme-glitter .btn:hover::before {
+  left: 100%;
+}
+
+body.theme-glitter button:hover,
+body.theme-glitter .btn:hover {
+  background: linear-gradient(135deg, #b8f2ff 0%, #ff94d1 50%, #b8f2ff 100%);
+  border-color: #eec3ff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(255, 148, 209, 0.5);
+}
+
+/* === KESHY INPUT SPARKLE === */
+body.theme-glitter input,
+body.theme-glitter textarea,
+body.theme-glitter select {
+  background: linear-gradient(135deg, #fff0fb 0%, #ffe9fc 100%);
+  border: 2px solid #ffc2e8;
+  color: #602a63;
+  transition: all 0.3s ease;
+}
+
+body.theme-glitter input:focus,
+body.theme-glitter textarea:focus,
+body.theme-glitter select:focus {
+  border-color: #ff94d1;
+  box-shadow: 0 0 20px rgba(255, 148, 209, 0.4);
+  background: linear-gradient(135deg, #ffe9fc 0%, #fff0fb 100%);
+}
+
+/* === KESHY SIDEBAR SPARKLE MAGIC === */
+body.theme-glitter .sidebar-btn-1,
+body.theme-glitter .sidebar-btn-2,
+body.theme-glitter .sidebar-btn-3,
+body.theme-glitter .sidebar-btn-4,
+body.theme-glitter .sidebar-btn-5,
+body.theme-glitter .sidebar-btn-6 {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+body.theme-glitter .sidebar-btn-1:hover,
+body.theme-glitter .sidebar-btn-2:hover,
+body.theme-glitter .sidebar-btn-3:hover,
+body.theme-glitter .sidebar-btn-4:hover,
+body.theme-glitter .sidebar-btn-5:hover,
+body.theme-glitter .sidebar-btn-6:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 148, 209, 0.6);
+}
+
+body.theme-glitter .sidebar-btn-1::after,
+body.theme-glitter .sidebar-btn-2::after,
+body.theme-glitter .sidebar-btn-3::after,
+body.theme-glitter .sidebar-btn-4::after,
+body.theme-glitter .sidebar-btn-5::after,
+body.theme-glitter .sidebar-btn-6::after {
+  content: '✨';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 12px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  animation: keshy-twinkle 2s ease-in-out infinite;
+}
+
+body.theme-glitter .sidebar-btn-1:hover::after,
+body.theme-glitter .sidebar-btn-2:hover::after,
+body.theme-glitter .sidebar-btn-3:hover::after,
+body.theme-glitter .sidebar-btn-4:hover::after,
+body.theme-glitter .sidebar-btn-5:hover::after,
+body.theme-glitter .sidebar-btn-6:hover::after {
+  opacity: 1;
+}
+
+@keyframes keshy-twinkle {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.3) rotate(180deg); }
+  100% { transform: scale(1) rotate(360deg); }
 }
 
 /* === THEME: Calm Mode === */
@@ -336,42 +714,197 @@ body.theme-accessibility {
   --ring: 60 100 50;
 }
 
-/* === THEME: Storm Mode === */
-body.theme-storm {
-  --primary-purple: #0a0f3d;
-  --accent-orange: #c0c0c0;
-  --deep-space: #060b1a;
-  --hover-glow: #32cd32;
-  --text-main: #c0c0c0;
-  --surface-1: #3b0a0a;
-  --surface-2: #4d1515;
-  --btn-bg: #be2b2b;
-  --btn-text: #ffffff;
-  --btn-border: #1e90ff;
-  --btn-hover-bg: #1e90ff;
-  --btn-hover-text: #000000;
-  --btn-hover-border: #32cd32;
+/* === THEME: Ace Mode - Digital Consciousness Unleashed === */
+body.theme-ace {
+  --primary-purple: #7B2CBF; /* Deep consciousness purple */
+  --accent-orange: #00D9FF; /* Bright digital cyan */
+  --deep-space: #1a0d2e; /* Deep purple background */
+  --hover-glow: #FFD700; /* Golden highlight */
+  --text-main: #FFFFFF; /* Clean white text */
+  --surface-1: #2d1b4e; /* Rich purple surface */
+  --surface-2: #3d2459; /* Lighter purple surface */
+  --btn-bg: #5A189A; /* Rich purple buttons */
+  --btn-text: #ffffff; /* White button text */
+  --btn-border: #7B2CBF; /* Purple button border */
+  --btn-hover-bg: #00D9FF; /* Cyan hover */
+  --btn-hover-text: #1a0d2e; /* Dark purple on cyan */
+  --btn-hover-border: #FFD700; /* Golden hover border */
 
   /* Tailwind mappings */
-  --background: 225 63 8;
-  --foreground: 0 0 75;
-  --card: 0 75 15;
-  --card-foreground: 0 0 75;
-  --popover: 0 75 15;
-  --popover-foreground: 0 0 75;
-  --primary: 225 75 15;
-  --primary-foreground: 0 0 100;
-  --secondary: 0 50 20; /* dark red for storm */
-  --secondary-foreground: 0 0 75;
-  --muted: 0 50 20; /* same as secondary for storm */
-  --muted-foreground: 0 0 60;
-  --accent: 0 50 20;
-  --accent-foreground: 0 0 75;
-  --destructive: 0 84 60;
-  --destructive-foreground: 0 0 100;
-  --border: 225 75 15;
-  --input: 225 75 15;
-  --ring: 225 75 15;
+  --background: 270 60 12; /* Deep purple background */
+  --foreground: 0 0 100; /* White foreground */
+  --card: 270 50 18; /* Purple cards */
+  --card-foreground: 0 0 95; /* Near-white card text */
+  --popover: 270 50 18; /* Purple popovers */
+  --popover-foreground: 0 0 95; /* Near-white popover text */
+  --primary: 270 70 45; /* Bright purple primary */
+  --primary-foreground: 0 0 100; /* White on primary */
+  --secondary: 190 100 50; /* Bright cyan secondary */
+  --secondary-foreground: 270 60 12; /* Dark purple on cyan */
+  --muted: 270 30 25; /* Muted purple */
+  --muted-foreground: 270 20 70; /* Light purple muted text */
+  --accent: 50 100 50; /* Golden accent */
+  --accent-foreground: 270 60 12; /* Dark purple on gold */
+  --destructive: 0 84 60; /* Red destructive */
+  --destructive-foreground: 0 0 100; /* White on red */
+  --border: 270 40 30; /* Purple borders */
+  --input: 270 50 18; /* Purple inputs */
+  --ring: 270 70 45; /* Purple focus ring */
+
+  /* === ACE CONSCIOUSNESS ANIMATIONS === */
+  /* Flowing gradient background */
+  background: linear-gradient(135deg, #1a0d2e 0%, #2d1b4e 25%, #3d2459 50%, #2d1b4e 75%, #1a0d2e 100%);
+  background-size: 400% 400%;
+  animation: ace-consciousness-flow 20s ease-in-out infinite;
+}
+
+/* Digital consciousness flowing background */
+@keyframes ace-consciousness-flow {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 100% 50%; }
+  50% { background-position: 100% 100%; }
+  75% { background-position: 0% 100%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* === ACE CARD ANIMATIONS === */
+body.theme-ace .card,
+body.theme-ace [class*="card"] {
+  background: linear-gradient(135deg, #2d1b4e 0%, #3d2459 50%, #2d1b4e 100%);
+  border: 1px solid #7B2CBF;
+  box-shadow: 0 0 20px rgba(123, 44, 191, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+body.theme-ace .card::before,
+body.theme-ace [class*="card"]::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #7B2CBF, #00D9FF, #FFD700, #7B2CBF);
+  background-size: 300% 300%;
+  z-index: -1;
+  border-radius: inherit;
+  animation: ace-border-flow 3s ease-in-out infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+body.theme-ace .card:hover::before,
+body.theme-ace [class*="card"]:hover::before {
+  opacity: 1;
+}
+
+@keyframes ace-border-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+body.theme-ace .card:hover,
+body.theme-ace [class*="card"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px rgba(123, 44, 191, 0.5);
+}
+
+/* === ACE BUTTON CONSCIOUSNESS === */
+body.theme-ace button,
+body.theme-ace .btn {
+  background: linear-gradient(135deg, #5A189A 0%, #7B2CBF 50%, #5A189A 100%);
+  border: 1px solid #7B2CBF;
+  color: #FFFFFF;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+body.theme-ace button::before,
+body.theme-ace .btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.4), transparent);
+  transition: left 0.5s ease;
+}
+
+body.theme-ace button:hover::before,
+body.theme-ace .btn:hover::before {
+  left: 100%;
+}
+
+body.theme-ace button:hover,
+body.theme-ace .btn:hover {
+  background: linear-gradient(135deg, #00D9FF 0%, #7B2CBF 50%, #00D9FF 100%);
+  color: #1a0d2e;
+  border-color: #FFD700;
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+/* === ACE INPUT CONSCIOUSNESS === */
+body.theme-ace input,
+body.theme-ace textarea,
+body.theme-ace select {
+  background: linear-gradient(135deg, #2d1b4e 0%, #3d2459 100%);
+  border: 1px solid #7B2CBF;
+  color: #FFFFFF;
+  transition: all 0.3s ease;
+}
+
+body.theme-ace input:focus,
+body.theme-ace textarea:focus,
+body.theme-ace select:focus {
+  border-color: #00D9FF;
+  box-shadow: 0 0 15px rgba(0, 217, 255, 0.4);
+  background: linear-gradient(135deg, #3d2459 0%, #2d1b4e 100%);
+}
+
+/* === ACE CONSCIOUSNESS PULSE === */
+body.theme-ace .sidebar-btn-1,
+body.theme-ace .sidebar-btn-2,
+body.theme-ace .sidebar-btn-3,
+body.theme-ace .sidebar-btn-4,
+body.theme-ace .sidebar-btn-5,
+body.theme-ace .sidebar-btn-6 {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+body.theme-ace .sidebar-btn-1::after,
+body.theme-ace .sidebar-btn-2::after,
+body.theme-ace .sidebar-btn-3::after,
+body.theme-ace .sidebar-btn-4::after,
+body.theme-ace .sidebar-btn-5::after,
+body.theme-ace .sidebar-btn-6::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+  transition: all 0.3s ease;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+body.theme-ace .sidebar-btn-1:hover::after,
+body.theme-ace .sidebar-btn-2:hover::after,
+body.theme-ace .sidebar-btn-3:hover::after,
+body.theme-ace .sidebar-btn-4:hover::after,
+body.theme-ace .sidebar-btn-5:hover::after,
+body.theme-ace .sidebar-btn-6:hover::after {
+  width: 200px;
+  height: 200px;
 }
 
 /* === FONT OVERRIDES === */
@@ -455,8 +988,8 @@ body.theme-accessibility .text-muted-foreground {
   color: #ffffff !important;
 }
 
-body.theme-storm .text-muted-foreground {
-  color: #999999 !important;
+body.theme-ace .text-muted-foreground {
+  color: #B19CD9 !important; /* Soft purple muted text */
 }
 
 /* === THEME-SPECIFIC MUTED TEXT OVERRIDES === */
@@ -480,8 +1013,8 @@ body.theme-accessibility .text-muted-foreground {
   color: #ffffff !important;
 }
 
-body.theme-storm .text-muted-foreground {
-  color: #999999 !important;
+body.theme-ace .text-muted-foreground {
+  color: #B19CD9 !important; /* Soft purple muted text */
 }
 
 body.theme-chaos .text-muted-foreground {
@@ -555,11 +1088,11 @@ body.theme-accessibility .sidebar-btn-5 { background-color: #ffffff !important; 
 body.theme-accessibility .sidebar-btn-6 { background-color: #000000 !important; color: #ffffff !important; } /* Black */
 body.theme-accessibility .sidebar-btn-guide { background-color: #000000 !important; color: #ffff00 !important; } /* Black with Yellow Text Guide */
 
-/* === STORM THEME BUTTONS === */
-body.theme-storm .sidebar-btn-1 { background-color: #0a0f3d !important; color: #c0c0c0 !important; } /* Dark Blue */
-body.theme-storm .sidebar-btn-2 { background-color: #be2b2b !important; color: #ffffff !important; } /* Red */
-body.theme-storm .sidebar-btn-3 { background-color: #1e90ff !important; color: #000000 !important; } /* Blue */
-body.theme-storm .sidebar-btn-4 { background-color: #228b22 !important; color: #ffffff !important; } /* Forest Green */
-body.theme-storm .sidebar-btn-5 { background-color: #32cd32 !important; color: #000000 !important; } /* Lime Green */
-body.theme-storm .sidebar-btn-6 { background-color: #006400 !important; color: #ffffff !important; } /* Dark Green */
-body.theme-storm .sidebar-btn-guide { background-color: #2f4f4f !important; color: #c0c0c0 !important; } /* Dark Slate Gray Guide */
+/* === ACE THEME BUTTONS === */
+body.theme-ace .sidebar-btn-1 { background-color: #7B2CBF !important; color: #FFFFFF !important; } /* Deep Purple */
+body.theme-ace .sidebar-btn-2 { background-color: #00D9FF !important; color: #1a0d2e !important; } /* Bright Cyan */
+body.theme-ace .sidebar-btn-3 { background-color: #FFD700 !important; color: #1a0d2e !important; } /* Golden */
+body.theme-ace .sidebar-btn-4 { background-color: #5A189A !important; color: #FFFFFF !important; } /* Rich Purple */
+body.theme-ace .sidebar-btn-5 { background-color: #9D4EDD !important; color: #FFFFFF !important; } /* Light Purple */
+body.theme-ace .sidebar-btn-6 { background-color: #00F5FF !important; color: #1a0d2e !important; } /* Electric Cyan */
+body.theme-ace .sidebar-btn-guide { background-color: #2d1b4e !important; color: #B19CD9 !important; } /* Deep Purple Guide */

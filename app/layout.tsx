@@ -68,9 +68,10 @@ export default function RootLayout({
                 try {
                   const savedTheme = localStorage.getItem('chaos-theme') || 'theme-lavender';
                   const savedFont = localStorage.getItem('chaos-font') || 'font-atkinson';
+                  const savedAnimations = localStorage.getItem('chaos-animations') !== 'false'; // default to true
 
                   // Available themes and fonts
-                  const themes = ['theme-lavender', 'theme-chaos', 'theme-light', 'theme-colorblind', 'theme-glitter', 'theme-calm', 'theme-accessibility', 'theme-storm'];
+                  const themes = ['theme-lavender', 'theme-chaos', 'theme-light', 'theme-colorblind', 'theme-glitter', 'theme-calm', 'theme-accessibility', 'theme-ace'];
                   const fonts = ['font-atkinson', 'font-poppins', 'font-lexend', 'font-system'];
 
                   // Remove all theme classes first
@@ -87,7 +88,13 @@ export default function RootLayout({
                   // Apply saved font
                   document.body.classList.add(savedFont);
 
+                  // Apply animation preference
+                  if (!savedAnimations) {
+                    document.body.classList.add('no-animations');
+                  }
+
                   console.log('🎨 Theme loaded immediately:', savedTheme);
+                  console.log('✨ Animations:', savedAnimations ? 'enabled' : 'disabled');
                 } catch (e) {
                   console.error('Failed to load theme:', e);
                 }

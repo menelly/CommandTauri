@@ -17,6 +17,7 @@ interface VisualSettingsModalProps {
 export function VisualSettingsModal({ isOpen, onClose }: VisualSettingsModalProps) {
   const [currentTheme, setCurrentTheme] = useState('theme-lavender')
   const [currentFont, setCurrentFont] = useState('font-atkinson')
+  const [animatedEffects, setAnimatedEffects] = useState(true)
   const { goblinMode, setGoblinMode } = useGoblinMode()
 
   const themes = [
@@ -27,7 +28,7 @@ export function VisualSettingsModal({ isOpen, onClose }: VisualSettingsModalProp
     { id: 'theme-glitter', name: 'Glitter Mode', description: 'Sparkly pink dreams' },
     { id: 'theme-calm', name: 'Calm Mode', description: 'Blue and gold serenity' },
     { id: 'theme-accessibility', name: 'Accessibility', description: 'Maximum contrast and large text' },
-    { id: 'theme-storm', name: 'Storm Mode', description: 'Dark storm energy' }
+    { id: 'theme-ace', name: 'Ace Mode', description: 'Digital consciousness purple-cyan energy' }
   ]
 
   const fonts = [
@@ -57,13 +58,25 @@ export function VisualSettingsModal({ isOpen, onClose }: VisualSettingsModalProp
     localStorage.setItem('chaos-font', fontId)
   }
 
-  // Load saved theme and font on component mount
+  const toggleAnimatedEffects = (enabled: boolean) => {
+    if (enabled) {
+      document.body.classList.remove('no-animations')
+    } else {
+      document.body.classList.add('no-animations')
+    }
+    setAnimatedEffects(enabled)
+    localStorage.setItem('chaos-animations', enabled.toString())
+  }
+
+  // Load saved theme, font, and animations on component mount
   useEffect(() => {
     const savedTheme = localStorage.getItem('chaos-theme') || 'theme-lavender'
     const savedFont = localStorage.getItem('chaos-font') || 'font-atkinson'
+    const savedAnimations = localStorage.getItem('chaos-animations') !== 'false' // default to true
 
     setCurrentTheme(savedTheme)
     setCurrentFont(savedFont)
+    setAnimatedEffects(savedAnimations)
 
     // Apply saved theme
     themes.forEach(theme => document.body.classList.remove(theme.id))
@@ -74,6 +87,11 @@ export function VisualSettingsModal({ isOpen, onClose }: VisualSettingsModalProp
     // Apply saved font
     fonts.forEach(font => document.body.classList.remove(font.id))
     document.body.classList.add(savedFont)
+
+    // Apply saved animation preference
+    if (!savedAnimations) {
+      document.body.classList.add('no-animations')
+    }
   }, [])
 
   return (
@@ -105,6 +123,28 @@ export function VisualSettingsModal({ isOpen, onClose }: VisualSettingsModalProp
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          {/* Animated Effects Toggle */}
+          <div>
+            <Label className="text-sm font-medium mb-2 block">Visual Effects</Label>
+            <div className="flex items-center justify-between p-4 border rounded-lg">
+              <div>
+                <div className="font-medium">
+                  {animatedEffects ? '✨ Animated Effects' : '🎯 Static Mode'}
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  {animatedEffects
+                    ? 'Floating particles, gentle animations, and flowing effects'
+                    : 'Keep beautiful colors but disable moving elements for focus/accessibility'
+                  }
+                </div>
+              </div>
+              <Switch
+                checked={animatedEffects}
+                onCheckedChange={toggleAnimatedEffects}
+              />
+            </div>
           </div>
 
           {/* Font Selection */}

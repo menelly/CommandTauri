@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { X, Menu } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { getWeekOfYear } from "@/lib/utils/dateUtils"
+
 
 export default function AppSidebar() {
   // Start with undefined to prevent hydration mismatch
@@ -67,14 +67,6 @@ export default function AppSidebar() {
       buttonClass: "sidebar-btn-6"
     },
     {
-      id: "test-pins",
-      text: "Test PINs",
-      emoji: "🧪",
-      targetPageId: "test-pins",
-      isVisible: true,
-      buttonClass: "sidebar-btn-dev"
-    },
-    {
       id: "journal",
       text: "Journal",
       emoji: "📝",
@@ -104,7 +96,6 @@ export default function AppSidebar() {
     ],
     'mind': [
       { id: 'brain-fog', name: 'Brain Fog', icon: '🧠' },
-      { id: 'mood-check', name: 'Mood Check', icon: '🎭' },
       { id: 'anxiety-tracker', name: 'Anxiety', icon: '😰' },
     ],
     /* MVP-HIDDEN: Planning submenu items
@@ -181,27 +172,11 @@ export default function AppSidebar() {
   }, [showSidebar])
 
   const getHref = (pageId: string): string => {
-    if (pageId === 'daily-today') {
-      const today = new Date()
-      const dateStr = today.toISOString().split('T')[0]
-      return `/calendar/day/${dateStr}`
-    } else {
-      return `/${pageId}`
-    }
+    return `/${pageId}`
   }
 
   const getHomeHref = (): string => {
-    // Safe for server-side rendering
-    if (typeof window === 'undefined') return '/'
-
-    const dailyAsHome = localStorage.getItem('chaos-daily-as-home') === 'true'
-    if (dailyAsHome) {
-      const today = new Date()
-      const dateStr = today.toISOString().split('T')[0]
-      return `/calendar/day/${dateStr}`
-    } else {
-      return '/'
-    }
+    return '/'
   }
 
   // Don't render until we know the sidebar state to prevent hydration mismatch
@@ -297,36 +272,7 @@ export default function AppSidebar() {
             📅 Month
           </Link>
 
-          <Link
-            href={(() => {
-              const now = new Date()
-              const year = now.getFullYear()
-              const week = getWeekOfYear(now)
-              return `/calendar/week/${year}-W${week}`
-            })()}
-            className="mb-1 rounded text-xs font-medium transition-all py-2 px-1 hover:opacity-80 block text-center"
-            title="Weekly View"
-            style={{
-              backgroundColor: "var(--btn-bg)",
-              color: "var(--text-main)",
-              border: "1px solid var(--border-soft)"
-            }}
-          >
-            📋 Weekly
-          </Link>
 
-          <Link
-            href={getHref('daily-today')}
-            className="mb-1 rounded text-xs font-medium transition-all py-2 px-1 hover:opacity-80 block text-center"
-            title="Daily Dashboard - Today"
-            style={{
-              backgroundColor: "var(--btn-bg)",
-              color: "var(--text-main)",
-              border: "1px solid var(--border-soft)"
-            }}
-          >
-            🗓️ Daily
-          </Link>
 
           {/* Trackers section */}
           <div className="flex-1 mt-2">
@@ -345,6 +291,15 @@ export default function AppSidebar() {
               </Link>
             ))}
           </div>
+
+          {/* Logout */}
+          <Link
+            href={getHref('logout')}
+            className="mt-2 rounded text-xs font-medium transition-all py-2 px-1 hover:opacity-80 block text-center sidebar-btn-5"
+            title="Logout"
+          >
+            🚪 Logout
+          </Link>
 
           {/* Settings */}
           <Link

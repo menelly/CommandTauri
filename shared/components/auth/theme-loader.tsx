@@ -6,14 +6,15 @@ export default function ThemeLoader() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Load saved theme and font from localStorage
+    // Load saved theme, font, and animations from localStorage
     const savedTheme = localStorage.getItem('chaos-theme') || 'theme-lavender'
     const savedFont = localStorage.getItem('chaos-font') || 'font-atkinson'
+    const savedAnimations = localStorage.getItem('chaos-animations') !== 'false' // default to true
 
     // Available themes and fonts
     const themes = [
       'theme-lavender', 'theme-chaos', 'theme-light', 'theme-colorblind',
-      'theme-glitter', 'theme-calm', 'theme-accessibility', 'theme-storm'
+      'theme-glitter', 'theme-calm', 'theme-accessibility', 'theme-ace'
     ]
     const fonts = ['font-atkinson', 'font-poppins', 'font-lexend', 'font-system']
 
@@ -31,8 +32,14 @@ export default function ThemeLoader() {
     // Apply saved font
     document.body.classList.add(savedFont)
 
+    // Apply animation preference
+    if (!savedAnimations) {
+      document.body.classList.add('no-animations')
+    }
+
     console.log(`🎨 Theme loaded: ${savedTheme}`)
     console.log(`🔤 Font loaded: ${savedFont}`)
+    console.log(`✨ Animations: ${savedAnimations ? 'enabled' : 'disabled'}`)
 
     setIsLoaded(true);
   }, [])

@@ -169,25 +169,7 @@ export default function DailyDashboard({ params }: DailyDashboardProps) {
       enabled: enabledWidgets.includes('symptom-check'),
       category: 'health'
     },
-    {
-      id: 'mood-tracker',
-      name: 'Mood Check-in',
-      component: (
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm">😊 Mood Check-in</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-muted-foreground mb-2">Coming soon - will integrate with mental health tracker</p>
-            <Button size="sm" variant="outline" disabled>
-              Log Mood
-            </Button>
-          </CardContent>
-        </Card>
-      ),
-      enabled: enabledWidgets.includes('mood-tracker'),
-      category: 'health'
-    },
+
     {
       id: 'daily-tasks',
       name: 'Daily Tasks',
@@ -324,19 +306,7 @@ export default function DailyDashboard({ params }: DailyDashboardProps) {
                 </a>
               </Button>
               
-              <Button
-                variant="outline"
-                asChild
-              >
-                <a href={(() => {
-                  const year = currentDate.getFullYear()
-                  const week = Math.ceil(currentDate.getDate() / 7)
-                  return `/calendar/week/${year}-W${week}`
-                })()}>
-                  📋 Weekly View
-                </a>
-              </Button>
-              
+
               <Button
                 variant="outline"
                 asChild

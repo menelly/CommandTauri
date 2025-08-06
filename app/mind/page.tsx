@@ -50,30 +50,17 @@ export default function MentalHealthIndex() {
       status: 'available',
       href: '/mental-health'
     },
-    {
-      id: 'mood-check-in',
-      name: 'Mood Check-in',
-      shortDescription: 'Emotional state with custom emojis',
-      helpContent: 'Quick daily mood tracking with customizable emoji scales. Track emotional states, energy levels, and overall mental weather. Simple enough for bad brain days, detailed enough for patterns.',
-      icon: <Smile className="h-5 w-5" />,
-      status: 'coming-soon'
-    },
+
     {
       id: 'anxiety-tracker',
-      name: 'Anxiety Tracker',
-      shortDescription: 'Worry patterns and solutions',
-      helpContent: 'Track anxiety levels, worry patterns, triggers, and what helps. Rate intensity, identify situations that cause anxiety, and build a toolkit of effective coping strategies.',
+      name: 'Anxiety & Panic Tracker',
+      shortDescription: 'Anxiety, panic attacks, and meltdowns with compassion',
+      helpContent: 'Track anxiety levels, panic attacks, and meltdowns with care and understanding. Document triggers, symptoms, coping strategies, and recovery patterns. Includes support for sensory overload and emotional overwhelm.',
       icon: <Frown className="h-5 w-5" />,
-      status: 'coming-soon'
+      status: 'available',
+      href: '/anxiety-tracker'
     },
-    {
-      id: 'panic-meltdowns',
-      name: 'Panic & Meltdowns',
-      shortDescription: 'Crisis tracking, triggers, recovery',
-      helpContent: 'Track panic attacks, meltdowns, and overwhelm episodes. Record triggers, warning signs, what helped, and recovery time. Build your personal crisis management toolkit.',
-      icon: <AlertTriangle className="h-5 w-5" />,
-      status: 'coming-soon'
-    },
+
     {
       id: 'self-care-tracker',
       name: 'Self-Care Tracker',
@@ -83,20 +70,13 @@ export default function MentalHealthIndex() {
       status: 'coming-soon'
     },
     {
-      id: 'sensory-overload',
-      name: 'Sensory Overload',
-      shortDescription: 'Sensory processing, overwhelm tracking',
-      helpContent: 'Track sensory overwhelm episodes, identify triggers (sounds, lights, textures, crowds), and monitor your sensory processing patterns. Essential for neurodivergent individuals.',
+      id: 'sensory-tracker',
+      name: 'Sensory Processing Tracker',
+      shortDescription: 'Overload, preferences, and comfort with understanding',
+      helpContent: 'Comprehensive sensory tracking for overload episodes, preferences, comfort needs, and safe spaces. Document triggers, recovery strategies, sensory tools, and environmental accommodations with care.',
       icon: <Ear className="h-5 w-5" />,
-      status: 'coming-soon'
-    },
-    {
-      id: 'sensory-preferences',
-      name: 'Sensory Preferences',
-      shortDescription: 'Environment and comfort tracking',
-      helpContent: 'Document your sensory preferences and environmental needs. Track what sensory inputs help vs. overwhelm you, and build your ideal environment profile for different situations.',
-      icon: <Palette className="h-5 w-5" />,
-      status: 'coming-soon'
+      status: 'available',
+      href: '/sensory-tracker'
     },
     {
       id: 'crisis-plan',

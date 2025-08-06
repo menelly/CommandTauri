@@ -65,6 +65,14 @@ export default function AppSidebar() {
       buttonClass: "sidebar-btn-6"
     },
     {
+      id: "logout",
+      text: "Logout",
+      emoji: "🚪",
+      targetPageId: "logout",
+      isVisible: true,
+      buttonClass: "sidebar-btn-dev"
+    },
+    {
       id: "journal",
       text: "Journal",
       emoji: "📝",
@@ -92,7 +100,6 @@ export default function AppSidebar() {
     ],
     'mind': [
       { id: 'brain-fog', name: 'Brain Fog', icon: '🧠' },
-      { id: 'mood-check', name: 'Mood Check', icon: '🎭' },
       { id: 'anxiety-tracker', name: 'Anxiety', icon: '😰' },
     ],
     'planning': [
