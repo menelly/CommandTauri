@@ -93,12 +93,14 @@ export interface SafetyPlan {
     phone: string
     available: string
     notes?: string
+    address?: string
   }>
   emergencyContacts: Array<{
     name: string
     relationship: string
     phone: string
     notes?: string
+    address?: string
   }>
   
   // Environment Safety

@@ -118,3 +118,5 @@ export function TagInput({
     </div>
   )
 }
+
+export default TagInput;

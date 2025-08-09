@@ -74,7 +74,6 @@ export default function AppSidebar() {
       isVisible: true,
       buttonClass: "sidebar-btn-2"
     },
-    /* MVP-HIDDEN: Forge Section - Complex feature not needed for core period tracking
     {
       id: "forge",
       text: "Forge",
@@ -83,7 +82,6 @@ export default function AppSidebar() {
       isVisible: true,
       buttonClass: "sidebar-btn-guide"
     },
-    */
 
   ]
 

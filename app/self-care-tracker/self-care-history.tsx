@@ -20,7 +20,7 @@ interface SelfCareHistoryProps {
 }
 
 export function SelfCareHistory({ refreshTrigger, onEdit, onDelete }: SelfCareHistoryProps) {
-  const { getCategoryData } = useDailyData()
+  const { getAllCategoryData } = useDailyData()
   const [entries, setEntries] = useState<SelfCareEntry[]>([])
   const [filteredEntries, setFilteredEntries] = useState<SelfCareEntry[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -44,20 +44,24 @@ export function SelfCareHistory({ refreshTrigger, onEdit, onDelete }: SelfCareHi
   const loadEntries = async () => {
     try {
       setIsLoading(true)
-      const data = await getCategoryData(CATEGORIES.TRACKER)
+      const data = await getAllCategoryData(CATEGORIES.TRACKER)
       
       const selfCareEntries = data
-        .filter(item => item.key.startsWith('selfcare-'))
+        .filter(item => item.subcategory.startsWith('selfcare-'))
         .map(item => {
           try {
-            return JSON.parse(item.value) as SelfCareEntry
+            return item.content as SelfCareEntry
           } catch (error) {
             console.error('Error parsing self-care entry:', error)
             return null
           }
         })
         .filter((entry): entry is SelfCareEntry => entry !== null)
-        .sort((a, b) => new Date(b.date + ' ' + b.time).getTime() - new Date(a.date + ' ' + a.time).getTime())
+        .sort((a, b) => {
+          const dateA = a.date && a.time ? new Date(a.date + ' ' + a.time).getTime() : 0
+          const dateB = b.date && b.time ? new Date(b.date + ' ' + b.time).getTime() : 0
+          return dateB - dateA
+        })
 
       setEntries(selfCareEntries)
     } catch (error) {
@@ -73,10 +77,10 @@ export function SelfCareHistory({ refreshTrigger, onEdit, onDelete }: SelfCareHi
     // Search filter
     if (searchTerm) {
       filtered = filtered.filter(entry =>
-        entry.activity.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        entry.activity?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         entry.customActivity?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        entry.notes.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        entry.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+        entry.notes?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (entry.tags || []).some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
       )
     }
 
@@ -252,13 +256,16 @@ export function SelfCareHistory({ refreshTrigger, onEdit, onDelete }: SelfCareHi
         </Card>
       ) : (
         <div className="space-y-4">
-          {filteredEntries.map((entry) => {
-            const categoryInfo = getCategoryInfo(entry.category)
-            const energyChange = getEnergyChange(entry.energyBefore, entry.energyAfter)
-            const stressChange = getStressChange(entry.stressLevelBefore, entry.stressLevelAfter)
+          {filteredEntries.map((entry, index) => {
+            const categoryInfo = getCategoryInfo(entry.category || '')
+            const energyChange = getEnergyChange(entry.energyBefore || 5, entry.energyAfter || 5)
+            const stressChange = getStressChange(entry.stressLevelBefore || 5, entry.stressLevelAfter || 5)
+
+            // Create unique key from available data
+            const uniqueKey = entry.id || `${entry.date || 'no-date'}-${entry.time || 'no-time'}-${entry.activity || 'no-activity'}-${index}`
 
             return (
-              <Card key={entry.id} className="hover:shadow-md transition-shadow">
+              <Card key={uniqueKey} className="hover:shadow-md transition-shadow">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
@@ -267,15 +274,15 @@ export function SelfCareHistory({ refreshTrigger, onEdit, onDelete }: SelfCareHi
                         <CardTitle className="text-lg">{getActivityLabel(entry)}</CardTitle>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Calendar className="h-4 w-4" />
-                          {format(parseISO(entry.date), 'MMM d, yyyy')} at {entry.time}
+                          {entry.date ? format(parseISO(entry.date), 'MMM d, yyyy') : 'No date'} at {entry.time || 'No time'}
                           <span>•</span>
-                          <span>{entry.duration}</span>
+                          <span>{entry.duration || 'No duration'}</span>
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge className={getEffectivenessColor(entry.effectiveness)}>
-                        {entry.effectiveness}/10 effective
+                      <Badge className={getEffectivenessColor(entry.effectiveness || 5)}>
+                        {entry.effectiveness || 5}/10 effective
                       </Badge>
                       <Button variant="ghost" size="sm" onClick={() => onEdit(entry)}>
                         <Edit className="h-4 w-4" />
@@ -292,13 +299,13 @@ export function SelfCareHistory({ refreshTrigger, onEdit, onDelete }: SelfCareHi
                     <div className="flex items-center gap-2">
                       <span>Energy:</span>
                       <span className={energyChange.color}>
-                        {entry.energyBefore} → {entry.energyAfter} ({energyChange.text})
+                        {entry.energyBefore || 5} → {entry.energyAfter || 5} ({energyChange.text})
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span>Stress:</span>
                       <span className={stressChange.color}>
-                        {entry.stressLevelBefore} → {entry.stressLevelAfter} ({stressChange.text})
+                        {entry.stressLevelBefore || 5} → {entry.stressLevelAfter || 5} ({stressChange.text})
                       </span>
                     </div>
                   </div>
@@ -311,9 +318,9 @@ export function SelfCareHistory({ refreshTrigger, onEdit, onDelete }: SelfCareHi
                   )}
 
                   {/* Tags */}
-                  {entry.tags.length > 0 && (
+                  {(entry.tags || []).length > 0 && (
                     <div className="flex flex-wrap gap-1">
-                      {entry.tags.map((tag) => (
+                      {(entry.tags || []).map((tag) => (
                         <Badge key={tag} variant="outline" className="text-xs">
                           {tag}
                         </Badge>

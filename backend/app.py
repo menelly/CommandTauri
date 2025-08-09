@@ -10,6 +10,7 @@ import logging
 import hashlib
 import hmac
 import time
+import tempfile
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
@@ -19,6 +20,7 @@ from functools import wraps
 # Import our modules
 from pdf_generator import PDFGenerator
 from analytics import AnalyticsEngine
+from document_parser import document_parser
 
 # Load environment variables
 load_dotenv()
@@ -217,6 +219,96 @@ def generate_pdf():
     except Exception as e:
         logger.error(f"PDF generation error: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
+@app.route('/api/documents/parse', methods=['POST'])
+def parse_document():
+    """🔥 REVOLUTIONARY MEDICAL DOCUMENT PARSER ENDPOINT"""
+    try:
+        # Check if file was uploaded
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file uploaded'}), 400
+
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'error': 'No file selected'}), 400
+
+        # Get file info
+        filename = file.filename
+        file_type = file.content_type
+
+        logger.info(f"🔥 PARSING DOCUMENT: {filename} ({file_type})")
+
+        # Save uploaded file temporarily
+        temp_dir = tempfile.gettempdir()
+        temp_path = os.path.join(temp_dir, f"upload_{int(time.time())}_{filename}")
+        file.save(temp_path)
+
+        try:
+            # Extract text from document
+            extracted_text = document_parser.extract_text_from_file(temp_path, file_type)
+            logger.info(f"✅ Extracted {len(extracted_text)} characters")
+
+            # Parse medical events
+            parsed_events = document_parser.parse_medical_events(extracted_text, filename)
+            logger.info(f"🎉 Found {len(parsed_events)} medical events")
+
+            # Convert to JSON-serializable format
+            events_data = [
+                {
+                    'id': event.id,
+                    'type': event.type,
+                    'title': event.title,
+                    'date': event.date,
+                    'endDate': event.end_date,
+                    'provider': event.provider,
+                    'location': event.location,
+                    'description': event.description,
+                    'status': event.status,
+                    'severity': event.severity,
+                    'tags': event.tags,
+                    'confidence': event.confidence,
+                    'sources': event.sources,
+                    'needsReview': event.needs_review,
+                    'suggestions': event.suggestions,
+                    'rawText': event.raw_text[:500] + '...' if len(event.raw_text) > 500 else event.raw_text,
+                    'incidentalFindings': [
+                        {
+                            'finding': finding.finding,
+                            'location': finding.location,
+                            'significance': finding.significance,
+                            'relatedSymptoms': finding.related_symptoms,
+                            'suggestedQuestions': finding.suggested_questions,
+                            'whyItMatters': finding.why_it_matters,
+                            'confidence': finding.confidence
+                        }
+                        for finding in event.incidental_findings
+                    ]
+                }
+                for event in parsed_events
+            ]
+
+            return jsonify({
+                'success': True,
+                'filename': filename,
+                'extractedText': extracted_text[:1000] + '...' if len(extracted_text) > 1000 else extracted_text,
+                'textLength': len(extracted_text),
+                'events': events_data,
+                'eventCount': len(events_data),
+                'message': f'🎉 Successfully parsed {len(events_data)} medical events from {filename}'
+            })
+
+        finally:
+            # Clean up temporary file
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+
+    except Exception as e:
+        logger.error(f"Document parsing error: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'message': f'Failed to parse document: {str(e)}'
+        }), 500
 
 
 

@@ -64,10 +64,11 @@ export default function MentalHealthIndex() {
     {
       id: 'self-care-tracker',
       name: 'Self-Care Tracker',
-      shortDescription: 'Wellness activities and habits',
-      helpContent: 'Track self-care activities and their impact on your mental health. Monitor sleep, exercise, social connection, creative activities, and other wellness practices that support your mental health.',
+      shortDescription: 'Comprehensive self-care tracking with 8 categories',
+      helpContent: 'Track self-care activities across 8 categories: physical, emotional, mental, spiritual, social, environmental, creative, and professional. Monitor effectiveness, track before/after states, and discover what self-care works best for you.',
       icon: <Heart className="h-5 w-5" />,
-      status: 'coming-soon'
+      status: 'available',
+      href: '/self-care-tracker'
     },
     {
       id: 'sensory-tracker',
@@ -79,12 +80,13 @@ export default function MentalHealthIndex() {
       href: '/sensory-tracker'
     },
     {
-      id: 'crisis-plan',
-      name: 'Crisis Plan',
-      shortDescription: 'Emergency contacts and strategies',
-      helpContent: 'Your emergency mental health plan. Store crisis contacts, warning signs to watch for, strategies that help, and important information for when you need help RIGHT NOW. Can be set to show on app open.',
-      icon: <Phone className="h-5 w-5" />,
-      status: 'coming-soon'
+      id: 'crisis-support',
+      name: 'Crisis Support',
+      shortDescription: 'Emergency resources, safety plans, and coping tools',
+      helpContent: 'Comprehensive crisis support with emergency hotlines, safety planning, coping strategies, hope reminders, and crisis tracking. Includes immediate help mode and professional resources.',
+      icon: <Shield className="h-5 w-5" />,
+      status: 'available',
+      href: '/crisis-support'
     }
   ]
 

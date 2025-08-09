@@ -19,6 +19,7 @@ export interface UseDailyDataReturn {
   // Data access
   getDateData: (date: string) => Promise<DailyDataRecord[]>;
   getCategoryData: (date: string, category: string) => Promise<DailyDataRecord[]>;
+  getAllCategoryData: (category: string) => Promise<DailyDataRecord[]>;
   getSpecificData: (date: string, category: string, subcategory: string) => Promise<DailyDataRecord | null>;
   
   // Data manipulation
@@ -74,6 +75,21 @@ export function useDailyData(): UseDailyDataReturn {
       const errorMsg = err instanceof Error ? err.message : 'Failed to get category data';
       setError(errorMsg);
       console.error('Failed to get category data:', err);
+      return [];
+    }
+  }, []);
+
+  const getAllCategoryData = useCallback(async (category: string): Promise<DailyDataRecord[]> => {
+    try {
+      setError(null);
+      return await db.daily_data
+        .where('category')
+        .equals(category)
+        .toArray();
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Failed to get all category data';
+      setError(errorMsg);
+      console.error('Failed to get all category data:', err);
       return [];
     }
   }, []);
@@ -397,6 +413,7 @@ export function useDailyData(): UseDailyDataReturn {
     // Data access
     getDateData,
     getCategoryData,
+    getAllCategoryData,
     getSpecificData,
     
     // Data manipulation

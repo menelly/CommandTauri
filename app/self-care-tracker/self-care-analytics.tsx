@@ -38,7 +38,7 @@ interface EffectivenessInsight {
 }
 
 export function SelfCareAnalytics({ refreshTrigger }: SelfCareAnalyticsProps) {
-  const { getCategoryData } = useDailyData()
+  const { getAllCategoryData } = useDailyData()
   const [entries, setEntries] = useState<SelfCareEntry[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [timeRange, setTimeRange] = useState<'week' | 'month' | 'all'>('month')
@@ -51,20 +51,24 @@ export function SelfCareAnalytics({ refreshTrigger }: SelfCareAnalyticsProps) {
   const loadEntries = async () => {
     try {
       setIsLoading(true)
-      const data = await getCategoryData(CATEGORIES.TRACKER)
-      
+      const data = await getAllCategoryData(CATEGORIES.TRACKER)
+
       const selfCareEntries = data
-        .filter(item => item.key.startsWith('selfcare-'))
+        .filter(item => item.subcategory.startsWith('selfcare-'))
         .map(item => {
           try {
-            return JSON.parse(item.value) as SelfCareEntry
+            return item.content as SelfCareEntry
           } catch (error) {
             console.error('Error parsing self-care entry:', error)
             return null
           }
         })
         .filter((entry): entry is SelfCareEntry => entry !== null)
-        .sort((a, b) => new Date(b.date + ' ' + b.time).getTime() - new Date(a.date + ' ' + a.time).getTime())
+        .sort((a, b) => {
+          const dateA = a.date && a.time ? new Date(a.date + ' ' + a.time).getTime() : 0
+          const dateB = b.date && b.time ? new Date(b.date + ' ' + b.time).getTime() : 0
+          return dateB - dateA
+        })
 
       setEntries(selfCareEntries)
     } catch (error) {
@@ -81,7 +85,7 @@ export function SelfCareAnalytics({ refreshTrigger }: SelfCareAnalyticsProps) {
     const now = new Date()
     const cutoff = timeRange === 'week' ? subDays(now, 7) : subDays(now, 30)
     
-    return entries.filter(entry => isAfter(parseISO(entry.date), cutoff))
+    return entries.filter(entry => entry.date && isAfter(parseISO(entry.date), cutoff))
   }
 
   const filteredEntries = getFilteredEntries()
@@ -97,7 +101,8 @@ export function SelfCareAnalytics({ refreshTrigger }: SelfCareAnalyticsProps) {
     }>()
 
     filteredEntries.forEach(entry => {
-      const existing = categoryMap.get(entry.category) || {
+      const category = entry.category || 'unknown'
+      const existing = categoryMap.get(category) || {
         count: 0,
         totalEffectiveness: 0,
         totalEnergyChange: 0,
@@ -106,12 +111,12 @@ export function SelfCareAnalytics({ refreshTrigger }: SelfCareAnalyticsProps) {
       }
 
       existing.count++
-      existing.totalEffectiveness += entry.effectiveness
-      existing.totalEnergyChange += (entry.energyAfter - entry.energyBefore)
-      existing.totalStressChange += (entry.stressLevelBefore - entry.stressLevelAfter) // Positive = stress decreased
+      existing.totalEffectiveness += (entry.effectiveness || 5)
+      existing.totalEnergyChange += ((entry.energyAfter || 5) - (entry.energyBefore || 5))
+      existing.totalStressChange += ((entry.stressLevelBefore || 5) - (entry.stressLevelAfter || 5)) // Positive = stress decreased
       // TODO: Parse duration to minutes for totalTime
 
-      categoryMap.set(entry.category, existing)
+      categoryMap.set(category, existing)
     })
 
     return Array.from(categoryMap.entries()).map(([category, stats]) => ({
@@ -133,16 +138,17 @@ export function SelfCareAnalytics({ refreshTrigger }: SelfCareAnalyticsProps) {
     }>()
 
     filteredEntries.forEach(entry => {
-      const activityKey = entry.customActivity || entry.activity
+      const activityKey = entry.customActivity || entry.activity || 'unknown'
+      const category = entry.category || 'unknown'
       const existing = activityMap.get(activityKey) || {
         count: 0,
         totalEffectiveness: 0,
-        category: entry.category
+        category: category
       }
 
       existing.count++
-      existing.totalEffectiveness += entry.effectiveness
-      existing.category = entry.category
+      existing.totalEffectiveness += (entry.effectiveness || 5)
+      existing.category = category
 
       activityMap.set(activityKey, existing)
     })
@@ -164,10 +170,10 @@ export function SelfCareAnalytics({ refreshTrigger }: SelfCareAnalyticsProps) {
     if (filteredEntries.length === 0) return null
 
     const totalEntries = filteredEntries.length
-    const avgEffectiveness = filteredEntries.reduce((sum, entry) => sum + entry.effectiveness, 0) / totalEntries
-    const avgEnergyChange = filteredEntries.reduce((sum, entry) => sum + (entry.energyAfter - entry.energyBefore), 0) / totalEntries
-    const avgStressChange = filteredEntries.reduce((sum, entry) => sum + (entry.stressLevelBefore - entry.stressLevelAfter), 0) / totalEntries
-    
+    const avgEffectiveness = filteredEntries.reduce((sum, entry) => sum + (entry.effectiveness || 5), 0) / totalEntries
+    const avgEnergyChange = filteredEntries.reduce((sum, entry) => sum + ((entry.energyAfter || 5) - (entry.energyBefore || 5)), 0) / totalEntries
+    const avgStressChange = filteredEntries.reduce((sum, entry) => sum + ((entry.stressLevelBefore || 5) - (entry.stressLevelAfter || 5)), 0) / totalEntries
+
     const guiltyCount = filteredEntries.filter(entry => entry.feltGuilty).length
     const interruptedCount = filteredEntries.filter(entry => entry.interrupted).length
     const wouldDoAgainCount = filteredEntries.filter(entry => entry.wouldDoAgain).length

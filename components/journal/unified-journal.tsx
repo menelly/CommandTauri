@@ -110,6 +110,17 @@ export default function UnifiedJournal() {
 
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-6">
+      {/* 🎀✨ GORGEOUS PAGE HEADER */}
+      <header className="text-center mb-8">
+        <h1 className="text-3xl font-bold text-foreground mb-2 flex items-center justify-center gap-2">
+          <BookOpen className="h-8 w-8 text-purple-500" />
+          📖 Journal & Documentation
+        </h1>
+        <p className="text-lg text-muted-foreground">
+          Your unified journaling space with optional subdivisions for thoughts, gratitude, and wins
+        </p>
+      </header>
+
       {/* Header with Date Navigation */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">

@@ -8,6 +8,13 @@ requests==2.31.0
 reportlab==4.0.7
 pillow==10.1.0
 
+# 🔥 REVOLUTIONARY DOCUMENT PARSING
+PyPDF2==3.0.1
+pdfplumber==0.10.3
+pytesseract==0.3.10
+opencv-python==4.8.1.78
+python-dateutil==2.8.2
+
 # Data processing (minimal set)
 numpy>=1.26.0
 pandas>=2.2.0

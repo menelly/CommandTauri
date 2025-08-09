@@ -114,7 +114,7 @@ body {
 
 /* === REN'S LAVENDER GARDEN - DEFAULT THEME MAGIC === */
 /* Only apply garden magic when no other theme is active */
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) {
+body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos):not(.theme-luka-penguin) {
   background: linear-gradient(135deg, #f3f0ff 0%, #e9d5ff 25%, #ddd6fe 50%, #e9d5ff 75%, #f3f0ff 100%) !important;
   background-size: 400% 400% !important;
   animation: ren-garden-breathe 100s ease-in-out infinite !important;
@@ -306,51 +306,125 @@ body.theme-light {
   --ring: 207 89 42;
 }
 
-/* === THEME: Chaos Mode === */
-body.theme-chaos {
-  --primary-purple: #3e103f;        /* main UI blocks — cards, nav, panel containers */
-  --accent-orange: #f48b50;         /* buttons, highlight icons, warning text */
-  --deep-space: #1a111f;            /* full page background */
-  --hover-glow: #a674ff;            /* hover/focus outlines + shimmer effect */
-  --border-soft: #aa88ff;
-  --text-main: #fcc16e;
-  --text-muted: #a18ac7;
+/* === THEME: Luka's Penguin Paradise === */
+body.theme-luka-penguin {
+  --primary-purple: #b19cd9;        /* light purple main UI blocks — cards, nav, panel containers */
+  --accent-orange: #87ceeb;         /* icy blue buttons, highlight icons, penguin accents */
+  --deep-space: #f8f6ff;            /* very light purple background like arctic snow */
+  --hover-glow: #dda0dd;            /* plum hover/focus outlines + shimmer effect */
+  --border-soft: #c8a2c8;           /* soft purple borders */
+  --text-main: #4b0082;             /* deep purple text like penguin shadows */
+  --text-muted: #8a2be2;            /* blue violet muted text */
 
-  /* BUTTON FIXINS */
-  --btn-bg: #942fbc;
-  --btn-text: #cfa33b;
-  --btn-border: #fc9004;
-  --btn-hover-bg: #522b84;         /* rich purple */
-  --btn-hover-text: #ffc37a;
-  --btn-hover-border: #b88eff;
-  --btn-disabled-background: #8d714f;
-  --btn-disabled-text: #9b9a9d;
-  --btn-disabled-border: #5c4b78;
+  /* GROUNDING TECHNIQUES & CRISIS COLORS */
+  --grounding-bg: #f0e6ff;          /* lightest purple background for technique cards */
+  --grounding-border: #b19cd9;      /* light purple border for technique cards */
+  --grounding-text: #4b0082;        /* deep purple text for readability */
+  --grounding-accent: #dda0dd;      /* plum accent for highlights */
+  --crisis-bg: #e6f3ff;             /* light blue background for crisis cards (like ice) */
+  --crisis-border: #87ceeb;         /* sky blue border for crisis cards */
+  --crisis-text: #4b0082;           /* deep purple text for crisis readability */
+  --crisis-accent: #87ceeb;         /* sky blue accent for crisis highlights */
 
   /* Aliased for new theme system */
-  --surface-1: #4a1e4a; /* content block background */
-  --surface-2: #320934; /* table rows, inset containers */
+  --surface-1: #f0e6ff;             /* content block background - light purple */
+  --surface-2: #e6f3ff;             /* table rows, inset containers - light blue like ice */
 
-  /* Tailwind CSS variable mappings for CHAOS VORTEX */
-  --background: 285 42 9; /* deep-space #1a111f */
-  --foreground: 39 69 69; /* text-main #fcc16e */
-  --card: 285 42 21; /* surface-1 #4a1e4a */
-  --card-foreground: 39 69 69;
-  --popover: 285 42 21;
-  --popover-foreground: 39 69 69;
-  --primary: 285 73 15; /* primary-purple #3e103f */
-  --primary-foreground: 39 69 69;
-  --secondary: 285 42 16; /* surface-2 #320934 */
-  --secondary-foreground: 39 69 69;
-  --muted: 285 42 16;
-  --muted-foreground: 261 28 65; /* text-muted #a18ac7 */
-  --accent: 285 42 16;
-  --accent-foreground: 39 69 69;
-  --destructive: 0 84 60;
-  --destructive-foreground: 39 69 69;
-  --border: 261 53 73; /* border-soft #aa88ff */
-  --input: 261 53 73;
-  --ring: 285 73 15;
+  /* FORCE PENGUIN BACKGROUND - NO MORE GARDEN! */
+  background: #f8f6ff !important;   /* Arctic snow background */
+  background-image: none !important; /* Kill any gradients */
+  animation: none !important;        /* Stop garden animations */
+}
+
+/* NUCLEAR PENGUIN THEME OVERRIDE - KILL THE GARDEN! */
+body.theme-luka-penguin,
+body.theme-luka-penguin *,
+body.theme-luka-penguin::before,
+body.theme-luka-penguin::after {
+  background: #f8f6ff !important;
+  background-image: none !important;
+  background-attachment: initial !important;
+  background-size: initial !important;
+  animation: none !important;
+}
+
+/* Force penguin background on main containers */
+body.theme-luka-penguin .min-h-screen,
+body.theme-luka-penguin [class*="bg-"],
+body.theme-luka-penguin .bg-background {
+  background: #f8f6ff !important;
+  background-image: none !important;
+}
+
+/* Override any Tailwind background classes */
+body.theme-luka-penguin .bg-gradient-to-r,
+body.theme-luka-penguin .bg-gradient-to-br {
+  background: #f8f6ff !important;
+  background-image: none !important;
+}
+
+/* KILL ALL BUTTERFLIES AND GARDEN ANIMATIONS! */
+body.theme-luka-penguin .butterfly,
+body.theme-luka-penguin [class*="butterfly"],
+body.theme-luka-penguin .floating-element,
+body.theme-luka-penguin [class*="float"],
+body.theme-luka-penguin [class*="garden"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Stop all animations in penguin theme */
+body.theme-luka-penguin * {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* === THEME: 🏀 LUKA'S BASKETBALL COURT === */
+body.theme-chaos {
+  --primary-purple: #1a1a1a;        /* Court black for main UI blocks */
+  --accent-orange: #ff8c00;         /* Basketball orange for highlights */
+  --deep-space: #f4e4bc;            /* Hardwood court background */
+  --hover-glow: #ff6b35;            /* Bright orange glow for hover effects */
+  --border-soft: #8b4513;           /* Wood brown borders */
+  --text-main: #1a1a1a;            /* Court black text */
+  --text-muted: #8b4513;           /* Wood brown muted text */
+
+  /* BASKETBALL BUTTON COLORS! */
+  --btn-bg: #ff8c00;               /* Basketball orange buttons */
+  --btn-text: #ffffff;             /* White text on orange */
+  --btn-border: #ff6b35;           /* Bright orange border */
+  --btn-hover-bg: #ff6b35;         /* Darker orange on hover */
+  --btn-hover-text: #ffffff;       /* Keep white text */
+  --btn-hover-border: #e55100;     /* Even darker orange border */
+  --btn-disabled-background: #d4a574; /* Muted wood color */
+  --btn-disabled-text: #8b4513;    /* Brown disabled text */
+  --btn-disabled-border: #c19a6b;  /* Light wood border */
+
+  /* Basketball court surfaces! */
+  --surface-1: #f5e6d3; /* Light hardwood surface */
+  --surface-2: #e8d5c4; /* Darker court wood surface */
+
+  /* Tailwind CSS variable mappings for BASKETBALL COURT! */
+  --background: 44 35 76; /* Hardwood court background #f4e4bc */
+  --foreground: 0 0 10; /* Court black text */
+  --card: 44 28 85; /* Light wood cards #f5e6d3 */
+  --card-foreground: 0 0 10;
+  --popover: 44 28 85; /* Light wood popover */
+  --popover-foreground: 0 0 10;
+  --primary: 28 100 50; /* Basketball orange #ff8c00 */
+  --primary-foreground: 0 0 100; /* White text on orange */
+  --secondary: 44 22 80; /* Medium wood secondary */
+  --secondary-foreground: 0 0 20;
+  --muted: 44 22 80; /* Medium wood muted */
+  --muted-foreground: 30 65 27; /* Wood brown text */
+  --accent: 28 100 50; /* Basketball orange accent */
+  --accent-foreground: 0 0 100;
+  --destructive: 0 84 60; /* Keep red for errors */
+  --destructive-foreground: 0 0 100;
+  --border: 30 65 55; /* Wood brown borders */
+  --input: 44 28 85; /* Light wood inputs */
+  --ring: 28 100 50; /* Orange focus ring */
 }
 
 /* === THEME: Colorblind Mode === */
@@ -1033,14 +1107,14 @@ body.theme-chaos .text-muted-foreground {
 .sidebar-btn-guide { background-color: #56A3A6 !important; color: #ffffff !important; } /* Teal Guide */
 .sidebar-btn-guide { background-color: #56A3A6 !important; color: #ffffff !important; } /* Teal Guide */
 
-/* === CHAOS THEME BUTTONS === */
-body.theme-chaos .sidebar-btn-1 { background-color: #942fbc !important; color: #cfa33b !important; } /* Purple */
-body.theme-chaos .sidebar-btn-2 { background-color: #f48b50 !important; color: #1a111f !important; } /* Orange */
-body.theme-chaos .sidebar-btn-3 { background-color: #a674ff !important; color: #1a111f !important; } /* Light Purple */
-body.theme-chaos .sidebar-btn-4 { background-color: #3e103f !important; color: #fcc16e !important; } /* Dark Purple */
-body.theme-chaos .sidebar-btn-5 { background-color: #522b84 !important; color: #ffc37a !important; } /* Rich Purple */
-body.theme-chaos .sidebar-btn-6 { background-color: #fc9004 !important; color: #1a111f !important; } /* Bright Orange */
-body.theme-chaos .sidebar-btn-guide { background-color: #8b5a3c !important; color: #fcc16e !important; } /* Brown Guide */
+/* === 🏀 LUKA'S BASKETBALL COURT BUTTONS === */
+body.theme-chaos .sidebar-btn-1 { background-color: #ff8c00 !important; color: #ffffff !important; } /* Basketball Orange */
+body.theme-chaos .sidebar-btn-2 { background-color: #1a1a1a !important; color: #ff8c00 !important; } /* Court Black */
+body.theme-chaos .sidebar-btn-3 { background-color: #ff6b35 !important; color: #ffffff !important; } /* Bright Orange */
+body.theme-chaos .sidebar-btn-4 { background-color: #8b4513 !important; color: #ffffff !important; } /* Wood Brown */
+body.theme-chaos .sidebar-btn-5 { background-color: #e55100 !important; color: #ffffff !important; } /* Dark Orange */
+body.theme-chaos .sidebar-btn-6 { background-color: #f4e4bc !important; color: #1a1a1a !important; } /* Hardwood */
+body.theme-chaos .sidebar-btn-guide { background-color: #d2691e !important; color: #ffffff !important; } /* Basketball Leather */
 
 /* === LIGHT THEME BUTTONS === */
 body.theme-light .sidebar-btn-1 { background-color: #007acc !important; color: #ffffff !important; } /* Blue */

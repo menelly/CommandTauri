@@ -200,9 +200,9 @@ export default function CrisisSupport() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Button 
+              <Button
                 onClick={() => handleEmergencyCall('988')}
-                className="h-16 text-lg bg-red-600 hover:bg-red-700"
+                className="h-16 text-lg bg-[var(--crisis-accent)] hover:bg-[var(--crisis-border)] text-[var(--crisis-text)] border-[var(--crisis-border)]"
               >
                 <div className="text-center">
                   <Phone className="h-6 w-6 mx-auto mb-1" />
@@ -210,11 +210,11 @@ export default function CrisisSupport() {
                   <div className="text-sm opacity-90">Suicide & Crisis</div>
                 </div>
               </Button>
-              
-              <Button 
+
+              <Button
                 onClick={() => handleEmergencyCall('741741')}
                 variant="outline"
-                className="h-16 text-lg border-blue-500 text-blue-600"
+                className="h-16 text-lg border-[var(--accent-orange)] text-[var(--accent-orange)] hover:bg-[var(--accent-orange)] hover:text-white"
               >
                 <div className="text-center">
                   <MessageSquare className="h-6 w-6 mx-auto mb-1" />
@@ -222,11 +222,11 @@ export default function CrisisSupport() {
                   <div className="text-sm opacity-90">Crisis Text Line</div>
                 </div>
               </Button>
-              
-              <Button 
+
+              <Button
                 onClick={() => handleEmergencyCall('911')}
                 variant="outline"
-                className="h-16 text-lg border-orange-500 text-orange-600"
+                className="h-16 text-lg border-[var(--hover-glow)] text-[var(--hover-glow)] hover:bg-[var(--hover-glow)] hover:text-white"
               >
                 <div className="text-center">
                   <AlertTriangle className="h-6 w-6 mx-auto mb-1" />
@@ -240,34 +240,34 @@ export default function CrisisSupport() {
 
         {/* Main Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-7">
-            <TabsTrigger value="immediate" className="flex items-center gap-1">
-              <AlertTriangle className="h-3 w-3" />
-              <span className="hidden sm:inline">Help</span>
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-7 gap-1 h-auto p-1">
+            <TabsTrigger value="immediate" className="flex flex-col items-center gap-1 h-16 px-2">
+              <AlertTriangle className="h-4 w-4" />
+              <span className="text-xs font-medium">Help</span>
             </TabsTrigger>
-            <TabsTrigger value="resources" className="flex items-center gap-1">
-              <Phone className="h-3 w-3" />
-              <span className="hidden sm:inline">Resources</span>
+            <TabsTrigger value="resources" className="flex flex-col items-center gap-1 h-16 px-2">
+              <Phone className="h-4 w-4" />
+              <span className="text-xs font-medium">Resources</span>
             </TabsTrigger>
-            <TabsTrigger value="coping" className="flex items-center gap-1">
-              <Lightbulb className="h-3 w-3" />
-              <span className="hidden sm:inline">Coping</span>
+            <TabsTrigger value="coping" className="flex flex-col items-center gap-1 h-16 px-2">
+              <Lightbulb className="h-4 w-4" />
+              <span className="text-xs font-medium">Coping</span>
             </TabsTrigger>
-            <TabsTrigger value="safety" className="flex items-center gap-1">
-              <Shield className="h-3 w-3" />
-              <span className="hidden sm:inline">Safety</span>
+            <TabsTrigger value="safety" className="flex flex-col items-center gap-1 h-16 px-2">
+              <Shield className="h-4 w-4" />
+              <span className="text-xs font-medium">Safety</span>
             </TabsTrigger>
-            <TabsTrigger value="hope" className="flex items-center gap-1">
-              <Star className="h-3 w-3" />
-              <span className="hidden sm:inline">Hope</span>
+            <TabsTrigger value="hope" className="flex flex-col items-center gap-1 h-16 px-2">
+              <Star className="h-4 w-4" />
+              <span className="text-xs font-medium">Hope</span>
             </TabsTrigger>
-            <TabsTrigger value="track" className="flex items-center gap-1">
-              <FileText className="h-3 w-3" />
-              <span className="hidden sm:inline">Track</span>
+            <TabsTrigger value="track" className="flex flex-col items-center gap-1 h-16 px-2">
+              <FileText className="h-4 w-4" />
+              <span className="text-xs font-medium">Track</span>
             </TabsTrigger>
-            <TabsTrigger value="insights" className="flex items-center gap-1">
-              <BarChart3 className="h-3 w-3" />
-              <span className="hidden sm:inline">Insights</span>
+            <TabsTrigger value="insights" className="flex flex-col items-center gap-1 h-16 px-2">
+              <BarChart3 className="h-4 w-4" />
+              <span className="text-xs font-medium">Insights</span>
             </TabsTrigger>
           </TabsList>
 

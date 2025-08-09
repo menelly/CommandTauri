@@ -183,6 +183,7 @@ export const SUBCATEGORIES = {
   DEMOGRAPHICS: 'demographics',
   PROVIDERS: 'providers',
   APPOINTMENTS: 'appointments',
+  MEDICAL_EVENTS: 'medical-events', // 🏥 Medical timeline events
   SETTINGS: 'settings',
   
   // Health Trackers (examples - will expand)

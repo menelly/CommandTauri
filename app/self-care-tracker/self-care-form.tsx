@@ -78,6 +78,11 @@ export function SelfCareForm({ initialData, selectedCategory, onSave, onCancel }
   const [tags, setTags] = useState<string[]>([])
   const [tagInput, setTagInput] = useState('')
 
+  // Reset activity when category changes
+  useEffect(() => {
+    setActivity('')
+  }, [category])
+
   // Get activities for selected category
   const categoryActivities = SELF_CARE_ACTIVITIES.filter(act => act.category === category)
 

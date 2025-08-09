@@ -44,7 +44,7 @@ export default function SelfCareTracker() {
         entryData.date,
         CATEGORIES.TRACKER,
         `selfcare-${selfCareEntry.id}`,
-        JSON.stringify(selfCareEntry),
+        selfCareEntry,
         entryData.tags
       )
 

@@ -856,6 +856,15 @@ export default function ProvidersPage() {
                       <Button
                         variant="ghost"
                         size="sm"
+                        onClick={() => window.open(`/timeline?provider=${provider.id}`, '_blank')}
+                        className="text-purple-600 hover:text-purple-700"
+                        title="View Medical Timeline"
+                      >
+                        <Clock className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         onClick={() => handleEditProvider(provider)}
                         className="text-blue-600 hover:text-blue-700"
                       >

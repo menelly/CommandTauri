@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Check, Sparkles } from "lucide-react"
-import confetti from "canvas-confetti"
+import { celebrate, penguinParty } from "@/lib/particle-physics-engine"
 import Image from "next/image"
 
 // Gremlinisms from Cares
@@ -100,11 +100,20 @@ export default function SurvivalButton() {
   }, [])
 
   const triggerConfetti = useCallback(() => {
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 }
-    })
+    // 🎆 EPIC PARTICLE PHYSICS CELEBRATION!
+    const currentTheme = document.body.className.match(/theme-[\w-]+/)?.[0];
+
+    if (currentTheme === 'theme-chaos' || currentTheme === 'theme-luka-penguin') {
+      // 🐧 PENGUIN PARTY FOR LUKA!
+      penguinParty();
+    } else {
+      // 🎨 THEME-AWARE CELEBRATION FOR EVERYONE!
+      celebrate({
+        particleCount: 100,
+        spread: 70,
+        origin: { x: 0.5, y: 0.6 }
+      });
+    }
   }, [])
 
   const cyclePhrase = useCallback(() => {
