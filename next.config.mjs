@@ -19,8 +19,35 @@ const nextConfig = {
   // Handle ES modules properly
   transpilePackages: ['canvas-confetti'],
 
+  // Fix rapid reload issue on Linux - use webpack watchOptions instead
+  experimental: {
+    // Other experimental features can go here
+  },
+
   // Unified webpack configuration
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, dev }) => {
+    // Fix hot reload infinite loop on Linux by configuring file watching
+    if (dev && !isServer) {
+      config.watchOptions = {
+        ignored: [
+          '**/node_modules/**',
+          '**/backend/**',
+          '**/.git/**',
+          '**/src-tauri/**',
+          '**/out/**',
+          '**/.next/**',
+          '**/venv/**',
+          '**/__pycache__/**',
+          '**/logs/**',
+          '**/*.log',
+          '**/temp/**',
+          '**/tmp/**'
+        ],
+        poll: false, // Disable polling to reduce CPU usage
+        aggregateTimeout: 300, // Delay before rebuilding
+      }
+    }
+
     // Browser-only configurations
     if (!isServer) {
       // Node.js fallbacks for browser
