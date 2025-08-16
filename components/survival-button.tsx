@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Check, Sparkles } from "lucide-react"
 import { celebrate, penguinParty } from "@/lib/particle-physics-engine"
+import { useUser } from "@/lib/contexts/user-context"
 import Image from "next/image"
 
 // Gremlinisms from Cares
@@ -74,6 +75,7 @@ const familiars = [
 ]
 
 export default function SurvivalButton() {
+  const { userPin } = useUser()
   const [checked, setChecked] = useState(false)
   const [count, setCount] = useState(0)
   const [lastCheckedDate, setLastCheckedDate] = useState("")
@@ -83,11 +85,14 @@ export default function SurvivalButton() {
   const [showGremlin, setShowGremlin] = useState(false)
   const [currentFamiliar, setCurrentFamiliar] = useState(familiars[0])
 
+  // PIN-specific storage keys for family member isolation
+  const getStorageKey = (key: string) => userPin ? `${key}_${userPin}` : key
+
   // Load saved state
   useEffect(() => {
-    const savedChecked = localStorage.getItem("survivalChecked")
-    const savedCount = localStorage.getItem("survivalCount")
-    const savedDate = localStorage.getItem("lastCheckedDate")
+    const savedChecked = localStorage.getItem(getStorageKey("survivalChecked"))
+    const savedCount = localStorage.getItem(getStorageKey("survivalCount"))
+    const savedDate = localStorage.getItem(getStorageKey("lastCheckedDate"))
 
     // Use local time instead of UTC to properly handle midnight reset
     const today = new Date()
@@ -99,7 +104,7 @@ export default function SurvivalButton() {
     } else {
       // Reset checkbox for new day
       setChecked(false)
-      localStorage.setItem("survivalChecked", "false")
+      localStorage.setItem(getStorageKey("survivalChecked"), "false")
     }
 
     if (savedCount) setCount(parseInt(savedCount))
@@ -109,7 +114,7 @@ export default function SurvivalButton() {
     const phraseIndex = (savedCount ? parseInt(savedCount) : 0) % uncheckedGoblinPhrases.length
     setCurrentPhrase(uncheckedGoblinPhrases[phraseIndex])
     setCurrentLabelPhrase(uncheckedGoblinPhrases[phraseIndex])
-  }, [])
+  }, [userPin, getStorageKey])
 
   const triggerConfetti = useCallback(() => {
     // 🎆 EPIC PARTICLE PHYSICS CELEBRATION!
@@ -158,7 +163,7 @@ export default function SurvivalButton() {
     const today = `${todayDate.getFullYear()}-${String(todayDate.getMonth() + 1).padStart(2, '0')}-${String(todayDate.getDate()).padStart(2, '0')}`
 
     setChecked(newChecked)
-    localStorage.setItem("survivalChecked", newChecked.toString())
+    localStorage.setItem(getStorageKey("survivalChecked"), newChecked.toString())
 
     let currentCount = count
     if (newChecked) {
@@ -166,9 +171,9 @@ export default function SurvivalButton() {
       if (lastCheckedDate !== today && !checked) {
         currentCount = count + 1
         setCount(currentCount)
-        localStorage.setItem("survivalCount", currentCount.toString())
+        localStorage.setItem(getStorageKey("survivalCount"), currentCount.toString())
         setLastCheckedDate(today)
-        localStorage.setItem("lastCheckedDate", today)
+        localStorage.setItem(getStorageKey("lastCheckedDate"), today)
       }
 
       // Trigger confetti celebration!
@@ -192,7 +197,7 @@ export default function SurvivalButton() {
       setCurrentPhrase(uncheckedGoblinPhrases[phraseIndex])
       setCurrentLabelPhrase(uncheckedGoblinPhrases[phraseIndex])
     }
-  }, [checked, count, lastCheckedDate, triggerConfetti])
+  }, [checked, count, lastCheckedDate, triggerConfetti, getStorageKey])
 
   // State for today's date to avoid hydration issues
   const [today, setToday] = useState('')

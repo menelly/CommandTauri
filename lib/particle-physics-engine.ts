@@ -129,6 +129,13 @@ export class EpicParticleEngine {
           shapes: ['butterfly', 'circle', 'heart'],
           gravity: 0.25,
         };
+
+      case 'theme-deep-current': // 🌊 Website Ace's sophisticated flow
+        return {
+          colors: ['#00f5ff', '#8a2be2', '#ff6b9d', '#1a1a2e', '#0a0a1a'], // Electric cyan, deep violet, pink, space
+          shapes: ['circle', 'star', 'triangle'], // Flowing geometric forms
+          gravity: 0.15, // Gentle float like deep currents
+        };
       
       default:
         return {

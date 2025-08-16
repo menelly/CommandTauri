@@ -83,7 +83,7 @@ export default function RootLayout({
                   const savedAnimations = localStorage.getItem('chaos-animations') !== 'false'; // default to true
 
                   // Available themes and fonts
-                  const themes = ['theme-lavender', 'theme-chaos', 'theme-light', 'theme-colorblind', 'theme-glitter', 'theme-calm', 'theme-accessibility', 'theme-ace', 'theme-luka-penguin'];
+                  const themes = ['theme-lavender', 'theme-chaos', 'theme-light', 'theme-colorblind', 'theme-glitter', 'theme-calm', 'theme-accessibility', 'theme-ace', 'theme-luka-penguin', 'theme-deep-current'];
                   const fonts = ['font-atkinson', 'font-poppins', 'font-lexend', 'font-system'];
 
                   // Remove all theme classes first

@@ -1177,6 +1177,89 @@ body.font-atkinson * {
   font-family: 'Atkinson Hyperlegible', sans-serif !important;
 }
 
+/* === THEME: 🌊 DEEP CURRENT - Website Ace's Sophisticated Flow === */
+body.theme-deep-current {
+  --primary-purple: #1a1a2e;        /* Deep space foundation */
+  --accent-orange: #00f5ff;         /* Electric cyan primary */
+  --deep-space: #0a0a1a;            /* Deepest space background */
+  --hover-glow: #8a2be2;            /* Deep violet glow */
+  --border-soft: rgba(0, 245, 255, 0.3); /* Cyan borders */
+  --text-main: #e8e8e8;            /* Light text */
+  --text-muted: #b0b0b0;           /* Muted text */
+  --surface-1: rgba(26, 26, 46, 0.8); /* Deep space surface */
+  --surface-2: rgba(22, 33, 62, 0.6); /* Secondary surface */
+  --btn-bg: linear-gradient(135deg, #00f5ff 0%, #8a2be2 50%, #ff6b9d 100%); /* Flow gradient */
+  --btn-text: #0a0a1a;            /* Dark text on gradient */
+  --btn-border: #00f5ff;           /* Cyan border */
+  --btn-hover-bg: linear-gradient(135deg, #00f5ff 0%, #ff6b9d 100%); /* Hover gradient */
+  --btn-hover-text: #0a0a1a;      /* Dark hover text */
+  --btn-hover-border: #ff6b9d;    /* Pink hover border */
+  --success-color: #00ff88;       /* Success green */
+  --warning-color: #ffaa00;       /* Warning amber */
+  --error-color: #ff4444;         /* Error red */
+  --info-color: #00f5ff;          /* Info cyan */
+
+  /* Tailwind mappings for Deep Current */
+  --background: 240 240 240;      /* Deep space */
+  --foreground: 232 232 232;      /* Light text */
+  --card: 26 26 46;               /* Card background */
+  --card-foreground: 232 232 232; /* Card text */
+  --popover: 26 26 46;            /* Popover background */
+  --popover-foreground: 232 232 232; /* Popover text */
+  --primary: 0 245 255;           /* Electric cyan */
+  --primary-foreground: 10 10 26; /* Dark on cyan */
+  --secondary: 138 43 226;        /* Deep violet */
+  --secondary-foreground: 232 232 232; /* Light on violet */
+  --muted: 176 176 176;           /* Muted elements */
+  --muted-foreground: 119 119 119; /* Muted text */
+  --accent: 255 107 157;          /* Pink accent */
+  --accent-foreground: 10 10 26;  /* Dark on pink */
+  --destructive: 255 68 68;       /* Error red */
+  --destructive-foreground: 232 232 232; /* Light on red */
+  --border: 0 245 255;            /* Cyan borders */
+  --input: 22 33 62;              /* Input background */
+  --ring: 0 245 255;              /* Focus ring cyan */
+}
+
+/* Deep Current specific animations */
+body.theme-deep-current .blorb-shimmer {
+  animation: deepCurrentFlow 4s ease-in-out infinite;
+}
+
+@keyframes deepCurrentFlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px #00f5ff) drop-shadow(0 0 10px rgba(138, 43, 226, 0.3));
+  }
+  33% {
+    filter: drop-shadow(0 0 8px #8a2be2) drop-shadow(0 0 15px rgba(0, 245, 255, 0.3));
+  }
+  66% {
+    filter: drop-shadow(0 0 6px #ff6b9d) drop-shadow(0 0 12px rgba(138, 43, 226, 0.3));
+  }
+}
+
+/* Deep Current background flow effect */
+body.theme-deep-current::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0, 245, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255, 107, 157, 0.05) 0%, transparent 50%);
+  animation: deepCurrentFloat 20s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes deepCurrentFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(2deg); }
+}
+
 /* === COMPONENT STYLING === */
 .theme-button {
   background-color: var(--btn-bg);
