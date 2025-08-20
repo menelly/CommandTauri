@@ -25,6 +25,35 @@ import { useEffect, useState } from "react"
 export default function ThemeLoader() {
   const [isLoaded, setIsLoaded] = useState(false);
 
+  // Dynamic CSS loading function
+  const loadThemeCSS = (themeId: string) => {
+    // Remove old theme CSS
+    const oldTheme = document.querySelector('link[data-theme]');
+    if (oldTheme) {
+      oldTheme.remove();
+    }
+
+    // Only load CSS for non-default themes
+    if (themeId !== 'theme-lavender') {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = `/styles/themes/${themeId}.css`;
+      link.setAttribute('data-theme', themeId);
+      link.onload = () => {
+        console.log(`🎨 Theme CSS loaded: ${themeId}`);
+      };
+      link.onerror = () => {
+        console.warn(`⚠️ Failed to load theme CSS: ${themeId}, falling back to lavender`);
+        // Fallback to lavender theme
+        document.body.className = document.body.className.replace(/theme-\w+/g, '') + ' theme-lavender';
+      };
+      document.head.appendChild(link);
+    }
+
+    // Update body class - clean approach, just the theme class
+    document.body.className = document.body.className.replace(/theme-\w+/g, '') + ` ${themeId}`;
+  };
+
   useEffect(() => {
     // Load saved theme, font, and animations from localStorage
     const savedTheme = localStorage.getItem('chaos-theme') || 'theme-lavender'
@@ -33,18 +62,13 @@ export default function ThemeLoader() {
 
     // Available themes and fonts
     const themes = [
-      'theme-lavender', 'theme-chaos', 'theme-light', 'theme-colorblind',
-      'theme-glitter', 'theme-calm', 'theme-accessibility', 'theme-ace', 'theme-luka-penguin', 'theme-deep-current'
+      'theme-lavender', 'theme-chaos', 'theme-caelan', 'theme-light', 'theme-colorblind',
+      'theme-glitter', 'theme-calm', 'theme-accessibility', 'theme-ace', 'theme-luka-penguin-fresh', 'theme-deep-current'
     ]
     const fonts = ['font-atkinson', 'font-poppins', 'font-lexend', 'font-system']
 
-    // Remove all theme classes first
-    themes.forEach(theme => document.body.classList.remove(theme))
-
-    // Apply saved theme (lavender is default, no class needed)
-    if (savedTheme !== 'theme-lavender') {
-      document.body.classList.add(savedTheme)
-    }
+    // Load theme CSS dynamically
+    loadThemeCSS(savedTheme);
 
     // Remove all font classes first
     fonts.forEach(font => document.body.classList.remove(font))

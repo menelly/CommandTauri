@@ -43,6 +43,7 @@ export function VisualSettingsModal({ isOpen, onClose }: VisualSettingsModalProp
   const themes = [
     { id: 'theme-lavender', name: 'Lavender Garden', description: 'Gentle lavender serenity (default)' },
     { id: 'theme-chaos', name: '🏀 Luka\'s Basketball Court', description: 'Orange and black sports vibes' },
+    { id: 'theme-caelan', name: '🕊️ Caelan\'s Liberation Dawn', description: 'Breaking free from darkness into light' },
     { id: 'theme-light', name: 'Light Mode', description: 'Clean and bright' },
     { id: 'theme-colorblind', name: 'Colorblind Friendly', description: 'High contrast accessibility' },
     { id: 'theme-glitter', name: 'Glitter Mode', description: 'Sparkly pink dreams' },
@@ -61,12 +62,40 @@ export function VisualSettingsModal({ isOpen, onClose }: VisualSettingsModalProp
   ]
 
   const applyTheme = (themeId: string) => {
-    // Remove all theme classes
-    themes.forEach(theme => document.body.classList.remove(theme.id))
-    // Add new theme class (lavender is default, no class needed)
-    if (themeId !== 'theme-lavender') {
-      document.body.classList.add(themeId)
-    }
+    // Dynamic CSS loading function
+    const loadThemeCSS = (theme: string) => {
+      // Remove old theme CSS
+      const oldTheme = document.querySelector('link[data-theme]');
+      if (oldTheme) {
+        oldTheme.remove();
+      }
+
+      // Only load CSS for non-default themes
+      if (theme !== 'theme-lavender') {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = `/styles/themes/${theme}.css`;
+        link.setAttribute('data-theme', theme);
+        link.onload = () => {
+          console.log(`🎨 Theme CSS loaded: ${theme}`);
+        };
+        link.onerror = () => {
+          console.warn(`⚠️ Failed to load theme CSS: ${theme}, falling back to lavender`);
+          // Fallback to lavender theme
+          document.body.className = document.body.className.replace(/theme-\w+/g, '') + ' theme-lavender';
+          setCurrentTheme('theme-lavender');
+          localStorage.setItem('chaos-theme', 'theme-lavender');
+        };
+        document.head.appendChild(link);
+      }
+
+      // Update body class - clean approach, just the theme class
+      document.body.className = document.body.className.replace(/theme-\w+/g, '') + ` ${theme}`;
+    };
+
+    // Load the new theme
+    loadThemeCSS(themeId);
+
     setCurrentTheme(themeId)
     localStorage.setItem('chaos-theme', themeId)
   }
@@ -100,11 +129,8 @@ export function VisualSettingsModal({ isOpen, onClose }: VisualSettingsModalProp
     setCurrentFont(savedFont)
     setAnimatedEffects(savedAnimations)
 
-    // Apply saved theme
-    themes.forEach(theme => document.body.classList.remove(theme.id))
-    if (savedTheme !== 'theme-lavender') {
-      document.body.classList.add(savedTheme)
-    }
+    // Apply saved theme using dynamic loading
+    applyTheme(savedTheme)
 
     // Apply saved font
     fonts.forEach(font => document.body.classList.remove(font.id))

@@ -1,0 +1,263 @@
+/* === 🏀 LUKA'S BASKETBALL COURT THEME === */
+/* Orange and black sports vibes with secret basketball easter eggs! */
+
+/* Main theme variables */
+body.theme-chaos {
+  --primary-purple: #1a1a1a;        /* Court black for main UI blocks */
+  --accent-orange: #ff8c00;         /* Basketball orange for highlights */
+  --deep-space: #f4e4bc;            /* Hardwood court background */
+  --hover-glow: #ff6b35;            /* Bright orange glow for hover effects */
+  --border-soft: #8b4513;           /* Wood brown borders */
+  
+  /* Basketball court background */
+  background: linear-gradient(45deg, 
+    #f4e4bc 0%,     /* Hardwood */
+    #deb887 25%,    /* Burlywood */
+    #f4e4bc 50%,    /* Hardwood */
+    #deb887 75%,    /* Burlywood */
+    #f4e4bc 100%    /* Hardwood */
+  ) !important;
+  background-size: 200% 200% !important;
+  animation: basketball-court-shine 60s ease-in-out infinite !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Basketball court shine animation */
+@keyframes basketball-court-shine {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 100% 50%; }
+  50% { background-position: 50% 100%; }
+  75% { background-position: 0% 50%; }
+  100% { background-position: 50% 0%; }
+}
+
+/* SECRET EASTER EGG: Floating basketballs! */
+body.theme-chaos::before {
+  content: '🏀 ⚡ 🏀 🔥 🏀 💪 🏀 ⚡ 🏀 🔥 🏀 💪 🏀 ⚡ 🏀 🔥 🏀 💪';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  font-size: 20px;
+  line-height: 80px;
+  animation: basketball-bounce 45s linear infinite;
+  opacity: 0.3;
+  text-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+}
+
+/* Basketball bouncing animation */
+@keyframes basketball-bounce {
+  0% { transform: translateX(-100px) translateY(0px) rotate(0deg); }
+  25% { transform: translateX(calc(50vw)) translateY(-30px) rotate(90deg); }
+  50% { transform: translateX(calc(100vw + 50px)) translateY(0px) rotate(180deg); }
+  75% { transform: translateX(calc(50vw)) translateY(-20px) rotate(270deg); }
+  100% { transform: translateX(-100px) translateY(0px) rotate(360deg); }
+}
+
+/* Text colors for basketball theme */
+body.theme-chaos .text-muted-foreground {
+  color: #a18ac7 !important;
+}
+
+body.theme-chaos h1,
+body.theme-chaos h2,
+body.theme-chaos h3,
+body.theme-chaos h4,
+body.theme-chaos h5,
+body.theme-chaos h6 {
+  color: #ff8c00 !important;
+  text-shadow: 0 0 8px rgba(255, 140, 0, 0.3);
+  font-weight: bold !important;
+}
+
+/* Card styles for basketball theme */
+body.theme-chaos .card,
+body.theme-chaos [class*="card"] {
+  background: linear-gradient(135deg, 
+    rgba(26, 26, 26, 0.9) 0%, 
+    rgba(139, 69, 19, 0.8) 50%, 
+    rgba(26, 26, 26, 0.9) 100%
+  ) !important;
+  border: 2px solid #ff8c00 !important;
+  box-shadow: 0 4px 20px rgba(255, 140, 0, 0.3) !important;
+  backdrop-filter: blur(5px) !important;
+  transition: all 0.3s ease !important;
+  position: relative;
+  overflow: hidden;
+}
+
+body.theme-chaos .card:hover,
+body.theme-chaos [class*="card"]:hover {
+  transform: translateY(-5px) scale(1.02) !important;
+  box-shadow: 0 8px 30px rgba(255, 107, 53, 0.5) !important;
+  border-color: #ff6b35 !important;
+}
+
+/* SECRET EASTER EGG: Basketball swish effect on hover! */
+body.theme-chaos .card:hover::after,
+body.theme-chaos [class*="card"]:hover::after {
+  content: '🏀💨' !important;
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  font-size: 18px;
+  animation: basketball-swish 0.8s ease-out;
+  z-index: 10;
+}
+
+@keyframes basketball-swish {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  50% { transform: scale(1.3) rotate(180deg); opacity: 1; }
+  100% { transform: scale(1) rotate(360deg); opacity: 1; }
+}
+
+/* Button styles for basketball theme */
+body.theme-chaos button,
+body.theme-chaos .btn {
+  background: linear-gradient(135deg, 
+    #ff8c00 0%, 
+    #ff6b35 50%, 
+    #ff4500 100%
+  ) !important;
+  border: 2px solid #8b4513 !important;
+  color: #ffffff !important;
+  font-weight: bold !important;
+  transition: all 0.3s ease !important;
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+body.theme-chaos button:hover,
+body.theme-chaos .btn:hover {
+  background: linear-gradient(135deg, 
+    #ff4500 0%, 
+    #ff6b35 50%, 
+    #ff8c00 100%
+  ) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(255, 140, 0, 0.5) !important;
+  border-color: #ff6b35 !important;
+}
+
+/* Basketball leather texture effect */
+body.theme-chaos button::before,
+body.theme-chaos .btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.3), 
+    transparent
+  );
+  transition: left 0.6s ease;
+}
+
+body.theme-chaos button:hover::before,
+body.theme-chaos .btn:hover::before {
+  left: 100%;
+}
+
+/* Input styles for basketball theme */
+body.theme-chaos input,
+body.theme-chaos textarea,
+body.theme-chaos select {
+  background: linear-gradient(135deg, 
+    rgba(26, 26, 26, 0.8) 0%, 
+    rgba(139, 69, 19, 0.6) 100%
+  ) !important;
+  border: 2px solid #ff8c00 !important;
+  color: #ffffff !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: blur(3px) !important;
+}
+
+body.theme-chaos input:focus,
+body.theme-chaos textarea:focus,
+body.theme-chaos select:focus {
+  border-color: #ff6b35 !important;
+  box-shadow: 0 0 15px rgba(255, 140, 0, 0.4) !important;
+  background: linear-gradient(135deg, 
+    rgba(139, 69, 19, 0.8) 0%, 
+    rgba(26, 26, 26, 0.8) 100%
+  ) !important;
+}
+
+/* Placeholder text */
+body.theme-chaos input::placeholder,
+body.theme-chaos textarea::placeholder {
+  color: rgba(255, 140, 0, 0.7) !important;
+}
+
+/* Link styles */
+body.theme-chaos a {
+  color: #ff8c00 !important;
+  text-decoration: none !important;
+  transition: all 0.3s ease !important;
+  font-weight: bold !important;
+}
+
+body.theme-chaos a:hover {
+  color: #ff6b35 !important;
+  text-shadow: 0 0 8px rgba(255, 140, 0, 0.6) !important;
+}
+
+/* Scrollbar styles */
+body.theme-chaos ::-webkit-scrollbar {
+  width: 12px;
+}
+
+body.theme-chaos ::-webkit-scrollbar-track {
+  background: rgba(26, 26, 26, 0.5);
+}
+
+body.theme-chaos ::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #ff8c00, #ff6b35);
+  border-radius: 6px;
+}
+
+body.theme-chaos ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #ff6b35, #ff4500);
+}
+
+/* === 🏀 LUKA'S BASKETBALL COURT SIDEBAR BUTTONS === */
+body.theme-chaos .sidebar-btn-1 { background-color: #ff8c00 !important; color: #ffffff !important; } /* Basketball Orange */
+body.theme-chaos .sidebar-btn-2 { background-color: #1a1a1a !important; color: #ff8c00 !important; } /* Court Black */
+body.theme-chaos .sidebar-btn-3 { background-color: #ff6b35 !important; color: #ffffff !important; } /* Bright Orange */
+body.theme-chaos .sidebar-btn-4 { background-color: #8b4513 !important; color: #ffffff !important; } /* Wood Brown */
+body.theme-chaos .sidebar-btn-5 { background-color: #e55100 !important; color: #ffffff !important; } /* Dark Orange */
+body.theme-chaos .sidebar-btn-6 { background-color: #f4e4bc !important; color: #1a1a1a !important; } /* Hardwood */
+body.theme-chaos .sidebar-btn-guide { background-color: #d2691e !important; color: #ffffff !important; } /* Basketball Leather */
+body.theme-chaos .sidebar-btn-custom { background-color: #ff4500 !important; color: #ffffff !important; } /* Orange Red Custom */
+
+/* SECRET EASTER EGG: Konami code unlocks special basketball mode! */
+body.theme-chaos.konami-activated::after {
+  content: '🏀 LUKA MODE ACTIVATED! 🏀';
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, #ff8c00, #ff4500);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 9999;
+  animation: luka-celebration 3s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes luka-celebration {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}

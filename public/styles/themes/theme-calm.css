@@ -1,0 +1,189 @@
+/* === 🌊 CALM MODE THEME === */
+/* Blue and gold serenity for peaceful focus */
+
+/* Main theme - Calming blues and golds */
+body.theme-calm {
+  background: linear-gradient(135deg, 
+    #e3f2fd 0%,     /* Light blue */
+    #bbdefb 25%,    /* Soft blue */
+    #90caf9 50%,    /* Medium blue */
+    #64b5f6 75%,    /* Deeper blue */
+    #e3f2fd 100%    /* Back to light blue */
+  ) !important;
+  background-size: 400% 400% !important;
+  animation: calm-ocean-breathe 120s ease-in-out infinite !important;
+  color: #1f2a44 !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Calm ocean breathing animation */
+@keyframes calm-ocean-breathe {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 100% 50%; }
+  50% { background-position: 50% 100%; }
+  75% { background-position: 0% 50%; }
+  100% { background-position: 50% 0%; }
+}
+
+/* Gentle floating elements */
+body.theme-calm::before {
+  content: '🌊 ☁️ 🕊️ ✨ 🌊 ☁️ 🕊️ ✨ 🌊 ☁️ 🕊️ ✨ 🌊 ☁️ 🕊️ ✨';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  font-size: 18px;
+  line-height: 80px;
+  animation: calm-float 150s linear infinite;
+  opacity: 0.4;
+  text-shadow: 0 0 10px rgba(100, 181, 246, 0.3);
+}
+
+/* Calm floating animation */
+@keyframes calm-float {
+  0% { transform: translateX(-100px) translateY(0px); }
+  25% { transform: translateX(calc(50vw)) translateY(-15px); }
+  50% { transform: translateX(calc(100vw + 50px)) translateY(0px); }
+  75% { transform: translateX(calc(50vw)) translateY(-10px); }
+  100% { transform: translateX(-100px) translateY(0px); }
+}
+
+/* Calm theme text colors */
+body.theme-calm .text-muted-foreground {
+  color: #5a7ba8 !important;
+}
+
+body.theme-calm h1,
+body.theme-calm h2,
+body.theme-calm h3,
+body.theme-calm h4,
+body.theme-calm h5,
+body.theme-calm h6 {
+  color: #1f2a44 !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* Serene cards */
+body.theme-calm .card,
+body.theme-calm [class*="card"] {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(227, 242, 253, 0.8) 50%, 
+    rgba(255, 255, 255, 0.9) 100%
+  ) !important;
+  border: 1px solid rgba(100, 181, 246, 0.3) !important;
+  color: #1f2a44 !important;
+  box-shadow: 0 4px 20px rgba(100, 181, 246, 0.2) !important;
+  backdrop-filter: blur(10px) !important;
+  transition: all 0.4s ease !important;
+}
+
+body.theme-calm .card:hover,
+body.theme-calm [class*="card"]:hover {
+  background: linear-gradient(135deg, 
+    rgba(227, 242, 253, 0.95) 0%, 
+    rgba(187, 222, 251, 0.9) 50%, 
+    rgba(227, 242, 253, 0.95) 100%
+  ) !important;
+  border-color: rgba(100, 181, 246, 0.6) !important;
+  box-shadow: 0 8px 30px rgba(100, 181, 246, 0.3) !important;
+  transform: translateY(-3px) scale(1.01) !important;
+}
+
+/* Peaceful buttons */
+body.theme-calm button,
+body.theme-calm .btn {
+  background: linear-gradient(135deg, 
+    #64b5f6 0%, 
+    #42a5f5 50%, 
+    #2196f3 100%
+  ) !important;
+  border: 1px solid rgba(33, 150, 243, 0.5) !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+body.theme-calm button:hover,
+body.theme-calm .btn:hover {
+  background: linear-gradient(135deg, 
+    #2196f3 0%, 
+    #1976d2 50%, 
+    #1565c0 100%
+  ) !important;
+  border-color: rgba(21, 101, 192, 0.8) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4) !important;
+}
+
+/* Tranquil inputs */
+body.theme-calm input,
+body.theme-calm textarea,
+body.theme-calm select {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(227, 242, 253, 0.8) 100%
+  ) !important;
+  border: 1px solid rgba(100, 181, 246, 0.4) !important;
+  color: #1f2a44 !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: blur(5px) !important;
+}
+
+body.theme-calm input:focus,
+body.theme-calm textarea:focus,
+body.theme-calm select:focus {
+  border-color: rgba(33, 150, 243, 0.8) !important;
+  box-shadow: 0 0 15px rgba(100, 181, 246, 0.3) !important;
+  background: linear-gradient(135deg, 
+    rgba(227, 242, 253, 0.95) 0%, 
+    rgba(255, 255, 255, 0.9) 100%
+  ) !important;
+}
+
+/* Calm placeholder text */
+body.theme-calm input::placeholder,
+body.theme-calm textarea::placeholder {
+  color: rgba(90, 123, 168, 0.7) !important;
+}
+
+/* Peaceful links */
+body.theme-calm a {
+  color: #1976d2 !important;
+  text-decoration: none !important;
+  transition: all 0.3s ease !important;
+}
+
+body.theme-calm a:hover {
+  color: #1565c0 !important;
+  text-shadow: 0 0 8px rgba(25, 118, 210, 0.4) !important;
+}
+
+/* Calm scrollbar */
+body.theme-calm ::-webkit-scrollbar {
+  width: 12px;
+}
+
+body.theme-calm ::-webkit-scrollbar-track {
+  background: rgba(227, 242, 253, 0.5);
+}
+
+body.theme-calm ::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #64b5f6, #42a5f5);
+  border-radius: 6px;
+}
+
+body.theme-calm ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #42a5f5, #2196f3);
+}
+
+/* No animations fallback */
+body.no-animations.theme-calm {
+  background: #e3f2fd !important;
+}

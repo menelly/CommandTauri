@@ -1,0 +1,130 @@
+/* === ☀️ LIGHT MODE THEME === */
+/* Clean and bright theme for daytime use */
+
+/* Main theme - Clean light colors */
+body.theme-light {
+  background: #ffffff !important;
+  color: #333333 !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+}
+
+/* Light theme text colors */
+body.theme-light .text-muted-foreground {
+  color: #6c757d !important;
+}
+
+body.theme-light h1,
+body.theme-light h2,
+body.theme-light h3,
+body.theme-light h4,
+body.theme-light h5,
+body.theme-light h6 {
+  color: #212529 !important;
+  font-weight: 600 !important;
+}
+
+/* Clean light cards */
+body.theme-light .card,
+body.theme-light [class*="card"] {
+  background: #f8f9fa !important;
+  border: 1px solid #dee2e6 !important;
+  color: #333333 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.2s ease !important;
+}
+
+body.theme-light .card:hover,
+body.theme-light [class*="card"]:hover {
+  background: #e9ecef !important;
+  border-color: #adb5bd !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Clean light buttons */
+body.theme-light button,
+body.theme-light .btn {
+  background: #007bff !important;
+  border: 1px solid #007bff !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+}
+
+body.theme-light button:hover,
+body.theme-light .btn:hover {
+  background: #0056b3 !important;
+  border-color: #0056b3 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3) !important;
+}
+
+/* Clean light inputs */
+body.theme-light input,
+body.theme-light textarea,
+body.theme-light select {
+  background: #ffffff !important;
+  border: 1px solid #ced4da !important;
+  color: #333333 !important;
+  transition: all 0.2s ease !important;
+}
+
+body.theme-light input:focus,
+body.theme-light textarea:focus,
+body.theme-light select:focus {
+  border-color: #007bff !important;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25) !important;
+  outline: none !important;
+}
+
+/* Light placeholder text */
+body.theme-light input::placeholder,
+body.theme-light textarea::placeholder {
+  color: #6c757d !important;
+}
+
+/* Clean light links */
+body.theme-light a {
+  color: #007bff !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+}
+
+body.theme-light a:hover {
+  color: #0056b3 !important;
+  text-decoration: underline !important;
+}
+
+/* Light scrollbar */
+body.theme-light ::-webkit-scrollbar {
+  width: 12px;
+}
+
+body.theme-light ::-webkit-scrollbar-track {
+  background: #f8f9fa;
+}
+
+body.theme-light ::-webkit-scrollbar-thumb {
+  background: #ced4da;
+  border-radius: 6px;
+}
+
+body.theme-light ::-webkit-scrollbar-thumb:hover {
+  background: #adb5bd;
+}
+
+/* Light theme sidebar buttons */
+body.theme-light .sidebar-btn-1 { background-color: #007acc !important; color: #ffffff !important; } /* Blue */
+body.theme-light .sidebar-btn-2 { background-color: #28a745 !important; color: #ffffff !important; } /* Green */
+body.theme-light .sidebar-btn-3 { background-color: #6f42c1 !important; color: #ffffff !important; } /* Purple */
+body.theme-light .sidebar-btn-4 { background-color: #fd7e14 !important; color: #ffffff !important; } /* Orange */
+body.theme-light .sidebar-btn-5 { background-color: #dc3545 !important; color: #ffffff !important; } /* Red */
+body.theme-light .sidebar-btn-6 { background-color: #20c997 !important; color: #ffffff !important; } /* Teal */
+body.theme-light .sidebar-btn-guide { background-color: #17a2b8 !important; color: #ffffff !important; } /* Info Blue Guide */
+body.theme-light .sidebar-btn-custom { background-color: #56A3A6 !important; color: #ffffff !important; } /* Teal Custom */
+
+/* No animations fallback */
+body.no-animations.theme-light {
+  background: #ffffff !important;
+}

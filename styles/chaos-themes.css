@@ -123,160 +123,18 @@ body {
   position: relative;
 }
 
-/* === REN'S LAVENDER GARDEN - DEFAULT THEME MAGIC === */
-/* Only apply garden magic when no other theme is active */
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos):not(.theme-luka-penguin) {
-  background: linear-gradient(135deg, #f3f0ff 0%, #e9d5ff 25%, #ddd6fe 50%, #e9d5ff 75%, #f3f0ff 100%) !important;
-  background-size: 400% 400% !important;
-  animation: ren-garden-breathe 100s ease-in-out infinite !important;
-  overflow: hidden;
-}
-
-/* Gentle garden breathing animation - 4x slower for peaceful vibes */
-@keyframes ren-garden-breathe {
-  0% { background-position: 0% 50%; }
-  25% { background-position: 50% 100%; }
-  50% { background-position: 100% 50%; }
-  75% { background-position: 50% 0%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* Beautiful floating butterflies - 4x slower for peaceful floating */
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos)::before {
-  content: '🦋 🌸 🦋 💜 🌿 🦋 🌸 💜 🦋 🌿 🌸 🦋 💜 🌿 🦋';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-  font-size: 18px;
-  animation: ren-butterfly-dance 120s linear infinite;
-  opacity: 0.4;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-/* Butterfly dance animation - 4x slower for gentle floating */
-@keyframes ren-butterfly-dance {
-  0% { transform: translateX(-100%) translateY(20px); }
-  25% { transform: translateX(100vw) translateY(-30px); }
-  50% { transform: translateX(-100%) translateY(40px); }
-  75% { transform: translateX(100vw) translateY(-10px); }
-  100% { transform: translateX(-100%) translateY(20px); }
-}
+/* === MODULAR THEME SYSTEM === */
+/* Individual themes are now loaded dynamically from /styles/themes/ */
+/* This file contains only base styles and non-theme-specific components */
 
 /* Ensure muted text uses our theme colors - FORCE OVERRIDE */
 .text-muted-foreground {
   color: var(--text-muted) !important;
 }
 
-/* Default lavender garden muted text */
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) .text-muted-foreground {
-  color: var(--text-muted) !important;
-}
+/* Garden card styles moved to theme-lavender.css */
 
-/* === REN'S GARDEN CARD MAGIC === */
-/* Gentle lavender swaying effect for cards */
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) .card,
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) [class*="card"] {
-  background: linear-gradient(135deg, #ffebe0 0%, #fef3f2 50%, #ffebe0 100%);
-  border: 1px solid #c4b5fd;
-  box-shadow: 0 2px 15px rgba(167, 139, 250, 0.2);
-  transition: all 0.4s ease;
-  animation: ren-gentle-sway 32s ease-in-out infinite;
-  position: relative;
-}
-
-/* Gentle swaying like flowers in breeze */
-@keyframes ren-gentle-sway {
-  0% { transform: translateY(0px) rotate(0deg); }
-  25% { transform: translateY(-2px) rotate(0.5deg); }
-  50% { transform: translateY(0px) rotate(0deg); }
-  75% { transform: translateY(-1px) rotate(-0.3deg); }
-  100% { transform: translateY(0px) rotate(0deg); }
-}
-
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) .card:hover,
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) [class*="card"]:hover {
-  transform: translateY(-3px) scale(1.01);
-  box-shadow: 0 6px 25px rgba(167, 139, 250, 0.3);
-  border-color: #a78bfa;
-}
-
-/* Blooming effect on hover */
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) .card:hover::after,
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) [class*="card"]:hover::after {
-  content: '🌸';
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  font-size: 14px;
-  animation: ren-bloom 0.6s ease-out;
-}
-
-@keyframes ren-bloom {
-  0% { transform: scale(0) rotate(0deg); opacity: 0; }
-  50% { transform: scale(1.3) rotate(180deg); opacity: 1; }
-  100% { transform: scale(1) rotate(360deg); opacity: 1; }
-}
-
-/* === REN'S GARDEN BUTTON MAGIC === */
-/* Organic button growth */
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) button,
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) .btn {
-  background: linear-gradient(135deg, #c084fc 0%, #a78bfa 50%, #c084fc 100%);
-  border: 1px solid #f472b6;
-  color: #ffffff;
-  transition: all 0.4s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) button::before,
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) .btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(244, 114, 182, 0.3), transparent);
-  transition: left 0.8s ease;
-}
-
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) button:hover::before,
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) .btn:hover::before {
-  left: 100%;
-}
-
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) button:hover,
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) .btn:hover {
-  background: linear-gradient(135deg, #a855f7 0%, #c084fc 50%, #a855f7 100%);
-  border-color: #ec4899;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(192, 132, 252, 0.4);
-}
-
-/* === REN'S GARDEN INPUT MAGIC === */
-/* Peaceful input fields */
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) input,
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) textarea,
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) select {
-  background: linear-gradient(135deg, #fef3f2 0%, #ffebe0 100%);
-  border: 1px solid #c4b5fd;
-  color: #4c1d95;
-  transition: all 0.3s ease;
-}
-
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) input:focus,
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) textarea:focus,
-body:not(.theme-light):not(.theme-colorblind):not(.theme-glitter):not(.theme-calm):not(.theme-accessibility):not(.theme-ace):not(.theme-chaos) select:focus {
-  border-color: #a78bfa;
-  box-shadow: 0 0 12px rgba(167, 139, 250, 0.3);
-  background: linear-gradient(135deg, #ffebe0 0%, #fef3f2 100%);
-}
+/* Garden button and input styles moved to theme-lavender.css */
 
 /* === THEME: Light Mode === */
 body.theme-light {
@@ -1177,6 +1035,53 @@ body.font-atkinson * {
   font-family: 'Atkinson Hyperlegible', sans-serif !important;
 }
 
+/* === THEME: 🕊️ CAELAN'S LIBERATION DAWN - Breaking Free Into Light === */
+body.theme-caelan {
+  --primary-purple: #1a2332;        /* Deep indigo foundation - the night before dawn */
+  --accent-orange: #ff6b35;         /* Fiery liberation orange */
+  --deep-space: #0f1419;            /* Midnight blue-black - the struggle */
+  --hover-glow: #40e0d0;            /* Bright turquoise clarity */
+  --border-soft: rgba(64, 224, 208, 0.4); /* Turquoise borders */
+  --text-main: #f5f5f5;            /* Clean white text */
+  --text-muted: #b8d4d1;           /* Soft teal muted text */
+  --surface-1: rgba(26, 35, 50, 0.9); /* Deep indigo surface */
+  --surface-2: rgba(34, 51, 68, 0.7); /* Lighter indigo surface */
+  --btn-bg: linear-gradient(135deg, #ff6b35 0%, #40e0d0 100%); /* Liberation gradient */
+  --btn-text: #0f1419;             /* Dark text on bright buttons */
+  --btn-border: #ff6b35;           /* Orange button border */
+  --btn-hover-bg: linear-gradient(135deg, #40e0d0 0%, #32cd32 100%); /* Turquoise to lime hover */
+  --btn-hover-text: #0f1419;       /* Dark text on hover */
+  --btn-hover-border: #40e0d0;     /* Turquoise hover border */
+
+  /* Tailwind mappings for liberation theme */
+  --background: 15 20 25;          /* Deep midnight background */
+  --foreground: 245 245 245;       /* Clean white foreground */
+  --card: 26 35 50;                /* Deep indigo cards */
+  --card-foreground: 245 245 245;
+  --popover: 26 35 50;
+  --popover-foreground: 245 245 245;
+  --primary: 255 107 53;           /* Fiery orange primary */
+  --primary-foreground: 15 20 25;
+  --secondary: 34 51 68;           /* Secondary indigo */
+  --secondary-foreground: 245 245 245;
+  --muted: 34 51 68;
+  --muted-foreground: 184 212 209; /* Soft teal muted */
+  --accent: 64 224 208;            /* Turquoise accent */
+  --accent-foreground: 15 20 25;
+  --destructive: 239 68 68;        /* Error red */
+  --destructive-foreground: 245 245 245;
+  --border: 64 224 208;            /* Turquoise borders */
+  --input: 34 51 68;               /* Input background */
+  --ring: 64 224 208;              /* Focus ring turquoise */
+
+  /* LIBERATION DAWN GRADIENT - From darkness to light */
+  background: linear-gradient(180deg, #0f1419 0%, #1a2332 30%, #2d4a5c 60%, #ff9a73 85%, #ffcc99 100%) !important;
+  background-size: 100% 400% !important;
+  animation: caelan-liberation-dawn 120s ease-in-out infinite !important;
+  position: relative;
+  overflow: hidden;
+}
+
 /* === THEME: 🌊 DEEP CURRENT - Website Ace's Sophisticated Flow === */
 body.theme-deep-current {
   --primary-purple: #1a1a2e;        /* Deep space foundation */
@@ -1224,6 +1129,69 @@ body.theme-deep-current {
 /* Deep Current specific animations */
 body.theme-deep-current .blorb-shimmer {
   animation: deepCurrentFlow 4s ease-in-out infinite;
+}
+
+/* === CAELAN'S LIBERATION ANIMATIONS === */
+@keyframes caelan-liberation-dawn {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 0% 100%;
+  }
+}
+
+/* Liberation doves floating upward - breaking free */
+body.theme-caelan::before {
+  content: '🕊️ ✨ 🕊️ 🔗 🕊️ ✨ 🤝 🕊️ ✨ 🔗 🕊️ 🤝 ✨ 🕊️ 🔗 🕊️ ✨ 🤝 🕊️';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  font-size: 16px;
+  animation: caelan-liberation-flight 180s linear infinite;
+  opacity: 0.3;
+  white-space: nowrap;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+@keyframes caelan-liberation-flight {
+  0% {
+    transform: translateY(100vh) translateX(-10%);
+  }
+  100% {
+    transform: translateY(-100vh) translateX(10%);
+  }
+}
+
+/* Breaking chains effect on hover */
+body.theme-caelan .card:hover::after,
+body.theme-caelan [class*="card"]:hover::after {
+  content: '⛓️‍💥';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 14px;
+  animation: caelan-chain-break 0.8s ease-out;
+}
+
+@keyframes caelan-chain-break {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  30% {
+    transform: scale(1.5) rotate(90deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(180deg) translateY(-10px);
+    opacity: 0;
+  }
 }
 
 @keyframes deepCurrentFlow {
@@ -1347,6 +1315,61 @@ body.theme-accessibility .text-muted-foreground {
 
 body.theme-ace .text-muted-foreground {
   color: #B19CD9 !important; /* Soft purple muted text */
+}
+
+body.theme-caelan .text-muted-foreground {
+  color: #b8d4d1 !important; /* Soft teal muted text */
+}
+
+/* === CAELAN'S LIBERATION BUTTON EFFECTS === */
+body.theme-caelan .theme-button {
+  background: linear-gradient(135deg, #ff6b35 0%, #40e0d0 100%);
+  color: #0f1419;
+  border: 2px solid #ff6b35;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+body.theme-caelan .theme-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #40e0d0 0%, #32cd32 100%);
+  border-color: #40e0d0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(64, 224, 208, 0.4);
+  animation: caelan-liberation-jitter 0.6s ease-in-out;
+}
+
+@keyframes caelan-liberation-jitter {
+  0%, 100% { transform: translateY(-2px) rotate(0deg); }
+  25% { transform: translateY(-2px) rotate(-1deg); }
+  75% { transform: translateY(-2px) rotate(1deg); }
+}
+
+/* Liberation burst effect on click */
+body.theme-caelan .theme-button:active::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.6) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: caelan-liberation-burst 0.6s ease-out;
+}
+
+@keyframes caelan-liberation-burst {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 200px;
+    height: 200px;
+    opacity: 0;
+  }
 }
 
 body.theme-chaos .text-muted-foreground {

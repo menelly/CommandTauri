@@ -33,8 +33,8 @@ export default function ThemeLoader() {
 
     // Available themes and fonts
     const themes = [
-      'theme-lavender', 'theme-chaos', 'theme-light', 'theme-colorblind',
-      'theme-glitter', 'theme-calm', 'theme-accessibility', 'theme-ace', 'theme-luka-penguin', 'theme-deep-current'
+      'theme-lavender', 'theme-chaos', 'theme-caelan', 'theme-light', 'theme-colorblind',
+      'theme-glitter', 'theme-calm', 'theme-accessibility', 'theme-ace', 'theme-luka-penguin-fresh', 'theme-deep-current'
     ]
     const fonts = ['font-atkinson', 'font-poppins', 'font-lexend', 'font-system']
 

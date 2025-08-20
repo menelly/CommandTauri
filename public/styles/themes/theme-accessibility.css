@@ -1,0 +1,171 @@
+/* === ♿ ACCESSIBILITY THEME === */
+/* Maximum contrast and large text for optimal accessibility */
+
+/* Main theme - High contrast, no animations */
+body.theme-accessibility {
+  background: #000000 !important;
+  color: #ffffff !important;
+  font-size: 18px !important;
+  line-height: 1.6 !important;
+}
+
+/* Remove all animations for accessibility */
+body.theme-accessibility * {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* High contrast text */
+body.theme-accessibility .text-muted-foreground {
+  color: #cccccc !important;
+}
+
+body.theme-accessibility h1,
+body.theme-accessibility h2,
+body.theme-accessibility h3,
+body.theme-accessibility h4,
+body.theme-accessibility h5,
+body.theme-accessibility h6 {
+  color: #ffffff !important;
+  font-weight: bold !important;
+  font-size: 1.2em !important;
+}
+
+/* High contrast cards */
+body.theme-accessibility .card,
+body.theme-accessibility [class*="card"] {
+  background: #ffffff !important;
+  border: 3px solid #000000 !important;
+  color: #000000 !important;
+  box-shadow: none !important;
+}
+
+body.theme-accessibility .card:hover,
+body.theme-accessibility [class*="card"]:hover {
+  background: #f0f0f0 !important;
+  border-color: #333333 !important;
+}
+
+/* High contrast buttons */
+body.theme-accessibility button,
+body.theme-accessibility .btn {
+  background: #ffffff !important;
+  border: 3px solid #000000 !important;
+  color: #000000 !important;
+  font-weight: bold !important;
+  font-size: 16px !important;
+  padding: 12px 20px !important;
+}
+
+body.theme-accessibility button:hover,
+body.theme-accessibility .btn:hover {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+body.theme-accessibility button:focus,
+body.theme-accessibility .btn:focus {
+  outline: 4px solid #ffff00 !important;
+  outline-offset: 2px !important;
+}
+
+/* High contrast inputs */
+body.theme-accessibility input,
+body.theme-accessibility textarea,
+body.theme-accessibility select {
+  background: #ffffff !important;
+  border: 3px solid #000000 !important;
+  color: #000000 !important;
+  font-size: 16px !important;
+  padding: 10px !important;
+}
+
+body.theme-accessibility input:focus,
+body.theme-accessibility textarea:focus,
+body.theme-accessibility select:focus {
+  outline: 4px solid #ffff00 !important;
+  outline-offset: 2px !important;
+  border-color: #000000 !important;
+}
+
+/* High contrast placeholder text */
+body.theme-accessibility input::placeholder,
+body.theme-accessibility textarea::placeholder {
+  color: #666666 !important;
+  font-weight: bold !important;
+}
+
+/* High contrast links */
+body.theme-accessibility a {
+  color: #0000ff !important;
+  text-decoration: underline !important;
+  font-weight: bold !important;
+}
+
+body.theme-accessibility a:hover {
+  color: #ffffff !important;
+  background: #0000ff !important;
+  padding: 2px 4px !important;
+}
+
+body.theme-accessibility a:focus {
+  outline: 4px solid #ffff00 !important;
+  outline-offset: 2px !important;
+}
+
+/* High contrast scrollbar */
+body.theme-accessibility ::-webkit-scrollbar {
+  width: 20px;
+}
+
+body.theme-accessibility ::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+body.theme-accessibility ::-webkit-scrollbar-thumb {
+  background: #000000;
+  border: 2px solid #ffffff;
+}
+
+body.theme-accessibility ::-webkit-scrollbar-thumb:hover {
+  background: #333333;
+}
+
+/* Focus indicators for all interactive elements */
+body.theme-accessibility button:focus,
+body.theme-accessibility .btn:focus,
+body.theme-accessibility [role="button"]:focus,
+body.theme-accessibility [tabindex]:focus {
+  outline: 4px solid #ffff00 !important;
+  outline-offset: 2px !important;
+}
+
+/* Ensure sufficient color contrast for all text */
+body.theme-accessibility * {
+  color: inherit !important;
+}
+
+/* Remove background images and patterns */
+body.theme-accessibility *::before,
+body.theme-accessibility *::after {
+  display: none !important;
+}
+
+/* Large click targets */
+body.theme-accessibility button,
+body.theme-accessibility .btn,
+body.theme-accessibility a,
+body.theme-accessibility input,
+body.theme-accessibility select {
+  min-height: 44px !important;
+  min-width: 44px !important;
+}
+
+/* Clear visual hierarchy */
+body.theme-accessibility h1 { font-size: 2.5em !important; }
+body.theme-accessibility h2 { font-size: 2.2em !important; }
+body.theme-accessibility h3 { font-size: 2em !important; }
+body.theme-accessibility h4 { font-size: 1.8em !important; }
+body.theme-accessibility h5 { font-size: 1.6em !important; }
+body.theme-accessibility h6 { font-size: 1.4em !important; }
