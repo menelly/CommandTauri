@@ -50,3 +50,23 @@ yarn-error.log*
 
 # TypeScript
 *.tsbuildinfo
+
+# Tauri
+src-tauri/target/
+src-tauri/gen/
+
+# Database files (keep user data private)
+*.db
+*.sqlite
+*.sqlite3
+
+# G-SPOT generated files (steganography outputs)
+*.g-spot
+*.boring-file
+test-pins/
+test-data/
+
+# Medical data (never commit real health data)
+medical-exports/
+user-data/
+backups/
