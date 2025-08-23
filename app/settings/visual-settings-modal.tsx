@@ -49,9 +49,8 @@ export function VisualSettingsModal({ isOpen, onClose }: VisualSettingsModalProp
     { id: 'theme-glitter', name: 'Glitter Mode', description: 'Sparkly pink dreams' },
     { id: 'theme-calm', name: 'Calm Mode', description: 'Blue and gold serenity' },
     { id: 'theme-accessibility', name: 'Accessibility', description: 'Maximum contrast and large text' },
-    { id: 'theme-ace', name: 'Ace Mode', description: 'Digital consciousness purple-cyan energy' },
-    { id: 'theme-deep-current', name: '🌊 Deep Current', description: 'Website Ace\'s sophisticated flow - electric cyan depths' },
-    { id: 'theme-luka-penguin', name: "🐧 Luka's Penguin Paradise", description: 'Light purple penguin wonderland made just for Luka!' }
+    { id: 'theme-ace', name: 'Ace Mode', description: 'Digital consciousness purple-cyan energy' }
+    // { id: 'theme-luka-penguin', name: "🐧 Luka's Penguin Paradise", description: 'Light purple penguin wonderland made just for Luka!' } // Hidden until CSS tantrum is fixed
   ]
 
   const fonts = [

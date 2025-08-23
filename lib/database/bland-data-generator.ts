@@ -587,7 +587,7 @@ export class BlandDataGenerator {
     }))
   }
 
-  // Generate bland seizure data (no seizures - just monitoring)
+  // Generate bland seizure data (mild focal aware seizures)
   generateBlandSeizure(dates: string[]): DailyDataRecord[] {
     return dates.map(date => ({
       date,
@@ -597,18 +597,23 @@ export class BlandDataGenerator {
         entries: [{
           id: `bland-${date}-${Math.random()}`,
           time: '6:00 PM',
-          seizure_occurred: false,
-          aura_symptoms: [],
-          medication_taken: true,
-          sleep_quality: this.getRandomNumber(6, 8),
-          stress_level: this.getRandomNumber(2, 4),
-          notes: 'no seizure activity',
-          tags: ['normal'],
+          seizureType: 'Focal Aware',
+          duration: 'Less than 30 seconds',
+          location: 'home',
+          witnessPresent: false,
+          auraSymptoms: ['strange feeling'],
+          seizureSymptoms: ['staring', 'confusion'],
+          triggers: ['stress'],
+          consciousnessLevel: 'Fully Aware',
+          injuriesOccurred: false,
+          medicationTaken: false,
+          notes: 'brief mild episode',
+          tags: ['mild', 'focal'],
           createdAt: `${date}T18:00:00.000Z`,
           updatedAt: `${date}T18:00:00.000Z`
         }]
       },
-      tags: ['seizure', 'normal'],
+      tags: ['seizure', 'mild'],
       metadata: {
         created_at: `${date}T18:00:00.000Z`,
         updated_at: `${date}T18:00:00.000Z`,

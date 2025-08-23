@@ -43,11 +43,17 @@ function TestPinManagerComponent({ onClose }: TestPinManagerProps) {
   const [daysOfData, setDaysOfData] = useState(30)
   const [includeReproductive, setIncludeReproductive] = useState(true)
   const [includeSurvival, setIncludeSurvival] = useState(true)
+  const [debugInfo, setDebugInfo] = useState<any>(null)
   
   const { login, userPin } = useUser()
 
   useEffect(() => {
     setTestPins(TestPinManager.getTestPins())
+    // Check for G-Spot 2.0 debug info
+    const debug = localStorage.getItem('gspot2-debug')
+    if (debug) {
+      setDebugInfo(JSON.parse(debug))
+    }
   }, [])
 
   const refreshTestPins = () => {
@@ -84,6 +90,15 @@ function TestPinManagerComponent({ onClose }: TestPinManagerProps) {
       })
       refreshTestPins()
       setCustomPin('')
+
+      // Check for debug info after creation
+      setTimeout(() => {
+        const debug = localStorage.getItem('gspot2-debug')
+        if (debug) {
+          setDebugInfo(JSON.parse(debug))
+        }
+      }, 100)
+
       alert(`✅ Custom test PIN created: ${customPin}\n\nClick "Switch to PIN" to start using it!`)
     } catch (error) {
       console.error('Failed to create custom test PIN:', error)
@@ -298,6 +313,32 @@ function TestPinManagerComponent({ onClose }: TestPinManagerProps) {
           <div className="animate-spin text-2xl mb-2">🧪</div>
           <p className="text-sm text-blue-600">Creating test PIN with bland data...</p>
         </div>
+      )}
+
+      {/* G-Spot 2.0 Debug Info */}
+      {debugInfo && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm">🧠 G-Spot 2.0 Debug Info</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2 text-xs font-mono">
+              <div><strong>Start Date:</strong> {debugInfo.startDate}</div>
+              <div><strong>Days Back:</strong> {debugInfo.daysBack}</div>
+              <div><strong>Total Records:</strong> {debugInfo.totalRecords}</div>
+              <div><strong>Sample Dates:</strong> {debugInfo.sampleDates?.join(', ')}</div>
+              <div><strong>Generated:</strong> {debugInfo.timestamp}</div>
+              {debugInfo.dateArithmeticTest && (
+                <div>
+                  <strong>Date Arithmetic Test:</strong>
+                  {debugInfo.dateArithmeticTest.map((test: string, i: number) => (
+                    <div key={i} className="ml-2">{test}</div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       )}
     </div>
   )

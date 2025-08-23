@@ -123,11 +123,34 @@ export default function CommandZone() {
   // Load data from localStorage
   useEffect(() => {
     const today = new Date().toDateString()
+    const userPin = localStorage.getItem('chaos-user-pin') || 'default'
     const savedTasks = localStorage.getItem(`daily-tasks-${today}`)
-    const savedGear = localStorage.getItem(`gear-check`)
+    const savedGearState = localStorage.getItem(`gear-check-${today}`)
+    const savedGearItems = localStorage.getItem(`gear-items-${userPin}`) // Persistent items list per user
 
     if (savedTasks) setDailyTasks(JSON.parse(savedTasks))
-    if (savedGear) setGearCheck(JSON.parse(savedGear))
+
+    // Load gear items (persistent) and gear state (daily reset)
+    let gearItems = savedGearItems ? JSON.parse(savedGearItems) : [
+      { id: '1', name: 'Purse/Bag', completed: false, essential: true },
+      { id: '2', name: 'Wallet', completed: false, essential: true },
+      { id: '3', name: 'Phone', completed: false, essential: true },
+      { id: '4', name: 'Keys', completed: false, essential: true },
+    ]
+
+    // If we have saved state for today, apply it; otherwise reset all to unchecked
+    if (savedGearState) {
+      const gearState = JSON.parse(savedGearState)
+      gearItems = gearItems.map(item => ({
+        ...item,
+        completed: gearState[item.id] || false
+      }))
+    } else {
+      // Reset all checkboxes for new day
+      gearItems = gearItems.map(item => ({ ...item, completed: false }))
+    }
+
+    setGearCheck(gearItems)
   }, [])
 
   const saveTasks = (tasks: DailyTask[]) => {
@@ -136,7 +159,24 @@ export default function CommandZone() {
   }
 
   const saveGear = (gear: GearItem[]) => {
-    localStorage.setItem(`gear-check`, JSON.stringify(gear))
+    const today = new Date().toDateString()
+    const userPin = localStorage.getItem('chaos-user-pin') || 'default'
+
+    // Save persistent items list (names and essential status) per user
+    const gearItems = gear.map(item => ({
+      id: item.id,
+      name: item.name,
+      essential: item.essential,
+      completed: false // Always reset completed state in persistent storage
+    }))
+    localStorage.setItem(`gear-items-${userPin}`, JSON.stringify(gearItems))
+
+    // Save daily state (which items are checked today)
+    const gearState: { [key: string]: boolean } = {}
+    gear.forEach(item => {
+      gearState[item.id] = item.completed
+    })
+    localStorage.setItem(`gear-check-${today}`, JSON.stringify(gearState))
   }
 
   const addTask = () => {

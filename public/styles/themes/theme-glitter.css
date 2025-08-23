@@ -119,10 +119,10 @@ body.theme-glitter [class*="card"]:hover {
   box-shadow: 0 8px 40px rgba(255, 148, 209, 0.6);
 }
 
-/* SECRET EASTER EGG: Sparkle explosion on hover! */
+/* SECRET EASTER EGG: Cherry blossom sparkle explosion on hover for Keshy! */
 body.theme-glitter .card:hover::after,
 body.theme-glitter [class*="card"]:hover::after {
-  content: '✨💖✨';
+  content: '🌸✨💖✨🌸';
   position: absolute;
   top: -10px;
   right: -10px;

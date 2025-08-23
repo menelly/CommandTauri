@@ -38,7 +38,7 @@ export interface DiabetesEntry {
   glp1_timer?: number
   mood?: string
   notes?: string
-  tags: string[]
+  tags?: string[]  // 🔥 FIX: Made tags optional
   created_at: string
 }
 

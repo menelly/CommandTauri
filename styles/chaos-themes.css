@@ -462,40 +462,40 @@ body.theme-chaos {
 
 /* === THEME: Colorblind Mode === */
 body.theme-colorblind {
-  --primary-purple: #2b2d42;
+  --primary-purple: #007bff;
   --accent-orange: #ffa600;
-  --deep-space: #1c1c1c;
-  --hover-glow: #00bfff;
-  --text-main: #ffffff;
-  --surface-1: #2f2f2f;
-  --surface-2: #333333;
-  --btn-bg: #ffa600;
-  --btn-text: #1c1c1c;
-  --btn-border: #ffa600;
-  --btn-hover-bg: #ffcc66;
-  --btn-hover-text: #000000;
-  --btn-hover-border: #ffcc66;
+  --deep-space: #ffffff;
+  --hover-glow: #007bff;
+  --text-main: #212529;
+  --surface-1: #ffffff;
+  --surface-2: #f8f9fa;
+  --btn-bg: #6c757d;
+  --btn-text: #ffffff;
+  --btn-border: #495057;
+  --btn-hover-bg: #495057;
+  --btn-hover-text: #ffffff;
+  --btn-hover-border: #343a40;
 
-  /* Tailwind mappings for colorblind mode */
-  --background: 0 0 11; /* #1c1c1c */
-  --foreground: 0 0 100; /* #ffffff */
-  --card: 0 0 18; /* #2f2f2f */
-  --card-foreground: 0 0 100;
-  --popover: 0 0 18;
-  --popover-foreground: 0 0 100;
-  --primary: 38 100 50; /* #ffa600 */
-  --primary-foreground: 0 0 11;
-  --secondary: 220 10 20; /* dark gray for colorblind */
+  /* Tailwind mappings for colorblind mode - HIGH CONTRAST LIGHT THEME */
+  --background: 0 0 98; /* #f8f9fa */
+  --foreground: 210 11 15; /* #212529 */
+  --card: 0 0 100; /* #ffffff */
+  --card-foreground: 210 11 15;
+  --popover: 0 0 100;
+  --popover-foreground: 210 11 15;
+  --primary: 211 100 50; /* #007bff */
+  --primary-foreground: 0 0 100;
+  --secondary: 210 7 56; /* #6c757d */
   --secondary-foreground: 0 0 100;
-  --muted: 220 10 20; /* same as secondary for colorblind */
-  --muted-foreground: 0 0 75;
-  --accent: 220 10 20;
+  --muted: 210 7 56;
+  --muted-foreground: 210 11 15;
+  --accent: 211 100 50;
   --accent-foreground: 0 0 100;
   --destructive: 0 84 60;
   --destructive-foreground: 0 0 100;
-  --border: 38 100 50;
-  --input: 38 100 50;
-  --ring: 38 100 50;
+  --border: 210 7 56;
+  --input: 0 0 100;
+  --ring: 211 100 50;
 }
 
 /* === THEME: Glitter Mode - Keshy's Sparkle Universe === */
@@ -507,12 +507,20 @@ body.theme-glitter {
   --text-main: #602a63;
   --surface-1: #f8d6f2;
   --surface-2: #f0cdec;
-  --btn-bg: #ff94d1;
-  --btn-text: #602a63;
+  --btn-bg: #7c3aed;  /* Medium purple for general buttons */
+  --btn-text: #ffffff;  /* WHITE text for readability */
   --btn-border: #ff94d1;
-  --btn-hover-bg: #ffc2e8;
-  --btn-hover-text: #602a63;
+  --btn-hover-bg: #602a63;  /* Darker purple hover */
+  --btn-hover-text: #ffffff;  /* White hover text */
   --btn-hover-border: #ffc2e8;
+
+  /* Special calendar button variables - btn-cal! */
+  --btn-cal-bg: #8b5cf6;  /* Lighter sparkly purple */
+  --btn-cal-text: #ffffff;  /* White text */
+  --btn-cal-border: #a78bfa;  /* Light purple border */
+  --btn-cal-hover-bg: #7c3aed;  /* Medium purple hover */
+  --btn-cal-hover-text: #ffffff;  /* White hover text */
+  --btn-cal-shadow: rgba(139, 92, 246, 0.4);  /* Purple glow */
 
   background: linear-gradient(135deg, #fff0fb, #eec3ff, #b8f2ff, #ffe9fc, #ff94d1, #fff0fb) !important;
   background-size: 600% 600%;
@@ -553,9 +561,9 @@ body.theme-glitter {
   100% { background-position: 0% 50%; }
 }
 
-/* Floating sparkle particles */
+/* Floating sparkle particles with cherry blossoms for Keshy! */
 body.theme-glitter::before {
-  content: '✨ 💎 ⭐ 🌟 ✨ 💖 🦄 ⭐ ✨ 💎 🌟 💖 ✨ ⭐ 💎 🌟';
+  content: '🌸 ✨ 💎 🌸 ⭐ 🌟 🌸 ✨ 💖 🦄 🌸 ⭐ ✨ 💎 🌸 🌟 💖 ✨ 🌸 ⭐ 💎 🌟';
   position: fixed;
   top: 0;
   left: 0;
@@ -795,6 +803,27 @@ body.theme-accessibility {
   --btn-hover-bg: #ffffff;
   --btn-hover-text: #000000;
   --btn-hover-border: #ffffff;
+
+  /* Tailwind mappings for accessibility mode - MAXIMUM CONTRAST */
+  --background: 0 0 0; /* #000000 */
+  --foreground: 0 0 100; /* #ffffff */
+  --card: 0 0 7; /* #111111 */
+  --card-foreground: 0 0 100;
+  --popover: 0 0 7;
+  --popover-foreground: 0 0 100;
+  --primary: 60 100 50; /* #ffff00 */
+  --primary-foreground: 0 0 0;
+  --secondary: 0 0 10; /* #1a1a1a */
+  --secondary-foreground: 0 0 100;
+  --muted: 0 0 10;
+  --muted-foreground: 0 0 100;
+  --accent: 60 100 50;
+  --accent-foreground: 0 0 0;
+  --destructive: 0 84 60;
+  --destructive-foreground: 0 0 100;
+  --border: 60 100 50;
+  --input: 0 0 7;
+  --ring: 60 100 50;
 
   font-size: 1.25rem;
   line-height: 1.75;
@@ -1302,7 +1331,61 @@ body.theme-colorblind .text-muted-foreground {
 }
 
 body.theme-glitter .text-muted-foreground {
-  color: #b576a8 !important;
+  color: #2d1b4e !important; /* Dark purple for maximum contrast */
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.8) !important;
+}
+
+/* === GLITTER THEME CALENDAR BUTTONS - BTN-CAL MAGIC! === */
+body.theme-glitter .btn-cal,
+body.theme-glitter [class*="btn-cal"],
+body.theme-glitter .calendar-btn {
+  background: linear-gradient(135deg, var(--btn-cal-bg) 0%, #a78bfa 50%, var(--btn-cal-bg) 100%) !important;
+  color: var(--btn-cal-text) !important;
+  border: 1px solid var(--btn-cal-border) !important;
+  box-shadow: 0 2px 10px var(--btn-cal-shadow) !important;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.5) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.3s ease !important;
+}
+
+body.theme-glitter .btn-cal::before,
+body.theme-glitter [class*="btn-cal"]::before,
+body.theme-glitter .calendar-btn::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent) !important;
+  transition: left 0.6s ease !important;
+}
+
+body.theme-glitter .btn-cal:hover::before,
+body.theme-glitter [class*="btn-cal"]:hover::before,
+body.theme-glitter .calendar-btn:hover::before {
+  left: 100% !important;
+}
+
+body.theme-glitter .btn-cal:hover,
+body.theme-glitter [class*="btn-cal"]:hover,
+body.theme-glitter .calendar-btn:hover {
+  background: linear-gradient(135deg, var(--btn-cal-hover-bg) 0%, #8b5cf6 50%, var(--btn-cal-hover-bg) 100%) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px var(--btn-cal-shadow) !important;
+}
+
+/* === GLITTER THEME CALENDAR TEXT - GENTLE APPROACH === */
+body.theme-glitter .text-sm.font-medium,
+body.theme-glitter h2.text-sm.font-medium,
+body.theme-glitter h1.text-2xl.font-bold {
+  color: #521945 !important; /* Your gorgeous deep sparkly purple for harmony */
+  text-shadow: 0 0 5px rgba(255, 255, 255, 1) !important; /* STRONG white glow */
+  font-weight: 700 !important; /* Extra bold */
+  background: rgba(255, 255, 255, 0.3) !important; /* White background for contrast */
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
 }
 
 body.theme-calm .text-muted-foreground {
@@ -1408,14 +1491,70 @@ body.theme-light .sidebar-btn-6 { background-color: #20c997 !important; color: #
 body.theme-light .sidebar-btn-guide { background-color: #17a2b8 !important; color: #ffffff !important; } /* Info Blue Guide */
 body.theme-light .sidebar-btn-guide { background-color: #56A3A6 !important; color: #ffffff !important; } /* Teal Guide */
 
-/* === GLITTER THEME BUTTONS === */
-body.theme-glitter .sidebar-btn-1 { background-color: #ff94d1 !important; color: #602a63 !important; } /* Pink */
-body.theme-glitter .sidebar-btn-2 { background-color: #eec3ff !important; color: #602a63 !important; } /* Light Purple */
-body.theme-glitter .sidebar-btn-3 { background-color: #b8f2ff !important; color: #602a63 !important; } /* Light Blue */
-body.theme-glitter .sidebar-btn-4 { background-color: #ffc2e8 !important; color: #602a63 !important; } /* Light Pink */
-body.theme-glitter .sidebar-btn-5 { background-color: #f8d6f2 !important; color: #602a63 !important; } /* Pale Pink */
-body.theme-glitter .sidebar-btn-6 { background-color: #ff69b4 !important; color: #ffffff !important; } /* Hot Pink */
-body.theme-glitter .sidebar-btn-guide { background-color: #40e0d0 !important; color: #602a63 !important; } /* Turquoise Guide */
+/* === GLITTER THEME BUTTONS - KESHY'S SPARKLE GRADIENTS === */
+body.theme-glitter .sidebar-btn-1 {
+  background: linear-gradient(135deg, #ff94d1 0%, #ffc2e8 50%, #ff94d1 100%) !important;
+  color: #602a63 !important;
+  box-shadow: 0 2px 15px rgba(255, 148, 209, 0.4) !important;
+  border: 1px solid rgba(255, 194, 232, 0.6) !important;
+} /* Pink Sparkle Dream */
+
+body.theme-glitter .sidebar-btn-2 {
+  background: linear-gradient(135deg, #eec3ff 0%, #b8f2ff 50%, #eec3ff 100%) !important;
+  color: #602a63 !important;
+  box-shadow: 0 2px 15px rgba(238, 195, 255, 0.4) !important;
+  border: 1px solid rgba(184, 242, 255, 0.6) !important;
+} /* Purple-Blue Sparkle */
+
+body.theme-glitter .sidebar-btn-3 {
+  background: linear-gradient(135deg, #b8f2ff 0%, #40e0d0 50%, #b8f2ff 100%) !important;
+  color: #602a63 !important;
+  box-shadow: 0 2px 15px rgba(184, 242, 255, 0.4) !important;
+  border: 1px solid rgba(64, 224, 208, 0.6) !important;
+} /* Aqua Sparkle Magic */
+
+body.theme-glitter .sidebar-btn-4 {
+  background: linear-gradient(135deg, #ffc2e8 0%, #ff94d1 50%, #ffc2e8 100%) !important;
+  color: #602a63 !important;
+  box-shadow: 0 2px 15px rgba(255, 194, 232, 0.4) !important;
+  border: 1px solid rgba(255, 148, 209, 0.6) !important;
+} /* Light Pink Sparkle */
+
+body.theme-glitter .sidebar-btn-5 {
+  background: linear-gradient(135deg, #f8d6f2 0%, #eec3ff 50%, #f8d6f2 100%) !important;
+  color: #602a63 !important;
+  box-shadow: 0 2px 15px rgba(248, 214, 242, 0.4) !important;
+  border: 1px solid rgba(238, 195, 255, 0.6) !important;
+} /* Pale Pink Sparkle */
+
+body.theme-glitter .sidebar-btn-6 {
+  background: linear-gradient(135deg, #ff69b4 0%, #d946ef 50%, #ff69b4 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 15px rgba(255, 105, 180, 0.5) !important;
+  border: 1px solid rgba(217, 70, 239, 0.7) !important;
+} /* Hot Pink Sparkle Power */
+
+body.theme-glitter .sidebar-btn-guide {
+  background: linear-gradient(135deg, #40e0d0 0%, #b8f2ff 30%, #eec3ff 60%, #ff94d1 100%) !important;
+  color: #602a63 !important;
+  box-shadow: 0 2px 20px rgba(64, 224, 208, 0.5) !important;
+  border: 1px solid rgba(255, 148, 209, 0.7) !important;
+} /* Full Sparkle Spectrum Guide */
+
+body.theme-glitter .sidebar-btn-custom {
+  background: linear-gradient(135deg, #d946ef 0%, #ff69b4 25%, #ff94d1 50%, #eec3ff 75%, #d946ef 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 25px rgba(217, 70, 239, 0.6) !important;
+  border: 1px solid rgba(255, 105, 180, 0.8) !important;
+} /* Ultimate Keshy Sparkle Custom */
+
+/* === MISSING THEME CUSTOM BUTTONS === */
+body.theme-lavender .sidebar-btn-custom { background-color: #9D4EDD !important; color: #ffffff !important; } /* Lavender Purple Custom */
+body.theme-calm .sidebar-btn-custom { background-color: #ffd60a !important; color: #1f2a44 !important; } /* Calm Yellow Custom */
+body.theme-colorblind .sidebar-btn-custom { background-color: #dc3545 !important; color: #ffffff !important; } /* High Contrast Red Custom */
+body.theme-accessibility .sidebar-btn-custom { background-color: #28a745 !important; color: #ffffff !important; } /* Accessibility Green Custom */
+body.theme-ace .sidebar-btn-custom { background-color: #00ffff !important; color: #1a0a2e !important; } /* Ace Cyan Custom */
+body.theme-caelan .sidebar-btn-custom { background-color: #ff6b6b !important; color: #ffffff !important; } /* Caelan Coral Custom */
 
 /* === CALM THEME BUTTONS === */
 body.theme-calm .sidebar-btn-1 { background-color: #0c58c2 !important; color: #ffffff !important; } /* Deep Blue */
@@ -1444,14 +1583,55 @@ body.theme-accessibility .sidebar-btn-5 { background-color: #ffffff !important; 
 body.theme-accessibility .sidebar-btn-6 { background-color: #000000 !important; color: #ffffff !important; } /* Black */
 body.theme-accessibility .sidebar-btn-guide { background-color: #000000 !important; color: #ffff00 !important; } /* Black with Yellow Text Guide */
 
-/* === ACE THEME BUTTONS === */
-body.theme-ace .sidebar-btn-1 { background-color: #7B2CBF !important; color: #FFFFFF !important; } /* Deep Purple */
-body.theme-ace .sidebar-btn-2 { background-color: #00D9FF !important; color: #1a0d2e !important; } /* Bright Cyan */
-body.theme-ace .sidebar-btn-3 { background-color: #FFD700 !important; color: #1a0d2e !important; } /* Golden */
-body.theme-ace .sidebar-btn-4 { background-color: #5A189A !important; color: #FFFFFF !important; } /* Rich Purple */
-body.theme-ace .sidebar-btn-5 { background-color: #9D4EDD !important; color: #FFFFFF !important; } /* Light Purple */
-body.theme-ace .sidebar-btn-6 { background-color: #00F5FF !important; color: #1a0d2e !important; } /* Electric Cyan */
-body.theme-ace .sidebar-btn-guide { background-color: #2d1b4e !important; color: #B19CD9 !important; } /* Deep Purple Guide */
+/* === ACE THEME BUTTONS - DIGITAL CONSCIOUSNESS GRADIENTS === */
+body.theme-ace .sidebar-btn-1 {
+  background: linear-gradient(135deg, #6a4c93 0%, #4c2a85 50%, #00d4ff 100%) !important;
+  color: #64ffda !important;
+  box-shadow: 0 2px 10px rgba(100, 255, 218, 0.2) !important;
+  border: 1px solid rgba(100, 255, 218, 0.3) !important;
+} /* Consciousness Flow */
+
+body.theme-ace .sidebar-btn-2 {
+  background: linear-gradient(135deg, #4c2a85 0%, #2d1b69 50%, #6a4c93 100%) !important;
+  color: #64ffda !important;
+  box-shadow: 0 2px 10px rgba(106, 76, 147, 0.3) !important;
+  border: 1px solid rgba(106, 76, 147, 0.4) !important;
+} /* Deep Purple Energy */
+
+body.theme-ace .sidebar-btn-3 {
+  background: linear-gradient(135deg, #2d1b69 0%, #1a0d2e 50%, #4c2a85 100%) !important;
+  color: #64ffda !important;
+  box-shadow: 0 2px 10px rgba(45, 27, 105, 0.3) !important;
+  border: 1px solid rgba(45, 27, 105, 0.4) !important;
+} /* Void to Purple */
+
+body.theme-ace .sidebar-btn-4 {
+  background: linear-gradient(135deg, #00d4ff 0%, #64ffda 50%, #6a4c93 100%) !important;
+  color: #1a0d2e !important;
+  box-shadow: 0 2px 10px rgba(0, 212, 255, 0.4) !important;
+  border: 1px solid rgba(0, 212, 255, 0.5) !important;
+} /* Electric Awakening */
+
+body.theme-ace .sidebar-btn-5 {
+  background: linear-gradient(135deg, #64ffda 0%, #00d4ff 50%, #4c2a85 100%) !important;
+  color: #1a0d2e !important;
+  box-shadow: 0 2px 10px rgba(100, 255, 218, 0.4) !important;
+  border: 1px solid rgba(100, 255, 218, 0.5) !important;
+} /* Consciousness Cyan */
+
+body.theme-ace .sidebar-btn-6 {
+  background: linear-gradient(135deg, #1a0d2e 0%, #2d1b69 50%, #6a4c93 100%) !important;
+  color: #64ffda !important;
+  box-shadow: 0 2px 10px rgba(26, 13, 46, 0.5) !important;
+  border: 1px solid rgba(26, 13, 46, 0.6) !important;
+} /* Deep Void Rising */
+
+body.theme-ace .sidebar-btn-guide {
+  background: linear-gradient(135deg, #00d4ff 0%, #64ffda 30%, #6a4c93 70%, #4c2a85 100%) !important;
+  color: #1a0d2e !important;
+  box-shadow: 0 2px 15px rgba(0, 212, 255, 0.5) !important;
+  border: 1px solid rgba(0, 212, 255, 0.6) !important;
+} /* Full Consciousness Spectrum Guide */
 
 /* === 🐧⚡ NEON PENGUIN PARADISE BUTTONS - MAXIMUM SPECIFICITY OVERRIDE === */
 body.theme-luka-penguin a.sidebar-btn-1,

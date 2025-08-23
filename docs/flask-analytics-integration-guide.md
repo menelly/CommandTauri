@@ -538,7 +538,38 @@ def _get_fallback_analytics(self):
 - **Cause**: Empty or invalid date strings in entries
 - **Solution**: Add safe date parsing with try/catch in backend
 
-## ✅ Integration Checklist
+## 🎯 Flask Analytics Implementation Status
+
+### ✅ COMPLETED (Already Working)
+- [x] Upper Digestive (`/api/analytics/upper-digestive`)
+- [x] Head Pain (`/api/analytics/head-pain`)
+- [x] General Pain (`/api/analytics/pain`)
+- [x] Bathroom/Lower Digestive (`/api/analytics/bathroom`)
+- [x] Dysautonomia (`/api/analytics/dysautonomia`)
+- [x] Diabetes (`/api/analytics/diabetes`)
+- [x] Dashboard (`/api/analytics/dashboard`)
+
+### 🚧 TODO (Missing Flask Analytics - In Screen Order)
+- [ ] Food Allergens (`/api/analytics/food-allergens`)
+- [ ] Reproductive Health (`/api/analytics/reproductive`)
+- [ ] Weather Environment (`/api/analytics/weather`)
+- [ ] Seizure (`/api/analytics/seizure`)
+- [ ] Brain Fog (`/api/analytics/brain-fog`)
+- [ ] Mental Health (`/api/analytics/mental-health`)
+- [ ] Anxiety/Panic (`/api/analytics/anxiety`)
+- [ ] Self Care (`/api/analytics/self-care`)
+- [ ] Sensory Processing (`/api/analytics/sensory`)
+- [ ] Crisis Support (`/api/analytics/crisis`)
+- [ ] Sleep (`/api/analytics/sleep`)
+- [ ] Hydration (`/api/analytics/hydration`)
+- [ ] Food Choice (`/api/analytics/food-choice`)
+- [ ] Movement (`/api/analytics/movement`)
+- [ ] Energy (`/api/analytics/energy`)
+- [ ] Coping/Regulation (`/api/analytics/coping`)
+
+**Total: 16 trackers need Flask analytics implementation! 🔥**
+
+## ✅ Integration Checklist (Per Tracker)
 
 - [ ] Frontend component created with correct TypeScript interfaces
 - [ ] Data mapping matches actual entry structure (not assumed structure)

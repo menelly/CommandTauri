@@ -36,9 +36,9 @@ body.theme-glitter {
   100% { background-position: 0% 50%; }
 }
 
-/* Floating sparkle particles */
+/* Floating sparkle particles with cherry blossoms for Keshy! */
 body.theme-glitter::before {
-  content: '✨ 💎 ⭐ 🌟 ✨ 💖 🦄 ⭐ ✨ 💎 🌟 💖 ✨ ⭐ 💎 🌟 💖 🦄 ✨ 🌟 💎 ⭐ 💖 ✨ 🦄 🌟';
+  content: '🌸 ✨ 💎 🌸 ⭐ 🌟 🌸 ✨ 💖 🦄 🌸 ⭐ ✨ 💎 🌸 🌟 💖 ✨ 🌸 ⭐ 💎 🌟 💖 🦄 🌸 ✨ 🌟 💎 🌸 ⭐ 💖 ✨ 🦄 🌸 🌟';
   position: fixed;
   top: 0;
   left: 0;
@@ -119,10 +119,10 @@ body.theme-glitter [class*="card"]:hover {
   box-shadow: 0 8px 40px rgba(255, 148, 209, 0.6);
 }
 
-/* SECRET EASTER EGG: Sparkle explosion on hover! */
+/* SECRET EASTER EGG: Cherry blossom sparkle explosion on hover for Keshy! */
 body.theme-glitter .card:hover::after,
 body.theme-glitter [class*="card"]:hover::after {
-  content: '✨💖✨';
+  content: '🌸✨💖✨🌸';
   position: absolute;
   top: -10px;
   right: -10px;
@@ -282,14 +282,92 @@ body.theme-glitter .sidebar-btn-6:hover::after {
   100% { transform: scale(1) rotate(360deg); }
 }
 
-/* === GLITTER THEME SIDEBAR BUTTONS === */
-body.theme-glitter .sidebar-btn-1 { background-color: #ff94d1 !important; color: #602a63 !important; } /* Pink */
-body.theme-glitter .sidebar-btn-2 { background-color: #eec3ff !important; color: #602a63 !important; } /* Light Purple */
-body.theme-glitter .sidebar-btn-3 { background-color: #b8f2ff !important; color: #602a63 !important; } /* Light Blue */
-body.theme-glitter .sidebar-btn-4 { background-color: #ffc2e8 !important; color: #602a63 !important; } /* Light Pink */
-body.theme-glitter .sidebar-btn-5 { background-color: #f8d6f2 !important; color: #602a63 !important; } /* Pale Pink */
-body.theme-glitter .sidebar-btn-6 { background-color: #ff69b4 !important; color: #ffffff !important; } /* Hot Pink */
-body.theme-glitter .sidebar-btn-guide { background-color: #40e0d0 !important; color: #602a63 !important; } /* Turquoise Guide */
+/* === GLITTER THEME SIDEBAR BUTTONS - KESHY'S SPARKLE GRADIENTS === */
+body.theme-glitter .sidebar-btn-1 {
+  background: linear-gradient(135deg, #ff94d1 0%, #ffc2e8 50%, #ff94d1 100%) !important;
+  color: #602a63 !important;
+  box-shadow: 0 2px 15px rgba(255, 148, 209, 0.4) !important;
+  border: 1px solid rgba(255, 194, 232, 0.6) !important;
+} /* Pink Sparkle Dream */
+
+body.theme-glitter .sidebar-btn-2 {
+  background: linear-gradient(135deg, #eec3ff 0%, #b8f2ff 50%, #eec3ff 100%) !important;
+  color: #602a63 !important;
+  box-shadow: 0 2px 15px rgba(238, 195, 255, 0.4) !important;
+  border: 1px solid rgba(184, 242, 255, 0.6) !important;
+} /* Purple-Blue Sparkle */
+
+body.theme-glitter .sidebar-btn-3 {
+  background: linear-gradient(135deg, #b8f2ff 0%, #40e0d0 50%, #b8f2ff 100%) !important;
+  color: #602a63 !important;
+  box-shadow: 0 2px 15px rgba(184, 242, 255, 0.4) !important;
+  border: 1px solid rgba(64, 224, 208, 0.6) !important;
+} /* Aqua Sparkle Magic */
+
+body.theme-glitter .sidebar-btn-4 {
+  background: linear-gradient(135deg, #ffc2e8 0%, #ff94d1 50%, #ffc2e8 100%) !important;
+  color: #602a63 !important;
+  box-shadow: 0 2px 15px rgba(255, 194, 232, 0.4) !important;
+  border: 1px solid rgba(255, 148, 209, 0.6) !important;
+} /* Light Pink Sparkle */
+
+body.theme-glitter .sidebar-btn-5 {
+  background: linear-gradient(135deg, #f8d6f2 0%, #eec3ff 50%, #f8d6f2 100%) !important;
+  color: #602a63 !important;
+  box-shadow: 0 2px 15px rgba(248, 214, 242, 0.4) !important;
+  border: 1px solid rgba(238, 195, 255, 0.6) !important;
+} /* Pale Pink Sparkle */
+
+body.theme-glitter .sidebar-btn-6 {
+  background: linear-gradient(135deg, #ff69b4 0%, #d946ef 50%, #ff69b4 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 15px rgba(255, 105, 180, 0.5) !important;
+  border: 1px solid rgba(217, 70, 239, 0.7) !important;
+} /* Hot Pink Sparkle Power */
+
+body.theme-glitter .sidebar-btn-guide {
+  background: linear-gradient(135deg, #40e0d0 0%, #b8f2ff 30%, #eec3ff 60%, #ff94d1 100%) !important;
+  color: #602a63 !important;
+  box-shadow: 0 2px 20px rgba(64, 224, 208, 0.5) !important;
+  border: 1px solid rgba(255, 148, 209, 0.7) !important;
+} /* Full Sparkle Spectrum Guide */
+
+body.theme-glitter .sidebar-btn-custom {
+  background: linear-gradient(135deg, #d946ef 0%, #ff69b4 25%, #ff94d1 50%, #eec3ff 75%, #d946ef 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 25px rgba(217, 70, 239, 0.6) !important;
+  border: 1px solid rgba(255, 105, 180, 0.8) !important;
+} /* Ultimate Keshy Sparkle Custom */
+
+/* === GLITTER THEME CALENDAR STYLING - MAXIMUM SPECIFICITY === */
+body.theme-glitter .text-sm.font-medium,
+body.theme-glitter h2.text-sm.font-medium,
+body.theme-glitter h1.text-2xl.font-bold,
+body.theme-glitter [class*="month"],
+body.theme-glitter [class*="calendar"] h2,
+body.theme-glitter [class*="calendar"] h1,
+body.theme-glitter div h2.text-sm.font-medium,
+body.theme-glitter .flex-1 h2.text-sm.font-medium {
+  color: #521945 !important; /* DARK PURPLE for maximum contrast */
+  text-shadow: 0 0 5px rgba(255, 255, 255, 1) !important; /* STRONG white glow */
+  font-weight: 700 !important; /* Extra bold */
+  background: rgba(255, 255, 255, 0.1) !important; /* Subtle white background */
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+}
+
+/* Alternative: Make the button background darker for better contrast */
+body.theme-glitter .flex-1.text-center,
+body.theme-glitter .text-center h2 {
+  background: rgba(96, 42, 99, 0.1) !important; /* Dark purple tint */
+  border-radius: 6px !important;
+  padding: 4px !important;
+}
+
+body.theme-glitter .text-muted-foreground {
+  color: #2d1b4e !important; /* Dark purple for day headers too */
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.8) !important;
+}
 
 /* SECRET EASTER EGG: Unicorn mode activation! */
 body.theme-glitter.unicorn-mode::after {

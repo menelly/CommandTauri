@@ -30,13 +30,8 @@ from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 import tempfile
 
-# PDF and image processing
-import PyPDF2
-import pdfplumber
-import pytesseract
-import cv2
-import numpy as np
-from PIL import Image
+# Import our modular components
+from text_extractor import extract_text_from_file
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -157,97 +152,9 @@ class RevolutionaryDocumentParser:
 
     def extract_text_from_file(self, file_path: str, file_type: str) -> str:
         """
-        🔥 EXTRACT TEXT FROM ANY DOCUMENT TYPE
+        🔥 EXTRACT TEXT FROM ANY DOCUMENT TYPE - Now using modular extractor!
         """
-        try:
-            if file_type == 'application/pdf':
-                return self._extract_from_pdf(file_path)
-            elif file_type.startswith('image/'):
-                return self._extract_from_image(file_path)
-            elif file_type in ['text/plain', 'text/html']:
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    return f.read()
-            else:
-                raise ValueError(f"Unsupported file type: {file_type}")
-                
-        except Exception as e:
-            logger.error(f"Text extraction failed for {file_path}: {str(e)}")
-            raise
-
-    def _extract_from_pdf(self, file_path: str) -> str:
-        """
-        📄 EXTRACT TEXT FROM PDF - MULTIPLE METHODS FOR MAXIMUM SUCCESS
-        """
-        text = ""
-        
-        # Method 1: pdfplumber (best for structured PDFs)
-        try:
-            with pdfplumber.open(file_path) as pdf:
-                for page_num, page in enumerate(pdf.pages, 1):
-                    page_text = page.extract_text()
-                    if page_text:
-                        text += f"\n--- Page {page_num} ---\n{page_text}\n"
-            
-            if text.strip():
-                logger.info(f"✅ pdfplumber extracted {len(text)} characters")
-                return text
-                
-        except Exception as e:
-            logger.warning(f"pdfplumber failed: {e}")
-        
-        # Method 2: PyPDF2 (fallback)
-        try:
-            with open(file_path, 'rb') as file:
-                pdf_reader = PyPDF2.PdfReader(file)
-                for page_num, page in enumerate(pdf_reader.pages, 1):
-                    page_text = page.extract_text()
-                    if page_text:
-                        text += f"\n--- Page {page_num} ---\n{page_text}\n"
-            
-            if text.strip():
-                logger.info(f"✅ PyPDF2 extracted {len(text)} characters")
-                return text
-                
-        except Exception as e:
-            logger.warning(f"PyPDF2 failed: {e}")
-        
-        # Method 3: OCR as last resort (for scanned PDFs)
-        try:
-            # Convert PDF pages to images and OCR them
-            # This would require pdf2image, but let's keep it simple for now
-            logger.warning("PDF appears to be scanned - OCR not implemented yet")
-            
-        except Exception as e:
-            logger.warning(f"PDF OCR failed: {e}")
-        
-        if not text.strip():
-            raise ValueError("Could not extract any text from PDF")
-        
-        return text
-
-    def _extract_from_image(self, file_path: str) -> str:
-        """
-        🧠 EXTRACT TEXT FROM IMAGES USING OCR
-        """
-        try:
-            # Load and preprocess image
-            image = cv2.imread(file_path)
-            
-            # Convert to grayscale
-            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            
-            # Apply noise reduction and sharpening
-            denoised = cv2.medianBlur(gray, 3)
-            
-            # Use Tesseract for OCR
-            text = pytesseract.image_to_string(denoised, config='--psm 6')
-            
-            logger.info(f"✅ OCR extracted {len(text)} characters from image")
-            return text
-            
-        except Exception as e:
-            logger.error(f"OCR failed for {file_path}: {str(e)}")
-            raise
+        return extract_text_from_file(file_path, file_type)
 
     def parse_medical_events(self, text: str, filename: str) -> List[ParsedMedicalEvent]:
         """

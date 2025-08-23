@@ -26,6 +26,7 @@
  */
 
 import { blandDataGenerator } from './bland-data-generator'
+import { gSpot2Generator } from './g-spot-2.0-advanced-bland-generator'
 import { getDB, initializeDatabase } from './dexie-db'
 import { DailyDataRecord } from './dexie-db'
 
@@ -84,8 +85,8 @@ export class TestPinManager {
       await initializeDatabase(config.testPin)
       const testDB = getDB(config.testPin)
       
-      // Generate bland data
-      console.log(`🥣 Generating ${config.daysOfData} days of bland data...`)
+      // Generate WORKING bland data for all trackers! 🔧
+      console.log(`🥣 Generating ${config.daysOfData} days of reliable bland data...`)
       const blandData = blandDataGenerator.generateAllBlandData(config.daysOfData)
       
       // Add reproductive health data if requested
@@ -100,14 +101,15 @@ export class TestPinManager {
         blandData.push(...survivalData)
       }
       
-      // Clear any existing data and insert bland data
+      // Clear any existing data and insert WORKING bland data
       await testDB.daily_data.clear()
+      console.log(`💾 Storing ${blandData.length} records of reliable test data...`)
       await testDB.daily_data.bulkAdd(blandData)
       
       // Mark this PIN as a test PIN
       TestPinManager.addTestPin(config.testPin)
       
-      console.log(`✅ Test PIN created successfully with ${blandData.length} records`)
+      console.log(`✅ Test PIN created successfully with ${blandData.length} records of reliable bland data!`)
       
     } catch (error) {
       console.error('❌ Failed to create test PIN:', error)

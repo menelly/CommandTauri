@@ -220,11 +220,57 @@ export function DiabetesTimerManager({ timers, onTimersChange, currentUserId }: 
 
       await db.daily_data.put(timerRecord)
 
+      // 🔥 NEW: Create tracking entry for timer updates/restarts
+      if (editingTimer) {
+        const trackingEntry = {
+          id: `timer-restart-${Date.now()}`,
+          user_id: currentUserId,
+          entry_date: formatDateForStorage(new Date()),
+          entry_time: new Date().toLocaleTimeString('en-US', {
+            hour12: false,
+            hour: '2-digit',
+            minute: '2-digit'
+          }),
+          notes: `🔄 Restarted ${newTimer.name} timer`,
+          tags: ['timer-restart'], // 🔥 FIX: Added required tags field
+          created_at: getCurrentTimestamp(),
+          updated_at: getCurrentTimestamp()
+        }
+
+        // Save tracking entry to today's diabetes entries
+        const todayDate = formatDateForStorage(new Date())
+        const existingTrackingRecord = await db.daily_data
+          .where('[date+category+subcategory]')
+          .equals([todayDate, CATEGORIES.HEALTH, 'diabetes'])
+          .first()
+
+        let updatedEntries = []
+        if (existingTrackingRecord && Array.isArray(existingTrackingRecord.content)) {
+          updatedEntries = existingTrackingRecord.content
+        }
+        updatedEntries.push(trackingEntry)
+
+        const trackingRecord = {
+          date: todayDate,
+          category: CATEGORIES.HEALTH,
+          subcategory: 'diabetes',
+          content: updatedEntries,
+          tags: [],
+          metadata: {
+            created_at: getCurrentTimestamp(),
+            updated_at: getCurrentTimestamp(),
+            user_id: currentUserId
+          }
+        }
+
+        await db.daily_data.put(trackingRecord)
+      }
+
       // Update local state
-      const allUpdatedTimers = editingTimer 
+      const allUpdatedTimers = editingTimer
         ? timers.map(t => t.id === editingTimer.id ? newTimer : t)
         : [...timers, newTimer]
-      
+
       onTimersChange(allUpdatedTimers)
 
       // Reset form and close modal

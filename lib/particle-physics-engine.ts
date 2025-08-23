@@ -456,7 +456,8 @@ export class EpicParticleEngine {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     // ✨ FADE TRAIL CANVAS FOR DREAMY EFFECT! ✨
-    this.trailCtx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+    // Much more subtle fade that respects dark themes
+    this.trailCtx.fillStyle = 'rgba(0, 0, 0, 0.02)';
     this.trailCtx.fillRect(0, 0, this.trailCanvas.width, this.trailCanvas.height);
 
     this.updateParticles();

@@ -42,7 +42,6 @@ import {
   Zap,
   Brain
 } from "lucide-react"
-import DailyDashboardToggle from "@/components/daily-dashboard-toggle"
 
 interface TrackerButton {
   id: string
@@ -196,13 +195,19 @@ export default function PhysicalHealthIndex() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {trackers.map((tracker) => (
-            <a
+            <Card
               key={tracker.id}
-              href={getTrackerHref(tracker.id)}
-              className="block"
+              className="cursor-pointer hover:shadow-md transition-shadow"
             >
-              <Card className="cursor-pointer hover:shadow-md transition-shadow">
-                <CardHeader className="pb-3 cursor-pointer">
+              <CardHeader
+                className="pb-3 cursor-pointer"
+                onClick={() => {
+                  const href = getTrackerHref(tracker.id)
+                  if (href) {
+                    window.location.href = href
+                  }
+                }}
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="text-primary">
@@ -211,12 +216,6 @@ export default function PhysicalHealthIndex() {
                     <CardTitle className="text-base leading-tight">{tracker.name}</CardTitle>
                   </div>
                   <div className="flex items-center gap-1">
-                    <DailyDashboardToggle
-                      trackerId={tracker.id}
-                      trackerName={tracker.name}
-                      description={tracker.shortDescription}
-                      variant="compact"
-                    />
                     <Dialog>
                     <DialogTrigger asChild>
                       <Button
@@ -228,7 +227,10 @@ export default function PhysicalHealthIndex() {
                         <HelpCircle className="h-4 w-4" />
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-md">
+                    <DialogContent
+                      className="max-w-md"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <DialogHeader>
                         <DialogTitle className="flex items-center gap-2">
                           {tracker.icon}
@@ -247,7 +249,6 @@ export default function PhysicalHealthIndex() {
                 </CardDescription>
               </CardHeader>
             </Card>
-            </a>
           ))}
         </div>
 

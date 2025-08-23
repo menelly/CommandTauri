@@ -28,7 +28,7 @@ import { Database, Download, Upload, Shield, Zap, Beaker } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useDailyData } from "@/lib/database/hooks/use-daily-data"
-import { exportGSpotData, importGSpotData, downloadGSpotExport } from "@/lib/database/g-spot-crypto"
+import { GSpot4BoringFileExporter } from "@/lib/database/g-spot-4.0-boring-file-steganography"
 import { exportAllData } from "@/lib/database/migration-helper"
 import TestPinManagerComponent from "@/components/test-pin-manager"
 
@@ -102,13 +102,30 @@ export function DataManagementModal({ isOpen, onClose }: DataManagementModalProp
       const allDataString = await exportAllData()
       const allData = JSON.parse(allDataString)
 
-      // Export with G-Spot encryption
-      const { filename, content, hour } = await exportGSpotData(allData.daily_data, pin)
+      // Export with G-Spot 4.0 BORING FILE encryption! 🔥
+      const result = await GSpot4BoringFileExporter.exportMedicalData(
+        allData.daily_data,
+        pin,
+        'costco_receipt' // Default to Costco receipt - perfectly boring!
+      )
 
-      // Download the disguised file
-      downloadGSpotExport(filename, content)
+      if (result.success) {
+        // Download the boring file
+        const file = result.files[0]
+        const blob = new Blob([file.content], { type: file.mimeType })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = file.filename
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url)
 
-      alert(`🔐 G-Spot Export Complete!\n\nFile: ${filename}\nHour of Detonation: ${hour}\n\nSave this hour! You'll need it to decrypt the data.`)
+        alert(`🔐 G-Spot 4.0 Export Complete!\n\nFile: ${file.filename}\n\n${result.message}\n\nYour medical data is now disguised as a perfectly boring household document!`)
+      } else {
+        throw new Error(result.message)
+      }
 
     } catch (error) {
       console.error('G-Spot export failed:', error)
@@ -127,13 +144,13 @@ export function DataManagementModal({ isOpen, onClose }: DataManagementModalProp
       // Read the file
       const fileContent = await importFile.text()
 
-      // Import and decrypt
-      const importData = await importGSpotData(fileContent, importPin, parseInt(importHour))
+      // Import and decrypt with G-Spot 4.0
+      const importResult = await GSpot4BoringFileExporter.importMedicalData([importFile], importPin)
 
       // Confirm before overwriting
-      if (confirm(`🔓 G-Spot Import Ready!\n\nFound ${importData.data_count} health records.\n\nThis will COMPLETELY REPLACE your current data. Continue?`)) {
+      if (importResult.success && confirm(`🔓 G-Spot 4.0 Import Ready!\n\nFound medical data in boring file.\n\nThis will COMPLETELY REPLACE your current data. Continue?`)) {
         // Overwrite with imported data
-        await secureOverwriteAllData(importData.health_data)
+        await secureOverwriteAllData(importResult.data)
 
         alert(`✅ G-Spot Import Complete!\n\n${importData.data_count} records restored successfully!`)
 

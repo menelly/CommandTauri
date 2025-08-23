@@ -235,7 +235,7 @@ export function DiabetesHistory({}: DiabetesHistoryProps) {
                         )}
                       </div>
 
-                      {entry.tags.length > 0 && (
+                      {entry.tags && entry.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1 mb-2">
                           {entry.tags.map(tag => (
                             <Badge key={tag} variant="outline" className="text-xs">
